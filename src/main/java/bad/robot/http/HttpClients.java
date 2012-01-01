@@ -28,24 +28,24 @@ import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithSh
 
 public class HttpClients {
 
-    public static CommonHttpClientBuilder anApacheClient() {
+    public static CommonHttpClient anApacheClient() {
         return new ApacheHttpClientBuilder();
     }
 
-    private static class ApacheHttpClientBuilder implements CommonHttpClientBuilder {
+    private static class ApacheHttpClientBuilder implements CommonHttpClient {
 
         private final bad.robot.http.apache.ApacheHttpClientBuilder apacheBuilder = anApacheClientWithShortTimeout();
 
         private ApacheHttpClient httpClient;
 
         @Override
-        public CommonHttpClientBuilder with(String username, String password) {
+        public CommonHttpClient with(String username, String password) {
             apacheBuilder.with(new ApacheHttpAuthenticationCredentials(new AuthScope(AuthScope.ANY), new UsernamePasswordCredentials(username, password)));
             return this;
         }
 
         @Override
-        public CommonHttpClientBuilder with(Duration timeout) {
+        public CommonHttpClient with(Duration timeout) {
             apacheBuilder.with(timeout);
             return this;
         }
