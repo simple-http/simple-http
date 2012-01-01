@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2011, bad robot (london) ltd
+ * Copyright (c) 2009-2012, bad robot (london) ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.HttpClientBuilder;
+import bad.robot.http.Builder;
 import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.HttpHost;
 import org.apache.http.client.params.HttpClientParams;
@@ -39,13 +39,13 @@ import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
 import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
 import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 
-public class ApacheHttpClientBuilder implements HttpClientBuilder {
+public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient> {
 
     private Duration timeout = minutes(10);
     private List<ApacheHttpAuthenticationCredentials> credentials = new ArrayList<ApacheHttpAuthenticationCredentials>();
     private HttpHost proxy;
 
-    public static ApacheHttpClientBuilder anApacheClientWithLowTimeout() {
+    public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
         return new ApacheHttpClientBuilder().with(seconds(5));
     }
 

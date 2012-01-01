@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2011, bad robot (london) ltd
+ * Copyright (c) 2009-2012, bad robot (london) ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.HttpClientBuilder;
+import bad.robot.http.Builder;
 import bad.robot.http.HttpException;
 import bad.robot.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -36,8 +36,9 @@ import java.net.URL;
 public class ApacheHttpClientTest {
 
     private static final String ANY_URL = "http://not.real.url";
+    
     private final Mockery context = new Mockery();
-    private final HttpClientBuilder builder = context.mock(HttpClientBuilder.class);
+    private final Builder<HttpClient> builder = context.mock(Builder.class);
     private final HttpClient client = context.mock(HttpClient.class, "apache http");
     private final HttpResponse response = context.mock(HttpResponse.class);
 

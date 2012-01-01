@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2011, bad robot (london) ltd
+ * Copyright (c) 2009-2012, bad robot (london) ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,15 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.HttpClient;
-import bad.robot.http.HttpClientBuilder;
-import bad.robot.http.HttpException;
-import bad.robot.http.HttpResponse;
+import bad.robot.http.*;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.URL;
 import java.util.concurrent.Callable;
 
+import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.apache.Coercions.asApacheBufferedHeader;
 import static com.google.code.tempusfugit.ExceptionWrapper.wrapAnyException;
 import static com.google.code.tempusfugit.WithException.with;
 
@@ -33,14 +32,20 @@ public class ApacheHttpClient implements HttpClient {
 
     private final org.apache.http.client.HttpClient client;
 
-    public ApacheHttpClient(HttpClientBuilder builder) {
+    public ApacheHttpClient(Builder<org.apache.http.client.HttpClient> builder) {
         client = builder.build();
     }
 
     @Override
-    public HttpResponse get(URL url) throws HttpException {
+    public HttpResponse get(URL url, Headers headers) throws HttpException {
         HttpGet get = new HttpGet(url.toExternalForm());
+        get.setHeaders(asApacheBufferedHeader(headers));
         return wrapAnyException(execute(get), with(HttpException.class));
+    }
+
+    @Override
+    public HttpResponse get(URL url) throws HttpException {
+        return get(url, noHeaders());
     }
 
     private Callable<HttpResponse> execute(final HttpUriRequest request) {
