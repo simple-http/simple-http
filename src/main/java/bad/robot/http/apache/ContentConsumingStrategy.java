@@ -20,6 +20,6 @@ import org.apache.http.HttpEntity;
 
 import java.io.IOException;
 
-public interface ContentConsumingStrategy {
+interface ContentConsumingStrategy {
     String toString(HttpEntity stream) throws IOException;
 }

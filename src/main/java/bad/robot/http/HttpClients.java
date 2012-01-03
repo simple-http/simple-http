@@ -29,10 +29,10 @@ import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithSh
 public class HttpClients {
 
     public static CommonHttpClient anApacheClient() {
-        return new ApacheHttpClientBuilder();
+        return new ApacheCommonHttpClient();
     }
 
-    private static class ApacheHttpClientBuilder implements CommonHttpClient {
+    private static class ApacheCommonHttpClient implements CommonHttpClient {
 
         private final bad.robot.http.apache.ApacheHttpClientBuilder apacheBuilder = anApacheClientWithShortTimeout();
 
