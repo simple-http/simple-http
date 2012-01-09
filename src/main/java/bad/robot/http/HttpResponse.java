@@ -23,4 +23,7 @@ public interface HttpResponse {
     String getStatusMessage();
 
     String getContent();
+
+    boolean ok();
+
 }

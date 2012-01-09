@@ -17,19 +17,25 @@
 package bad.robot.http.matchers;
 
 import bad.robot.http.HttpResponse;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.Matcher;
+
+import java.net.URL;
 
 public class Matchers {
 
-    public static TypeSafeMatcher<HttpResponse> hasStatus(int status) {
+    public static Matcher<HttpResponse> hasStatus(int status) {
         return HttpResponseStatusCodeMatcher.hasStatus(status);
     }
 
-    public static TypeSafeMatcher<HttpResponse> hasStatusMessage(String message) {
+    public static Matcher<HttpResponse> hasStatusMessage(String message) {
         return HttpResponseStatusMessageMatcher.hasStatusMessage(message);
     }
 
-    public static TypeSafeMatcher<HttpResponse> hasBody(String body) {
+    public static Matcher<HttpResponse> hasBody(String body) {
         return HttpResponseBodyMatcher.hasBody(body);
+    }
+
+    public static Matcher<URL> containsPath(String path) {
+        return UrlMatcher.containsPath(path);
     }
 }

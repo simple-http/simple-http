@@ -17,6 +17,7 @@
 package bad.robot.http;
 
 public class DefaultHttpResponse implements HttpResponse {
+
     private final int statusCode;
     private final String statusMessage;
     private final String content;
@@ -40,6 +41,11 @@ public class DefaultHttpResponse implements HttpResponse {
     @Override
     public String getContent() {
         return content;
+    }
+
+    @Override
+    public boolean ok() {
+        return statusCode == 200;
     }
 
     @Override
