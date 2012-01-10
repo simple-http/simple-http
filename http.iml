@@ -28,6 +28,7 @@
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.tempus-fugit:tempus-fugit:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jedi:jedi-core:3.0.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
   </component>
 </module>
 

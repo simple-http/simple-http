@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
+
 public class SimpleHeaders implements Headers {
 
     private final List<Header> headers;
@@ -22,6 +25,21 @@ public class SimpleHeaders implements Headers {
     @Override
     public Iterator<Header> iterator() {
         return headers.iterator();
+    }
+
+    @Override
+    public int hashCode() {
+        return reflectionHashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return reflectionEquals(this, that);
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleHeaders{headers=" + headers + '}';
     }
 
     public static Headers noHeaders() {

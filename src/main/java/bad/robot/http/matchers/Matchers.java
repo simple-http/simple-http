@@ -16,6 +16,7 @@
 
 package bad.robot.http.matchers;
 
+import bad.robot.http.Header;
 import bad.robot.http.HttpResponse;
 import org.hamcrest.Matcher;
 
@@ -37,5 +38,9 @@ public class Matchers {
 
     public static Matcher<URL> containsPath(String path) {
         return UrlMatcher.containsPath(path);
+    }
+
+    public static Matcher<Header> hasHeader(Header header) {
+        return HeaderMatcher.hasHeader(header);
     }
 }
