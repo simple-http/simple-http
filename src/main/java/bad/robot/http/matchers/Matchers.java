@@ -36,11 +36,12 @@ public class Matchers {
         return HttpResponseBodyMatcher.hasBody(body);
     }
 
+    public static Matcher<HttpResponse> hasHeader(Header header) {
+        return HttpResponseHeaderMatcher.hasHeader(header);
+    }
+
     public static Matcher<URL> containsPath(String path) {
         return UrlMatcher.containsPath(path);
     }
 
-    public static Matcher<Header> hasHeader(Header header) {
-        return HeaderMatcher.hasHeader(header);
-    }
 }

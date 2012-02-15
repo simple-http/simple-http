@@ -16,14 +16,13 @@
 
 package bad.robot.http;
 
-public interface HttpResponse {
+public interface HttpResponse extends HttpMessage {
 
     int getStatusCode();
 
     String getStatusMessage();
 
-    String getContent();
-
+    Headers getHeaders();
+    
     boolean ok();
-
 }

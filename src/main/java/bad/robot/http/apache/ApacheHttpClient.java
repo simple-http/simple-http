@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.concurrent.Callable;
 
 import static bad.robot.http.SimpleHeaders.noHeaders;
-import static bad.robot.http.apache.Coercions.asApacheBufferedHeader;
+import static bad.robot.http.apache.Coercions.asApacheBasicHeader;
 import static com.google.code.tempusfugit.ExceptionWrapper.wrapAnyException;
 import static com.google.code.tempusfugit.WithException.with;
 
@@ -39,7 +39,7 @@ public class ApacheHttpClient implements HttpClient {
     @Override
     public HttpResponse get(URL url, Headers headers) throws HttpException {
         HttpGet get = new HttpGet(url.toExternalForm());
-        get.setHeaders(asApacheBufferedHeader(headers));
+        get.setHeaders(asApacheBasicHeader(headers));
         return wrapAnyException(execute(get), with(HttpException.class));
     }
 

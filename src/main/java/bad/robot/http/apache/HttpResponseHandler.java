@@ -17,11 +17,14 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.DefaultHttpResponse;
+import bad.robot.http.Headers;
 import bad.robot.http.HttpResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ResponseHandler;
 
 import java.io.IOException;
+
+import static bad.robot.http.apache.Coercions.asHeaders;
 
 class HttpResponseHandler implements ResponseHandler<HttpResponse> {
 
@@ -33,7 +36,11 @@ class HttpResponseHandler implements ResponseHandler<HttpResponse> {
 
     @Override
     public HttpResponse handleResponse(org.apache.http.HttpResponse response) throws IOException {
-        return new DefaultHttpResponse(getStatusCodeFrom(response), getStatusMessageFrom(response), getContentFrom(response));
+        return new DefaultHttpResponse(
+                getStatusCodeFrom(response), 
+                getStatusMessageFrom(response), 
+                getContentFrom(response), 
+                getHeadersFrom(response));
     }
 
     private static String getStatusMessageFrom(org.apache.http.HttpResponse response) {
@@ -42,6 +49,10 @@ class HttpResponseHandler implements ResponseHandler<HttpResponse> {
 
     private static int getStatusCodeFrom(org.apache.http.HttpResponse response) {
         return response.getStatusLine().getStatusCode();
+    }
+
+    private static Headers getHeadersFrom(org.apache.http.HttpResponse response) {
+        return asHeaders(response.getAllHeaders());
     }
 
     private String getContentFrom(org.apache.http.HttpResponse response) throws IOException {

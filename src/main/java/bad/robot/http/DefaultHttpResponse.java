@@ -21,11 +21,13 @@ public class DefaultHttpResponse implements HttpResponse {
     private final int statusCode;
     private final String statusMessage;
     private final String content;
+    private final Headers headers;
 
-    public DefaultHttpResponse(int statusCode, String statusMessage, String content) {
+    public DefaultHttpResponse(int statusCode, String statusMessage, String content, Headers headers) {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.content = content;
+        this.headers = headers;
     }
 
     @Override
@@ -44,6 +46,11 @@ public class DefaultHttpResponse implements HttpResponse {
     }
 
     @Override
+    public Headers getHeaders() {
+        return headers;
+    }
+
+    @Override
     public boolean ok() {
         return statusCode == 200;
     }
@@ -53,6 +60,7 @@ public class DefaultHttpResponse implements HttpResponse {
         return "DefaultHttpResponse{statusCode=" + statusCode +
                 ", statusMessage='" + statusMessage + '\'' +
                 ", content='" + content + '\'' +
+                ", headers='" + headers + '\'' +
                 '}';
     }
 }
