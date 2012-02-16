@@ -23,7 +23,6 @@ import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
@@ -44,6 +43,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     private Duration timeout = minutes(10);
     private List<ApacheHttpAuthenticationCredentials> credentials = new ArrayList<ApacheHttpAuthenticationCredentials>();
     private HttpHost proxy;
+    private Ssl ssl = Ssl.enabled;
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
         return new ApacheHttpClientBuilder().with(seconds(5));
@@ -64,6 +64,11 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return this;
     }
 
+    public ApacheHttpClientBuilder with(Ssl ssl) {
+        this.ssl = ssl;
+        return this;
+    }
+    
     public org.apache.http.client.HttpClient build() {
         HttpParams httpParameters = createAndConfigureHttpParameters();
         ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager(httpParameters, createSchemeRegistry());
@@ -74,8 +79,8 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
 
     private SchemeRegistry createSchemeRegistry() {
         SchemeRegistry registry = new SchemeRegistry();
-        registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        registry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+        registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
+        registry.register(new Scheme("https", 443, ssl.getSocketFactory()));
         return registry;
     }
 

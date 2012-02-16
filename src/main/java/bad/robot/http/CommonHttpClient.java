@@ -18,4 +18,6 @@ public interface CommonHttpClient extends HttpClient {
 
     CommonHttpClient with(String username, String password);
 
+    CommonHttpClient withoutSsl();
+
 }

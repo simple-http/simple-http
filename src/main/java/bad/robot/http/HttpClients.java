@@ -18,6 +18,7 @@ package bad.robot.http;
 
 import bad.robot.http.apache.ApacheHttpAuthenticationCredentials;
 import bad.robot.http.apache.ApacheHttpClient;
+import bad.robot.http.apache.Ssl;
 import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -47,6 +48,12 @@ public class HttpClients {
         @Override
         public CommonHttpClient with(Duration timeout) {
             apacheBuilder.with(timeout);
+            return this;
+        }
+
+        @Override
+        public CommonHttpClient withoutSsl() {
+            apacheBuilder.with(Ssl.disabled);
             return this;
         }
 
