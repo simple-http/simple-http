@@ -18,6 +18,7 @@ package bad.robot.http.apache;
 
 import bad.robot.http.*;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.URL;
@@ -40,7 +41,7 @@ public class ApacheHttpClient implements HttpClient {
     public HttpResponse get(URL url, Headers headers) throws HttpException {
         HttpGet get = new HttpGet(url.toExternalForm());
         get.setHeaders(asApacheBasicHeader(headers));
-        return wrapAnyException(execute(get), with(HttpException.class));
+        return execute(get);
     }
 
     @Override
@@ -48,13 +49,22 @@ public class ApacheHttpClient implements HttpClient {
         return get(url, noHeaders());
     }
 
-    private Callable<HttpResponse> execute(final HttpUriRequest request) {
-        return new Callable<HttpResponse>() {
+    @Override
+    public HttpResponse post(URL url, HttpPostMessage message) throws HttpException {
+        HttpPost post = new HttpPost(url.toExternalForm());
+        for (Header header : message.getHeaders())
+            post.setHeader(header.name(), header.value());
+        post.setEntity(new ApacheStringEntityConverter(message).asHttpEntity());
+        return execute(post);
+    }
+
+    private HttpResponse execute(final HttpUriRequest request) {
+        return wrapAnyException(new Callable<HttpResponse>() {
             @Override
             public HttpResponse call() throws Exception {
                 return client.execute(request, new HttpResponseHandler(new ToStringConsumer()));
             }
-        };
+        }, with(HttpException.class));
     }
 
     @Override

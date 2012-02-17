@@ -22,7 +22,6 @@ public interface HttpResponse extends HttpMessage {
 
     String getStatusMessage();
 
-    Headers getHeaders();
-    
     boolean ok();
+    
 }

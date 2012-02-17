@@ -24,6 +24,8 @@ public interface HttpClient {
 
     HttpResponse get(URL url, Headers headers) throws HttpException;
 
+    HttpResponse post(URL url, HttpPostMessage message) throws HttpException;
+
     void shutdown();
 
 }

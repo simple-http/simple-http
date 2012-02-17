@@ -13,7 +13,7 @@ import static jedi.functional.FunctionalPrimitives.collect;
 
 public class Coercions {
 
-    static org.apache.http.Header[] asApacheBasicHeader(Headers headers) {
+    public static org.apache.http.Header[] asApacheBasicHeader(Headers headers) {
         return collect(headers, new Functor<Header, org.apache.http.Header>() {
             @Override
             public org.apache.http.Header execute(Header header) {
@@ -22,7 +22,7 @@ public class Coercions {
         }).toArray(new org.apache.http.Header[]{});
     }
     
-    static Headers asHeaders(org.apache.http.Header[] headers) {
+    public static Headers asHeaders(org.apache.http.Header[] headers) {
         List<Header> list = collect(headers, new Functor<org.apache.http.Header, Header>() {
             @Override
             public Header execute(org.apache.http.Header header) {

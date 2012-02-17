@@ -17,7 +17,12 @@
 package bad.robot.http.matchers;
 
 import bad.robot.http.Header;
+import bad.robot.http.Headers;
 import bad.robot.http.HttpResponse;
+import bad.robot.http.matchers.apache.ApacheHeaderMatcher;
+import bad.robot.http.matchers.apache.ApacheHttpUriRequestHeaderMatcher;
+import bad.robot.http.matchers.apache.ApacheHttpUriRequestUrlMatcher;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.hamcrest.Matcher;
 
 import java.net.URL;
@@ -32,8 +37,8 @@ public class Matchers {
         return HttpResponseStatusMessageMatcher.hasStatusMessage(message);
     }
 
-    public static Matcher<HttpResponse> hasBody(String body) {
-        return HttpResponseBodyMatcher.hasBody(body);
+    public static Matcher<HttpResponse> hasContent(String content) {
+        return HttpResponseMessageContentMatcher.hasContent(content);
     }
 
     public static Matcher<HttpResponse> hasHeader(Header header) {
@@ -44,4 +49,15 @@ public class Matchers {
         return UrlMatcher.containsPath(path);
     }
 
+    public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
+        return ApacheHeaderMatcher.apacheHeader(name, value);
+    }
+    
+    public static Matcher<HttpUriRequest> requestContaining(Headers headers) {
+        return ApacheHttpUriRequestHeaderMatcher.requestContaining(headers);
+    }
+
+    public static Matcher<HttpUriRequest> requestWith(URL url) {
+        return ApacheHttpUriRequestUrlMatcher.requestWith(url);
+    }
 }

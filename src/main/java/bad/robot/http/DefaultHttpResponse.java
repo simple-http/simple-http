@@ -41,8 +41,8 @@ public class DefaultHttpResponse implements HttpResponse {
     }
 
     @Override
-    public String getContent() {
-        return content;
+    public StringMessageContent getContent() {
+        return new StringMessageContent(content);
     }
 
     @Override

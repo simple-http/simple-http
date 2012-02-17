@@ -5,6 +5,8 @@ package bad.robot.http;
  */
 public interface HttpMessage {
 
-    String getContent();
+    MessageContent getContent();
+
+    Headers getHeaders();
 
 }

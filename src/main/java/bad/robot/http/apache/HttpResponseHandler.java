@@ -59,15 +59,7 @@ class HttpResponseHandler implements ResponseHandler<HttpResponse> {
         HttpEntity entity = response.getEntity();
         if (entity == null)
             return "";
-        try {
-            return consumer.toString(entity);
-        } finally {
-            cleanup(entity);
-        }
-    }
-
-    private static void cleanup(HttpEntity entity) throws IOException {
-        entity.consumeContent();
+        return consumer.toString(entity);
     }
 
 }

@@ -52,17 +52,16 @@ public class HttpResponseHandlerTest {
     @Test
     public void shouldConvertEmptyBody() throws IOException {
         HttpResponse response = handler.handleResponse(anApacheOkResponse);
-        assertThat(response, hasBody(""));
+        assertThat(response, hasContent(""));
     }
 
     @Test
     public void shouldConvertBody() throws IOException {
         context.checking(new Expectations(){{
             one(consumer).toString(body); will(returnValue("I'm a http message body"));
-            ignoring(body).consumeContent();
         }});
         HttpResponse response = handler.handleResponse(anApacheResponseWithBody);
-        assertThat(response, hasBody("I'm a http message body"));
+        assertThat(response, hasContent("I'm a http message body"));
     }
 
     @Test
@@ -76,7 +75,6 @@ public class HttpResponseHandlerTest {
     public void shouldCleanupContent() throws IOException {
         context.checking(new Expectations(){{
             ignoring(consumer);
-            one(body).consumeContent();
         }});
         handler.handleResponse(anApacheResponseWithBody);
     }
@@ -85,7 +83,6 @@ public class HttpResponseHandlerTest {
     public void shouldCleanupContentEvenOnException() throws IOException {
         context.checking(new Expectations(){{
             allowing(consumer); will(throwException(new IOException()));
-            one(body).consumeContent();
         }});
         handler.handleResponse(anApacheResponseWithBody);
     }

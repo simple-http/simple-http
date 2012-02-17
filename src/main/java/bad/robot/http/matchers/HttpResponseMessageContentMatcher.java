@@ -21,15 +21,15 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HttpResponseBodyMatcher extends TypeSafeMatcher<HttpResponse> {
+public class HttpResponseMessageContentMatcher extends TypeSafeMatcher<HttpResponse> {
     private final String expected;
 
     @Factory
-    public static HttpResponseBodyMatcher hasBody(String expected) {
-        return new HttpResponseBodyMatcher(expected);
+    public static HttpResponseMessageContentMatcher hasContent(String expected) {
+        return new HttpResponseMessageContentMatcher(expected);
     }
 
-    private HttpResponseBodyMatcher(String expected) {
+    private HttpResponseMessageContentMatcher(String expected) {
         this.expected = expected;
     }
 

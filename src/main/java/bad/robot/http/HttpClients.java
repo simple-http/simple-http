@@ -59,23 +59,31 @@ public class HttpClients {
 
         @Override
         public HttpResponse get(URL url) throws HttpException {
-            if (httpClient == null)
-                httpClient = new ApacheHttpClient(apacheBuilder);
+            initialiseHttpClient();
             return httpClient.get(url);
         }
 
         @Override
         public HttpResponse get(URL url, Headers headers) throws HttpException {
-            if (httpClient == null)
-                httpClient = new ApacheHttpClient(apacheBuilder);
+            initialiseHttpClient();
             return httpClient.get(url, headers);
         }
 
         @Override
+        public HttpResponse post(URL url, HttpPostMessage message) throws HttpException {
+            initialiseHttpClient();
+            return httpClient.post(url, message);
+        }
+
+        @Override
         public void shutdown() {
+            initialiseHttpClient();
+            httpClient.shutdown();
+        }
+
+        private void initialiseHttpClient() {
             if (httpClient == null)
                 httpClient = new ApacheHttpClient(apacheBuilder);
-            httpClient.shutdown();
         }
     }
 }
