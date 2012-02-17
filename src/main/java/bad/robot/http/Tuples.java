@@ -9,7 +9,11 @@ public class Tuples implements MessageContent {
 
     private final Map<String, String> tuples = new HashMap<String, String>();
 
-    public Tuples(String... values) {
+    public static Tuples tuples(String... values) {
+        return new Tuples(values);
+    }
+
+    private Tuples(String... values) {
         if (values.length % 2 != 0)
             throw new IllegalArgumentException("should be a even number of arguments, received" + values.length);
         toMap(values);

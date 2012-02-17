@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static bad.robot.http.Tuples.tuples;
 import static bad.robot.http.matchers.Matchers.apacheHeader;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -18,7 +19,7 @@ public class ApacheStringEntityConverterTest {
 
     @Test
     public void shouldConvertSimpleBody() throws IOException {
-        Tuples tuples = new Tuples("name", "I'm a cheese sandwich");
+        Tuples tuples = tuples("name", "I'm a cheese sandwich");
         ApacheStringEntityConverter converter = new ApacheStringEntityConverter(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 
@@ -30,7 +31,7 @@ public class ApacheStringEntityConverterTest {
 
     @Test
     public void shouldNotAllowDuplicateKeys() throws IOException {
-        Tuples tuples = new Tuples("name", "value", "name", "anotherValue");
+        Tuples tuples = tuples("name", "value", "name", "anotherValue");
         ApacheStringEntityConverter converter = new ApacheStringEntityConverter(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 

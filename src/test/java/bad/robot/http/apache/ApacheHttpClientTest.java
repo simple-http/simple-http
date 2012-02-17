@@ -106,7 +106,7 @@ public class ApacheHttpClientTest {
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(builder);
-        HttpPostMessage message = new FormUrlEncodedMessage(new Tuples("naughts", "crosses"));
+        HttpPostMessage message = new FormUrlEncodedMessage(Tuples.tuples("naughts", "crosses"));
         http.post(anyUrl(), message);
     }
 
