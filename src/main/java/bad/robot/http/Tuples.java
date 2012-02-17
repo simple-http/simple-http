@@ -1,9 +1,10 @@
 package bad.robot.http;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import jedi.functional.Functor;
+
+import java.util.*;
+
+import static jedi.functional.FunctionalPrimitives.collect;
 
 public class Tuples implements MessageContent {
 
@@ -31,4 +32,14 @@ public class Tuples implements MessageContent {
         return pairs;
     }
 
+    @Override
+    public String asString() {
+        List<String> list = collect(tuples.entrySet(), new Functor<Map.Entry<String, String>, String>() {
+            @Override
+            public String execute(Map.Entry<String, String> tuple) {
+                return tuple.getKey() + "=" + tuple.getValue();
+            }
+        });
+        return Arrays.toString(list.toArray());
+    }
 }

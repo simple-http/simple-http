@@ -35,7 +35,7 @@ public class HttpResponseMessageContentMatcher extends TypeSafeMatcher<HttpRespo
 
     @Override
     public boolean matchesSafely(HttpResponse actual) {
-        return actual.getContent().equals(expected);
+        return actual.getContent().asString().equals(expected);
     }
 
     @Override
