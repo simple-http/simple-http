@@ -19,46 +19,34 @@
  * under the License.
  */
 
-package bad.robot.http.matchers.apache;
+package bad.robot.http.matchers;
 
-import bad.robot.http.HttpException;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.util.EntityUtils;
+import bad.robot.http.HttpResponse;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.io.IOException;
+public class HttpResponseMessageContentStringMatcher extends TypeSafeMatcher<HttpResponse> {
 
-import static org.hamcrest.Matchers.is;
-
-public class ApacheHttpUriRequestContentMatcher<T extends HttpEntityEnclosingRequest> extends TypeSafeMatcher<T> {
-
-    private final String expected;
+    private final Matcher<String> matcher;
 
     @Factory
-    public static Matcher<? extends HttpUriRequest> messageContaining(String expected) {
-        return new ApacheHttpUriRequestContentMatcher(expected);
+    public static HttpResponseMessageContentStringMatcher hasContent(Matcher<String> matcher) {
+        return new HttpResponseMessageContentStringMatcher(matcher);
     }
 
-    public ApacheHttpUriRequestContentMatcher(String expected) {
-        this.expected = expected;
+    public HttpResponseMessageContentStringMatcher(Matcher<String> matcher) {
+        this.matcher = matcher;
     }
 
     @Override
-    public boolean matchesSafely(T actual) {
-        try {
-            return is(expected).matches(EntityUtils.toString(actual.getEntity()));
-        } catch (IOException e) {
-            throw new HttpException(e);
-        }
+    public boolean matchesSafely(HttpResponse actual) {
+        return matcher.matches(actual.getContent().asString());
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendValue(expected);
+        matcher.describeTo(description);
     }
-
 }

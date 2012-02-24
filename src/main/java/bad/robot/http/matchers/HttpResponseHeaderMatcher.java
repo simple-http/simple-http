@@ -28,6 +28,7 @@ import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
 
 public class HttpResponseHeaderMatcher extends TypeSafeMatcher<HttpResponse> {
+
     private final Header expected;
 
     @Factory

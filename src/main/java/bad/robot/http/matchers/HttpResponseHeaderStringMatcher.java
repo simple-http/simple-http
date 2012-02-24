@@ -19,46 +19,42 @@
  * under the License.
  */
 
-package bad.robot.http.matchers.apache;
+package bad.robot.http.matchers;
 
-import bad.robot.http.HttpException;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.util.EntityUtils;
+import bad.robot.http.Header;
+import bad.robot.http.HttpResponse;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import java.io.IOException;
+public class HttpResponseHeaderStringMatcher extends TypeSafeMatcher<HttpResponse> {
 
-import static org.hamcrest.Matchers.is;
-
-public class ApacheHttpUriRequestContentMatcher<T extends HttpEntityEnclosingRequest> extends TypeSafeMatcher<T> {
-
-    private final String expected;
+    private final String name;
+    private final Matcher<String> valueMatcher;
 
     @Factory
-    public static Matcher<? extends HttpUriRequest> messageContaining(String expected) {
-        return new ApacheHttpUriRequestContentMatcher(expected);
+    public static HttpResponseHeaderStringMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
+        return new HttpResponseHeaderStringMatcher(name, matcher);
     }
 
-    public ApacheHttpUriRequestContentMatcher(String expected) {
-        this.expected = expected;
+    public HttpResponseHeaderStringMatcher(String name, Matcher<String> valueMatcher) {
+        this.name = name;
+        this.valueMatcher = valueMatcher;
     }
 
     @Override
-    public boolean matchesSafely(T actual) {
-        try {
-            return is(expected).matches(EntityUtils.toString(actual.getEntity()));
-        } catch (IOException e) {
-            throw new HttpException(e);
+    public boolean matchesSafely(HttpResponse actual) {
+        for (Header header : actual.getHeaders()) {
+            if (header.name().equals(name) && valueMatcher.matches(header.value()))
+                return true;
         }
+        return false;
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendValue(expected);
+        description.appendText("header ").appendValue(name).appendText(" with value of ");
+        valueMatcher.describeTo(description);
     }
-
 }

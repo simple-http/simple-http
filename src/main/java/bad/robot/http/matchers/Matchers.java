@@ -33,6 +33,8 @@ import org.hamcrest.Matcher;
 
 import java.net.URL;
 
+import static org.hamcrest.Matchers.equalTo;
+
 public class Matchers {
 
     public static Matcher<HttpResponse> hasStatus(int status) {
@@ -44,11 +46,19 @@ public class Matchers {
     }
 
     public static Matcher<HttpResponse> hasContent(String content) {
-        return HttpResponseMessageContentMatcher.hasContent(content);
+        return HttpResponseMessageContentStringMatcher.hasContent(equalTo(content));
+    }
+
+    public static Matcher<HttpResponse> hasContent(Matcher<String> content) {
+        return HttpResponseMessageContentStringMatcher.hasContent(content);
     }
 
     public static Matcher<HttpResponse> hasHeader(Header header) {
         return HttpResponseHeaderMatcher.hasHeader(header);
+    }
+
+    public static Matcher<HttpResponse> hasHeader(String name, Matcher<String> value) {
+        return HttpResponseHeaderStringMatcher.hasHeaderWithValue(name, value);
     }
 
     public static Matcher<URL> containsPath(String path) {
@@ -70,4 +80,5 @@ public class Matchers {
     public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
         return ApacheHttpUriRequestContentMatcher.messageContaining(content);
     }
+
 }
