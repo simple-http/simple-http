@@ -27,6 +27,7 @@ import java.util.*;
 
 import static jedi.functional.FunctionalPrimitives.collect;
 
+// TODO rename as Paramaters?
 public class Tuples implements MessageContent {
 
     private final Map<String, String> tuples = new HashMap<String, String>();

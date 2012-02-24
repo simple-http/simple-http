@@ -24,6 +24,7 @@ package bad.robot.http.apache;
 import bad.robot.http.*;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import java.net.URL;
@@ -58,9 +59,18 @@ public class ApacheHttpClient implements HttpClient {
     public HttpResponse post(URL url, HttpPostMessage message) throws HttpException {
         HttpPost post = new HttpPost(url.toExternalForm());
         for (Header header : message.getHeaders())
-            post.setHeader(header.name(), header.value());
-        post.setEntity(new ApacheStringEntityConverter(message).asHttpEntity());
+            post.addHeader(header.name(), header.value());
+        post.setEntity(new HttpPostMessageToStringEntity(message).asHttpEntity());
         return execute(post);
+    }
+
+    @Override
+    public HttpResponse put(URL url, HttpPutMessage message) {
+        HttpPut put = new HttpPut(url.toExternalForm());
+        for (Header header : message.getHeaders())
+            put.addHeader(header.name(), header.value());
+        put.setEntity(new HttpPutMessageToStringEntity(message).asHttpEntity());
+        return execute(put);
     }
 
     private HttpResponse execute(final HttpUriRequest request) {

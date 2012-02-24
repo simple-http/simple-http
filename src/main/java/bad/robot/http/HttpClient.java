@@ -31,6 +31,7 @@ public interface HttpClient {
 
     HttpResponse post(URL url, HttpPostMessage message) throws HttpException;
 
-    void shutdown();
+    HttpResponse put(URL url, HttpPutMessage message) throws HttpException;
 
+    void shutdown();
 }

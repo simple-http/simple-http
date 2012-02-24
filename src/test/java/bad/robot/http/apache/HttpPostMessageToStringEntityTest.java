@@ -34,14 +34,14 @@ import static bad.robot.http.matchers.Matchers.apacheHeader;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class ApacheStringEntityConverterTest {
+public class HttpPostMessageToStringEntityTest {
 
     private static final String encodedContent = "name=I%27m+a+cheese+sandwich";
 
     @Test
     public void shouldConvertSimpleBody() throws IOException {
         Tuples tuples = tuples("name", "I'm a cheese sandwich");
-        ApacheStringEntityConverter converter = new ApacheStringEntityConverter(new FormUrlEncodedMessage(tuples));
+        HttpPostMessageToStringEntity converter = new HttpPostMessageToStringEntity(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 
         String content = IOUtils.toString(entity.getContent());
@@ -53,7 +53,7 @@ public class ApacheStringEntityConverterTest {
     @Test
     public void shouldNotAllowDuplicateKeys() throws IOException {
         Tuples tuples = tuples("name", "value", "name", "anotherValue");
-        ApacheStringEntityConverter converter = new ApacheStringEntityConverter(new FormUrlEncodedMessage(tuples));
+        HttpPostMessageToStringEntity converter = new HttpPostMessageToStringEntity(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 
         String content = IOUtils.toString(entity.getContent());

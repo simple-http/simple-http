@@ -25,6 +25,7 @@ import bad.robot.http.Header;
 import bad.robot.http.Headers;
 import bad.robot.http.HttpResponse;
 import bad.robot.http.matchers.apache.ApacheHeaderMatcher;
+import bad.robot.http.matchers.apache.ApacheHttpUriRequestContentMatcher;
 import bad.robot.http.matchers.apache.ApacheHttpUriRequestHeaderMatcher;
 import bad.robot.http.matchers.apache.ApacheHttpUriRequestUrlMatcher;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -64,5 +65,9 @@ public class Matchers {
 
     public static Matcher<HttpUriRequest> requestWith(URL url) {
         return ApacheHttpUriRequestUrlMatcher.requestWith(url);
+    }
+
+    public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
+        return ApacheHttpUriRequestContentMatcher.messageContaining(content);
     }
 }

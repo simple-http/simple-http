@@ -81,6 +81,12 @@ public class HttpClients {
         }
 
         @Override
+        public HttpResponse put(URL url, HttpPutMessage message) throws HttpException {
+            initialiseHttpClient();
+            return httpClient.put(url, message);
+        }
+
+        @Override
         public void shutdown() {
             initialiseHttpClient();
             httpClient.shutdown();
