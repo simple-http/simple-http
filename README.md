@@ -13,7 +13,7 @@ Will create a HTTP client, perform a `GET` with an `Accept` header and populate 
 ## features
 
 1. No noise. Build and work with HTTP clients simply.
-1. Supports the basic HTTP verbs (`GET`, `POST`, `PUT`, `DELETE``)
+1. Supports the basic HTTP verbs (`GET`, `POST`, `PUT`, `DELETE`)
 1. Easy to configure. Comes out of the box with sensible defaults but is easy to customise
 1. Baked in support for instrumentation (view timings, request/responses including underlying TCP messages) 
 1. Supplied with [Hamcrest](http://code.google.com/p/hamcrest/) `Matcher`s making testing your clients straight forward
