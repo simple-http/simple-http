@@ -26,13 +26,13 @@ import static bad.robot.http.SimpleHeaders.noHeaders;
 public class FormUrlEncodedMessage implements HttpPostMessage {
 
     private final Headers headers;
-    private final Tuples content;
+    private final FormParameters content;
 
-    public FormUrlEncodedMessage(Tuples content) {
+    public FormUrlEncodedMessage(FormParameters content) {
         this(content, noHeaders());
     }
 
-    public FormUrlEncodedMessage(Tuples content, Headers headers) {
+    public FormUrlEncodedMessage(FormParameters content, Headers headers) {
         this.headers = headers;
         this.content = content;
     }
@@ -44,7 +44,7 @@ public class FormUrlEncodedMessage implements HttpPostMessage {
     }
 
     @Override
-    public Tuples getContent() {
+    public FormParameters getContent() {
         return content;
     }
 

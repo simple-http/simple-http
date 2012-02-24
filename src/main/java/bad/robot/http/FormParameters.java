@@ -27,16 +27,15 @@ import java.util.*;
 
 import static jedi.functional.FunctionalPrimitives.collect;
 
-// TODO rename as Paramaters?
-public class Tuples implements MessageContent {
+public class FormParameters implements MessageContent {
 
     private final Map<String, String> tuples = new HashMap<String, String>();
 
-    public static Tuples tuples(String... values) {
-        return new Tuples(values);
+    public static FormParameters params(String... values) {
+        return new FormParameters(values);
     }
 
-    private Tuples(String... values) {
+    private FormParameters(String... values) {
         if (values.length % 2 != 0)
             throw new IllegalArgumentException("should be a even number of arguments, received" + values.length);
         toMap(values);

@@ -26,33 +26,37 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-import static bad.robot.http.Tuples.tuples;
+import static bad.robot.http.FormParameters.params;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class TuplesTest {
+public class FormParametersTest {
     
     @Test (expected = IllegalArgumentException.class)
     public void shouldAllowOnlyPairs() {
-        tuples("name");
+        params("name");
     }
 
     @Test
     public void shouldAllowNoArguments() {
-        tuples();
+        params();
     }
 
     @Test
     public void shouldAllowRetrievalViaTransformation() {
-        Tuples tuples = tuples("name", "value", "cheese", "ham");
-        List<String> values = tuples.transform(new Transform<Map.Entry<String, String>, String>() {
+        FormParameters tuples = params("name", "value", "cheese", "ham");
+        List<String> values = tuples.transform(asSimpleString());
+        assertThat(values.get(0), is("name=value"));
+        assertThat(values.get(1), is("cheese=ham"));
+    }
+
+    private static Transform<Map.Entry<String, String>, String> asSimpleString() {
+        return new Transform<Map.Entry<String, String>, String>() {
             @Override
             public String call(Map.Entry<String, String> tuple) {
                 return tuple.getKey() + "=" + tuple.getValue();
             }
-        });
-        assertThat(values.get(0), is("name=value"));
-        assertThat(values.get(1), is("cheese=ham"));
+        };
     }
 
 }

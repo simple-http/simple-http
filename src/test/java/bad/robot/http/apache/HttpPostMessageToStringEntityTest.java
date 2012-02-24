@@ -21,15 +21,15 @@
 
 package bad.robot.http.apache;
 
+import bad.robot.http.FormParameters;
 import bad.robot.http.FormUrlEncodedMessage;
-import bad.robot.http.Tuples;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static bad.robot.http.Tuples.tuples;
+import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.matchers.Matchers.apacheHeader;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -40,7 +40,7 @@ public class HttpPostMessageToStringEntityTest {
 
     @Test
     public void shouldConvertSimpleBody() throws IOException {
-        Tuples tuples = tuples("name", "I'm a cheese sandwich");
+        FormParameters tuples = params("name", "I'm a cheese sandwich");
         HttpPostMessageToStringEntity converter = new HttpPostMessageToStringEntity(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 
@@ -52,7 +52,7 @@ public class HttpPostMessageToStringEntityTest {
 
     @Test
     public void shouldNotAllowDuplicateKeys() throws IOException {
-        Tuples tuples = tuples("name", "value", "name", "anotherValue");
+        FormParameters tuples = params("name", "value", "name", "anotherValue");
         HttpPostMessageToStringEntity converter = new HttpPostMessageToStringEntity(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 

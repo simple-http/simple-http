@@ -40,10 +40,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
 import static bad.robot.http.SimpleHeaders.noHeaders;
-import static bad.robot.http.Tuples.tuples;
 import static bad.robot.http.matchers.Matchers.*;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -112,7 +112,7 @@ public class ApacheHttpClientTest {
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(builder);
-        HttpPostMessage message = new FormUrlEncodedMessage(tuples("naughts", "crosses"));
+        HttpPostMessage message = new FormUrlEncodedMessage(params("naughts", "crosses"));
         assertThat(http.post(anyUrl(), message), is(response));
     }
 

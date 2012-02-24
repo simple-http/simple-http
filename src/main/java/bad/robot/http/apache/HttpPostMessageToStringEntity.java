@@ -21,10 +21,10 @@
 
 package bad.robot.http.apache;
 
+import bad.robot.http.FormParameters;
 import bad.robot.http.HttpException;
 import bad.robot.http.HttpPostMessage;
 import bad.robot.http.Transform;
-import bad.robot.http.Tuples;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -44,7 +44,7 @@ class HttpPostMessageToStringEntity implements HttpEntityConverter {
     @Override
     public HttpEntity asHttpEntity() {
         try {
-            Tuples content = (Tuples) message.getContent();
+            FormParameters content = (FormParameters) message.getContent();
             return new UrlEncodedFormEntity(content.transform(asApacheNameValuePair()));
         } catch (UnsupportedEncodingException e) {
             throw new HttpException(e);
