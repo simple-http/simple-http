@@ -33,5 +33,7 @@ public interface HttpClient {
 
     HttpResponse put(URL url, HttpPutMessage message) throws HttpException;
 
+    HttpResponse delete(URL url) throws HttpException;
+
     void shutdown();
 }

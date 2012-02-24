@@ -87,6 +87,12 @@ public class HttpClients {
         }
 
         @Override
+        public HttpResponse delete(URL url) throws HttpException {
+            initialiseHttpClient();
+            return httpClient.delete(url);
+        }
+
+        @Override
         public void shutdown() {
             initialiseHttpClient();
             httpClient.shutdown();

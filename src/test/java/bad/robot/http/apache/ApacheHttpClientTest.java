@@ -24,10 +24,7 @@ package bad.robot.http.apache;
 import bad.robot.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.conn.ClientConnectionManager;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -163,6 +160,17 @@ public class ApacheHttpClientTest {
         expectingHttpClientExecuteWith(messageContaining("that's no moon!"));
         ApacheHttpClient http = new ApacheHttpClient(builder);
         http.put(anyUrl(), new UnencodedStringMessage("that's no moon!"));
+    }
+
+    @Test
+    public void executesDelete() throws IOException {
+        context.checking(new Expectations() {{
+            one(builder).build(); will(returnValue(client));
+            one(client).execute((HttpUriRequest) with(instanceOf(HttpDelete.class)), with(any(ResponseHandler.class))); will(returnValue(response));
+        }});
+
+        ApacheHttpClient http = new ApacheHttpClient(builder);
+        assertThat(http.delete(anyUrl()), is(response));
     }
 
     @Test
