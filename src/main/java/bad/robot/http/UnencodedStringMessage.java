@@ -38,7 +38,7 @@ public class UnencodedStringMessage implements HttpPutMessage, HttpPostMessage {
     }
 
     @Override
-    public MessageContent getContent() {
+    public StringMessageContent getContent() {
         return new StringMessageContent(content);
     }
 
@@ -47,4 +47,8 @@ public class UnencodedStringMessage implements HttpPutMessage, HttpPostMessage {
         return headers;
     }
 
+    @Override
+    public void accept(HttpRequestVisitor visitor) {
+        visitor.visit(this);
+    }
 }

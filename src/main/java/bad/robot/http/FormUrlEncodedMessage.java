@@ -48,4 +48,8 @@ public class FormUrlEncodedMessage implements HttpPostMessage {
         return content;
     }
 
+    @Override
+    public void accept(HttpRequestVisitor visitor) {
+        visitor.visit(this);
+    }
 }

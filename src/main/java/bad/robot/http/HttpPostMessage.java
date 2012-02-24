@@ -21,6 +21,7 @@
 
 package bad.robot.http;
 
+
 /**
  * <p/>
  * A HTTP message consists of the following; a request line, such as GET /logo.gif HTTP/1.1 or Status line, such as HTTP/1.1 200 OK,

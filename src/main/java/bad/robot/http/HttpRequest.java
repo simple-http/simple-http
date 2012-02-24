@@ -22,5 +22,7 @@
 package bad.robot.http;
 
 public interface HttpRequest extends HttpMessage {
-    
+
+    void accept(HttpRequestVisitor visitor);
+
 }

@@ -60,7 +60,7 @@ public class ApacheHttpClient implements HttpClient {
         HttpPost post = new HttpPost(url.toExternalForm());
         for (Header header : message.getHeaders())
             post.addHeader(header.name(), header.value());
-        post.setEntity(new HttpPostMessageToStringEntity(message).asHttpEntity());
+        post.setEntity(new HttpRequestToEntity(message).asHttpEntity());
         return execute(post);
     }
 
@@ -69,7 +69,7 @@ public class ApacheHttpClient implements HttpClient {
         HttpPut put = new HttpPut(url.toExternalForm());
         for (Header header : message.getHeaders())
             put.addHeader(header.name(), header.value());
-        put.setEntity(new HttpPutMessageToStringEntity(message).asHttpEntity());
+        put.setEntity(new HttpRequestToEntity(message).asHttpEntity());
         return execute(put);
     }
 

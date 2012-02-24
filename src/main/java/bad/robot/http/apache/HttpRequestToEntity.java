@@ -21,34 +21,48 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.FormParameters;
-import bad.robot.http.HttpException;
-import bad.robot.http.HttpPostMessage;
-import bad.robot.http.Transform;
+import bad.robot.http.*;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-class HttpPostMessageToStringEntity implements HttpEntityConverter {
+class HttpRequestToEntity implements HttpRequestVisitor {
 
-    private final HttpPostMessage message;
+    private final HttpRequest message;
+    private HttpEntity entity;
 
-    public HttpPostMessageToStringEntity(HttpPostMessage message) {
+    public HttpRequestToEntity(HttpRequest message) {
         this.message = message;
     }
 
-    @Override
     public HttpEntity asHttpEntity() {
+        message.accept(this);
+        return entity;
+    }
+
+    @Override
+    public void visit(FormUrlEncodedMessage formUrlEncodedMessage) {
         try {
-            FormParameters content = (FormParameters) message.getContent();
-            return new UrlEncodedFormEntity(content.transform(asApacheNameValuePair()));
+            FormParameters content = formUrlEncodedMessage.getContent();
+            entity = new UrlEncodedFormEntity(content.transform(asApacheNameValuePair()));
         } catch (UnsupportedEncodingException e) {
             throw new HttpException(e);
         }
+    }
+
+    @Override
+    public void visit(UnencodedStringMessage unencodedStringMessage) {
+        try {
+            StringMessageContent content = unencodedStringMessage.getContent();
+            entity = new StringEntity(content.asString());
+        } catch (UnsupportedEncodingException e) {
+            throw new HttpException(e);
+        }        
     }
 
     private Transform<Map.Entry<String, String>, NameValuePair> asApacheNameValuePair() {
@@ -59,5 +73,4 @@ class HttpPostMessageToStringEntity implements HttpEntityConverter {
             }
         };
     }
-
 }

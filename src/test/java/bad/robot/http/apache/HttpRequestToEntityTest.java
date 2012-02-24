@@ -23,6 +23,7 @@ package bad.robot.http.apache;
 
 import bad.robot.http.FormParameters;
 import bad.robot.http.FormUrlEncodedMessage;
+import bad.robot.http.UnencodedStringMessage;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.junit.Test;
@@ -34,14 +35,14 @@ import static bad.robot.http.matchers.Matchers.apacheHeader;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class HttpPostMessageToStringEntityTest {
+public class HttpRequestToEntityTest {
 
     private static final String encodedContent = "name=I%27m+a+cheese+sandwich";
 
     @Test
-    public void shouldConvertSimpleBody() throws IOException {
+    public void shouldConvertEncodedContent() throws IOException {
         FormParameters tuples = params("name", "I'm a cheese sandwich");
-        HttpPostMessageToStringEntity converter = new HttpPostMessageToStringEntity(new FormUrlEncodedMessage(tuples));
+        HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 
         String content = IOUtils.toString(entity.getContent());
@@ -51,13 +52,24 @@ public class HttpPostMessageToStringEntityTest {
     }
 
     @Test
-    public void shouldNotAllowDuplicateKeys() throws IOException {
+    public void shouldIgnoreDuplicateKeysInEncodedContent() throws IOException {
         FormParameters tuples = params("name", "value", "name", "anotherValue");
-        HttpPostMessageToStringEntity converter = new HttpPostMessageToStringEntity(new FormUrlEncodedMessage(tuples));
+        HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(tuples));
         HttpEntity entity = converter.asHttpEntity();
 
         String content = IOUtils.toString(entity.getContent());
         assertThat(content, is("name=anotherValue"));
+    }
+    
+    @Test
+    public void shouldConvertStringContent() throws IOException {
+        HttpRequestToEntity converter = new HttpRequestToEntity(new UnencodedStringMessage("nom nom nom"));
+        HttpEntity entity = converter.asHttpEntity();
+
+        String content = IOUtils.toString(entity.getContent());
+        assertThat(content, is("nom nom nom"));
+        assertThat(entity.getContentType(), is(apacheHeader("Content-Type", "text/plain; charset=ISO-8859-1")));
+        assertThat(entity.getContentLength(), is((long) "nom nom nom".getBytes().length));
     }
 
 }

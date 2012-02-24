@@ -19,30 +19,11 @@
  * under the License.
  */
 
-package bad.robot.http.apache;
+package bad.robot.http;
 
-import bad.robot.http.HttpException;
-import bad.robot.http.HttpPutMessage;
-import org.apache.http.HttpEntity;
-import org.apache.http.entity.StringEntity;
+public interface HttpRequestVisitor {
 
-import java.io.UnsupportedEncodingException;
+    void visit(FormUrlEncodedMessage formUrlEncodedMessage);
 
-class HttpPutMessageToStringEntity implements HttpEntityConverter {
-
-    private final HttpPutMessage message;
-
-    public HttpPutMessageToStringEntity(HttpPutMessage message) {
-        this.message = message;
-    }
-
-    @Override
-    public HttpEntity asHttpEntity() {
-        try {
-            return new StringEntity(message.getContent().asString());
-        } catch (UnsupportedEncodingException e) {
-            throw new HttpException(e);
-        }
-    }
-
+    void visit(UnencodedStringMessage unencodedStringMessage);
 }

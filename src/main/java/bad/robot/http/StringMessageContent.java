@@ -47,7 +47,6 @@ public class StringMessageContent implements MessageContent {
         return reflectionEquals(this, that);
     }
 
-
     @Override
     public String toString() {
         return "StringMessageBody{content=" + content + '}';
