@@ -21,5 +21,30 @@
 
 package bad.robot.http;
 
-public interface HttpPutMessage extends HttpRequest {
+import static bad.robot.http.SimpleHeaders.noHeaders;
+
+public class UnencodedStringMessage implements HttpPutMessage, HttpPostMessage {
+
+    private final String content;
+    private final Headers headers;
+
+    public UnencodedStringMessage(String content) {
+        this(content, noHeaders());
+    }
+
+    public UnencodedStringMessage(String content, Headers headers) {
+        this.content = content;
+        this.headers = headers;
+    }
+
+    @Override
+    public MessageContent getContent() {
+        return new StringMessageContent(content);
+    }
+
+    @Override
+    public Headers getHeaders() {
+        return headers;
+    }
+
 }
