@@ -38,51 +38,61 @@ public class LoggingHttpClient implements HttpClient {
 
     @Override
     public HttpResponse get(final URL url) throws HttpException {
+        HttpResponse response = null;
         try {
-            return delegate.get(url);
+            response = delegate.get(url);
+            return response;
         } finally {
             if (log.isInfoEnabled())
-                log.info(request(url, new HttpGetMessage()));
+                log.info(message(url, new HttpGetMessage(), response));
         }
     }
 
     @Override
     public HttpResponse get(URL url, Headers headers) throws HttpException {
+        HttpResponse response = null;
         try {
-            return delegate.get(url, headers);
+            response = delegate.get(url, headers);
+            return response;
         } finally {
             if (log.isInfoEnabled())
-                log.info(request(url, new HttpGetMessage(headers)));
+                log.info(message(url, new HttpGetMessage(headers), response));
         }
     }
 
     @Override
     public HttpResponse post(URL url, HttpPost message) throws HttpException {
+        HttpResponse response = null;
         try {
-            return delegate.post(url, message);
+            response = delegate.post(url, message);
+            return response;
         } finally {
             if (log.isInfoEnabled())
-                log.info(request(url, message));
+                log.info(message(url, message, response));
         }
     }
 
     @Override
     public HttpResponse put(URL url, HttpPut message) throws HttpException {
-        try {            
-            return delegate.put(url, message);
+        HttpResponse response = null;
+        try {
+            response = delegate.put(url, message);
+            return response;
         } finally {
             if (log.isInfoEnabled())
-                log.info(request(url, message));
+                log.info(message(url, message, response));
         }
     }
 
     @Override
     public HttpResponse delete(URL url) throws HttpException {
+        HttpResponse response = null;
         try {
-            return delegate.delete(url);
+            response = delegate.delete(url);
+            return response;
         } finally {
             if (log.isInfoEnabled())
-                log.info(request(url, new HttpDeleteMessage()));
+                log.info(message(url, new HttpDeleteMessage(), response));
         }
     }
 
@@ -91,10 +101,27 @@ public class LoggingHttpClient implements HttpClient {
         delegate.shutdown();
     }
 
-    private String request(final URL url, final HttpRequest message) {
+    private String message(URL url, HttpRequest request, HttpResponse response) {
+        return new StringBuilder()
+            .append(request(url, request))
+            .append("\n")
+            .append(response(response))
+            .toString();
+    }
+
+    private String request(URL url, final HttpRequest message) {
         RawHttpRequest rawRequest = new RawHttpRequest(url);
         message.accept(rawRequest);
         return rawRequest.asString();
+    }
+    
+    private String response(HttpResponse response) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("HTTP/1.1 ").append(response.getStatusCode()).append(" ").append(response.getStatusMessage()).append("\n");
+        for (Header header : response.getHeaders())
+            builder.append(header.name()).append(": ").append(header.value()).append("\n");
+        builder.append("\n").append(response.getContent().asString());
+        return builder.toString();
     }
 
     private static class RawHttpRequest implements HttpRequestVisitor {
