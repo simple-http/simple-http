@@ -23,6 +23,8 @@ package bad.robot.http;
 
 import com.google.code.tempusfugit.temporal.Duration;
 
+import java.net.URL;
+
 /**
  * The common configuration interface for all {@link HttpClient} implementations.
  *
@@ -40,5 +42,7 @@ public interface CommonHttpClient extends HttpClient {
     CommonHttpClient with(String username, String password);
 
     CommonHttpClient withoutSsl();
+
+    CommonHttpClient withProxy(URL url);
 
 }

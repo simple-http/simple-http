@@ -21,15 +21,13 @@
 
 package bad.robot.http;
 
-import jedi.functional.Functor;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
-
-import static jedi.functional.FunctionalPrimitives.collect;
 
 public class FormParameters implements MessageContent {
 
-    private final Map<String, String> tuples = new HashMap<String, String>();
+    private final Map<String, String> parameters = new HashMap<String, String>();
 
     public static FormParameters params(String... values) {
         return new FormParameters(values);
@@ -43,24 +41,35 @@ public class FormParameters implements MessageContent {
 
     private void toMap(String[] values) {
         for (int i = 0; i < values.length; i += 2)
-            tuples.put(values[i], values[i + 1]);
+            parameters.put(values[i], values[i + 1]);
     }
 
     public <T> List<T> transform(Transform<Map.Entry<String, String>, T> transform) {
         List<T> pairs = new ArrayList<T>();
-        for (Map.Entry<String, String> tuple : tuples.entrySet())
-            pairs.add(transform.call(tuple));
+        for (Map.Entry<String, String> parameter : parameters.entrySet())
+            pairs.add(transform.call(parameter));
         return pairs;
     }
 
     @Override
     public String asString() {
-        List<String> list = collect(tuples.entrySet(), new Functor<Map.Entry<String, String>, String>() {
-            @Override
-            public String execute(Map.Entry<String, String> tuple) {
-                return tuple.getKey() + "=" + tuple.getValue();
-            }
-        });
-        return Arrays.toString(list.toArray());
+        StringBuilder builder = new StringBuilder();
+        Iterator<Map.Entry<String, String>> iterator = parameters.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, String> parameter = iterator.next();
+            builder.append(encode(parameter.getKey())).append("=").append(encode(parameter.getValue()));
+            if (iterator.hasNext())
+                builder.append("&");
+        }
+        return builder.toString();
     }
+
+    private String encode(String value) {
+        try {
+            return URLEncoder.encode(value, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new HttpException(e);
+        }
+    }
+
 }

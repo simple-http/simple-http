@@ -21,18 +21,37 @@
 
 package bad.robot.http;
 
+import static bad.robot.http.SimpleHeaders.noHeaders;
 
-/**
- * <p/>
- * A HTTP message consists of the following; a request line, such as GET /logo.gif HTTP/1.1 or Status line, such as HTTP/1.1 200 OK,
- * headers, an empty line and the optional HTTP message body data.
- * <p/>
- * <p>
- * This class represents a container to capture the {@link Headers} and optional {@link MessageContent} data.
- * </p>
- * See http://en.wikipedia.org/wiki/HTTP_body_data
- * See http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.3
- */
-public interface HttpPostMessage extends HttpRequest {
+public class HttpGetMessage implements HttpGet {
 
+    private final Headers headers;
+
+    public HttpGetMessage() {
+        this.headers = noHeaders();
+    }
+
+    public HttpGetMessage(Headers headers) {
+        this.headers = headers;
+    }
+
+    @Override
+    public void accept(HttpRequestVisitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
+    public MessageContent getContent() {
+        return new MessageContent() {
+            @Override
+            public String asString() {
+                return "";
+            }
+        };
+    }
+
+    @Override
+    public Headers getHeaders() {
+        return headers;
+    }
 }

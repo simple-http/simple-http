@@ -21,5 +21,5 @@
 
 package bad.robot.http;
 
-public interface HttpPutMessage extends HttpRequest {
+public interface HttpPut extends HttpRequest {
 }

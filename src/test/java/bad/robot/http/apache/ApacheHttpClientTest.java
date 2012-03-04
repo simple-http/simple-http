@@ -24,7 +24,10 @@ package bad.robot.http.apache;
 import bad.robot.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -105,11 +108,11 @@ public class ApacheHttpClientTest {
     public void executesPost() throws IOException {
         context.checking(new Expectations() {{
             one(builder).build(); will(returnValue(client));
-            one(client).execute((HttpUriRequest) with(instanceOf(HttpPost.class)), with(any(ResponseHandler.class))); will(returnValue(response));
+            one(client).execute((HttpUriRequest) with(instanceOf(org.apache.http.client.methods.HttpPost.class)), with(any(ResponseHandler.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(builder);
-        HttpPostMessage message = new FormUrlEncodedMessage(params("naughts", "crosses"));
+        HttpPost message = new FormUrlEncodedMessage(params("naughts", "crosses"));
         assertThat(http.post(anyUrl(), message), is(response));
     }
 

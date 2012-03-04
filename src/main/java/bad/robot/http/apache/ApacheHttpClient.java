@@ -22,6 +22,10 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.*;
 
 import java.net.URL;
@@ -53,7 +57,7 @@ public class ApacheHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse post(URL url, HttpPostMessage message) throws HttpException {
+    public HttpResponse post(URL url, bad.robot.http.HttpPost message) throws HttpException {
         HttpPost post = new HttpPost(url.toExternalForm());
         for (Header header : message.getHeaders())
             post.addHeader(header.name(), header.value());
@@ -62,7 +66,7 @@ public class ApacheHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse put(URL url, HttpPutMessage message) {
+    public HttpResponse put(URL url, bad.robot.http.HttpPut message) {
         HttpPut put = new HttpPut(url.toExternalForm());
         for (Header header : message.getHeaders())
             put.addHeader(header.name(), header.value());

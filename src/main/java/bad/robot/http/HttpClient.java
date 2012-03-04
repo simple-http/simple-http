@@ -29,9 +29,9 @@ public interface HttpClient {
 
     HttpResponse get(URL url, Headers headers) throws HttpException;
 
-    HttpResponse post(URL url, HttpPostMessage message) throws HttpException;
+    HttpResponse post(URL url, HttpPost message) throws HttpException;
 
-    HttpResponse put(URL url, HttpPutMessage message) throws HttpException;
+    HttpResponse put(URL url, HttpPut message) throws HttpException;
 
     HttpResponse delete(URL url) throws HttpException;
 

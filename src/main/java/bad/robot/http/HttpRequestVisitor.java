@@ -23,7 +23,12 @@ package bad.robot.http;
 
 public interface HttpRequestVisitor {
 
+    void visit(HttpGet message);
+
+    void visit(HttpDelete message);
+
     void visit(FormUrlEncodedMessage formUrlEncodedMessage);
 
     void visit(UnencodedStringMessage unencodedStringMessage);
+
 }

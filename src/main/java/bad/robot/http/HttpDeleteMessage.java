@@ -23,28 +23,21 @@ package bad.robot.http;
 
 import static bad.robot.http.SimpleHeaders.noHeaders;
 
-public class UnencodedStringMessage implements HttpPut, HttpPost {
-
-    private final String content;
-    private final Headers headers;
-
-    public UnencodedStringMessage(String content) {
-        this(content, noHeaders());
-    }
-
-    public UnencodedStringMessage(String content, Headers headers) {
-        this.content = content;
-        this.headers = headers;
-    }
+public class HttpDeleteMessage implements HttpDelete {
 
     @Override
-    public StringMessageContent getContent() {
-        return new StringMessageContent(content);
+    public MessageContent getContent() {
+        return new MessageContent() {
+            @Override
+            public String asString() {
+                return "";
+            }
+        };
     }
 
     @Override
     public Headers getHeaders() {
-        return headers;
+        return noHeaders();
     }
 
     @Override

@@ -46,6 +46,16 @@ class HttpRequestToEntity implements HttpRequestVisitor {
     }
 
     @Override
+    public void visit(HttpDelete message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void visit(HttpGet message) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void visit(FormUrlEncodedMessage formUrlEncodedMessage) {
         try {
             FormParameters content = formUrlEncodedMessage.getContent();

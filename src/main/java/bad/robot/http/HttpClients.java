@@ -25,6 +25,7 @@ import bad.robot.http.apache.ApacheHttpAuthenticationCredentials;
 import bad.robot.http.apache.ApacheHttpClient;
 import bad.robot.http.apache.Ssl;
 import com.google.code.tempusfugit.temporal.Duration;
+import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
@@ -63,6 +64,12 @@ public class HttpClients {
         }
 
         @Override
+        public CommonHttpClient withProxy(URL url) {
+            apacheBuilder.withProxy(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
+            return this;
+        }
+
+        @Override
         public HttpResponse get(URL url) throws HttpException {
             initialiseHttpClient();
             return httpClient.get(url);
@@ -75,13 +82,13 @@ public class HttpClients {
         }
 
         @Override
-        public HttpResponse post(URL url, HttpPostMessage message) throws HttpException {
+        public HttpResponse post(URL url, HttpPost message) throws HttpException {
             initialiseHttpClient();
             return httpClient.post(url, message);
         }
 
         @Override
-        public HttpResponse put(URL url, HttpPutMessage message) throws HttpException {
+        public HttpResponse put(URL url, HttpPut message) throws HttpException {
             initialiseHttpClient();
             return httpClient.put(url, message);
         }
