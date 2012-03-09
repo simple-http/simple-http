@@ -24,6 +24,7 @@ package bad.robot.http;
 import bad.robot.http.apache.ApacheHttpAuthenticationCredentials;
 import bad.robot.http.apache.ApacheHttpClient;
 import bad.robot.http.apache.Ssl;
+import bad.robot.http.observer.Observer;
 import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -66,6 +67,11 @@ public class HttpClients {
         @Override
         public CommonHttpClient withProxy(URL url) {
             apacheBuilder.withProxy(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
+            return this;
+        }
+
+        @Override
+        public CommonHttpClient with(Observer observer) {
             return this;
         }
 

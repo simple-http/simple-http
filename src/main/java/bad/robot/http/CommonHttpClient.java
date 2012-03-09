@@ -21,6 +21,7 @@
 
 package bad.robot.http;
 
+import bad.robot.http.observer.Observer;
 import com.google.code.tempusfugit.temporal.Duration;
 
 import java.net.URL;
@@ -44,5 +45,7 @@ public interface CommonHttpClient extends HttpClient {
     CommonHttpClient withoutSsl();
 
     CommonHttpClient withProxy(URL url);
+
+    CommonHttpClient with(Observer observer);
 
 }
