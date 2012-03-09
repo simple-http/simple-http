@@ -24,8 +24,6 @@ package bad.robot.http.listener;
 import bad.robot.http.*;
 import org.apache.log4j.Logger;
 
-import java.net.URL;
-
 public class LoggingHttpClient implements HttpClient {
 
     private final HttpClient delegate;
@@ -37,7 +35,7 @@ public class LoggingHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse get(final URL url) throws HttpException {
+    public HttpResponse get(final Url url) throws HttpException {
         HttpResponse response = null;
         try {
             response = delegate.get(url);
@@ -49,7 +47,7 @@ public class LoggingHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse get(URL url, Headers headers) throws HttpException {
+    public HttpResponse get(Url url, Headers headers) throws HttpException {
         HttpResponse response = null;
         try {
             response = delegate.get(url, headers);
@@ -61,7 +59,7 @@ public class LoggingHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse post(URL url, HttpPost message) throws HttpException {
+    public HttpResponse post(Url url, HttpPost message) throws HttpException {
         HttpResponse response = null;
         try {
             response = delegate.post(url, message);
@@ -73,7 +71,7 @@ public class LoggingHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse put(URL url, HttpPut message) throws HttpException {
+    public HttpResponse put(Url url, HttpPut message) throws HttpException {
         HttpResponse response = null;
         try {
             response = delegate.put(url, message);
@@ -85,7 +83,7 @@ public class LoggingHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse delete(URL url) throws HttpException {
+    public HttpResponse delete(Url url) throws HttpException {
         HttpResponse response = null;
         try {
             response = delegate.delete(url);
@@ -101,7 +99,7 @@ public class LoggingHttpClient implements HttpClient {
         delegate.shutdown();
     }
 
-    private String message(URL url, HttpRequest request, HttpResponse response) {
+    private String message(Url url, HttpRequest request, HttpResponse response) {
         return new StringBuilder()
             .append(request(url, request))
             .append("\n")
@@ -109,7 +107,7 @@ public class LoggingHttpClient implements HttpClient {
             .toString();
     }
 
-    private String request(URL url, final HttpRequest message) {
+    private String request(Url url, final HttpRequest message) {
         RawHttpRequest rawRequest = new RawHttpRequest(url);
         message.accept(rawRequest);
         return rawRequest.asString();
@@ -126,10 +124,10 @@ public class LoggingHttpClient implements HttpClient {
 
     private static class RawHttpRequest implements HttpRequestVisitor {
 
-        private final URL url;
+        private final Url url;
         private final StringBuilder builder;
 
-        public RawHttpRequest(URL url) {
+        public RawHttpRequest(Url url) {
             this.url = url;
             this.builder = new StringBuilder();
         }

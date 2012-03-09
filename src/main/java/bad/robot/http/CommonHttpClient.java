@@ -31,7 +31,7 @@ import java.net.URL;
  *
  * Clients may or may not implement the various configuration parameters and they may or may not take affect after actual
  * {@link HttpClient} calls. For example, you might set a timeout using the {@link CommonHttpClient#with(com.google.code.tempusfugit.temporal.Duration)}
- * and then call the {@link HttpClient#get(java.net.URL)} to perform a HTTP GET. The underlying HTTP client implementation
+ * and then call the {@link HttpClient#get(Url)} to perform a HTTP GET. The underlying HTTP client implementation
  * should respect the timeout configuration but is free to ignore subsequent calls to set the timeout (ie, implementations
  * may choose to lazy load the underlying client).
  *

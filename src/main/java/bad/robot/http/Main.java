@@ -21,19 +21,37 @@
 
 package bad.robot.http;
 
+import bad.robot.http.observer.Proxy;
 import bad.robot.http.observer.ProxyObserver;
+import com.google.code.tempusfugit.temporal.Condition;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.concurrent.TimeoutException;
 
 import static bad.robot.http.HttpClients.anApacheClient;
 import static com.google.code.tempusfugit.temporal.Duration.millis;
+import static com.google.code.tempusfugit.temporal.Duration.seconds;
+import static com.google.code.tempusfugit.temporal.Timeout.timeout;
+import static com.google.code.tempusfugit.temporal.WaitFor.waitOrTimeout;
 
 public class Main {
 
-    public static void main(String... args) throws MalformedURLException {
-        bad.robot.http.HttpResponse response = anApacheClient().with(new ProxyObserver()).with(millis(200)).get(new URL("http://localhost:8080/ping"));
-        System.out.println(response);
+    public static void main(String... args) throws TimeoutException, InterruptedException {
+        Proxy proxy = new Proxy();
+        proxy.start();
+        final HttpResponse response;
+        try {
+            response = anApacheClient().with(new ProxyObserver()).with(millis(200)).get(new Url("http://www.google.com:8080"));
+            waitOrTimeout(new Condition() {
+                @Override
+                public boolean isSatisfied() {
+                    return response.ok();
+                }
+            }, timeout(seconds(2)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            proxy.stop();
+        }
     }
 
 }

@@ -21,12 +21,7 @@
 
 package bad.robot.http.listener;
 
-import bad.robot.http.FormUrlEncodedMessage;
-import bad.robot.http.HttpClient;
-import bad.robot.http.Log4J;
-import bad.robot.http.UnencodedStringMessage;
-import com.google.code.tempusfugit.FactoryException;
-import com.google.code.tempusfugit.temporal.Clock;
+import bad.robot.http.*;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -34,10 +29,6 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Date;
 
 import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.SimpleHeader.header;
@@ -49,12 +40,6 @@ import static org.hamcrest.Matchers.containsString;
 public class LoggingHttpClientTest {
 
     private final Mockery context = new Mockery();
-    private final Clock mock = new Clock() {
-        @Override
-        public Date create() throws FactoryException {
-            return new Date();
-        }
-    };
     private final Logger logger = Logger.getLogger(this.getClass());
     private final Log4J log4J = Log4J.appendTo(logger, INFO);
     private final HttpClient client = context.mock(HttpClient.class);
@@ -62,21 +47,21 @@ public class LoggingHttpClientTest {
     private final LoggingHttpClient http = new LoggingHttpClient(client, logger);
 
     @Test
-    public void shouldLogGet() throws MalformedURLException {
+    public void shouldLogGet() {
         expectingHttpClientCall();
         http.get(anyUrl());
         log4J.assertThat(containsString("GET http://baddotrobot.com HTTP/1.1"));
     }
 
     @Test
-    public void shouldLogGetWithHeaders() throws MalformedURLException {
+    public void shouldLogGetWithHeaders() {
         expectingHttpClientCall();
         http.get(anyUrl(), headers(header("Accept", "text/plain"), header("Host", "127.0.0.1")));
         log4J.assertThat(containsString("GET http://baddotrobot.com HTTP/1.1\nAccept: text/plain\nHost: 127.0.0.1"));
     }
     
     @Test
-    public void shouldLogPostFormUrlEncoded() throws MalformedURLException {
+    public void shouldLogPostFormUrlEncoded() {
         expectingHttpClientCall();
         http.post(anyUrl(), new FormUrlEncodedMessage(
             params(
@@ -96,7 +81,7 @@ public class LoggingHttpClientTest {
     }
 
     @Test
-    public void shouldLogPostUnencoded() throws MalformedURLException {
+    public void shouldLogPostUnencoded() {
         expectingHttpClientCall();
         http.post(anyUrl(), new UnencodedStringMessage("cheese sandwich", headers(header("Accept", "text/plain"), header("Host", "127.0.0.1"))));
         log4J.assertThat(containsString("POST http://baddotrobot.com HTTP/1.1"));
@@ -106,7 +91,7 @@ public class LoggingHttpClientTest {
     }
 
     @Test
-    public void shouldLogPut() throws MalformedURLException {
+    public void shouldLogPut() {
         expectingHttpClientCall();
         http.put(anyUrl(), new UnencodedStringMessage("cheese sandwich", headers(header("Accept", "text/plain"), header("Host", "127.0.0.1"))));
         log4J.assertThat(containsString("PUT http://baddotrobot.com HTTP/1.1"));
@@ -116,7 +101,7 @@ public class LoggingHttpClientTest {
     }
 
     @Test
-    public void shouldLogDelete() throws MalformedURLException {
+    public void shouldLogDelete() {
         expectingHttpClientCall();
         http.delete(anyUrl());
         log4J.assertThat(containsString("DELETE http://baddotrobot.com HTTP/1.1"));
@@ -128,8 +113,8 @@ public class LoggingHttpClientTest {
         }});
     }
 
-    private URL anyUrl() throws MalformedURLException {
-        return new URL("http://baddotrobot.com");
+    private Url anyUrl() {
+        return new Url("http://baddotrobot.com");
     }
 
     @After

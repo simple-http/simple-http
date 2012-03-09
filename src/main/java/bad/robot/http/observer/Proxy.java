@@ -27,14 +27,15 @@ import org.littleshoot.proxy.*;
 
 import java.util.HashMap;
 
-class Proxy {
+public class Proxy {
 
     private final DefaultHttpProxyServer proxy;
 
     public Proxy() {
-        proxy = new DefaultHttpProxyServer(8000, new HttpRequestFilter() {
+        proxy = new DefaultHttpProxyServer(8081, new HttpRequestFilter() {
             @Override
             public void filter(HttpRequest request) {
+//                request.setUri(request.getUri());
                 System.out.println(request);
             }
         }, new HashMap<String, HttpFilter>() {
@@ -54,5 +55,9 @@ class Proxy {
 
     public void start() {
         proxy.start();
+    }
+
+    public void stop() {
+        proxy.stop();
     }
 }

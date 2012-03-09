@@ -24,6 +24,7 @@ package bad.robot.http.listener;
 import bad.robot.http.DefaultHttpResponse;
 import bad.robot.http.HttpClient;
 import bad.robot.http.Log4J;
+import bad.robot.http.Url;
 import com.google.code.tempusfugit.FactoryException;
 import com.google.code.tempusfugit.temporal.Clock;
 import org.apache.log4j.Logger;
@@ -35,8 +36,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 
 import static bad.robot.http.SimpleHeaders.noHeaders;
@@ -56,8 +55,8 @@ public class TimedHttpClientTest {
     private final Log4J log4J = Log4J.appendTo(Logger.getLogger(logger), INFO);
 
     @Test
-    public void shouldDelegate() throws MalformedURLException {
-        final URL url = anyUrl();
+    public void shouldDelegate() {
+        final Url url = anyUrl();
         context.checking(new Expectations() {{
             one(delegate).get(url);
         }});
@@ -67,7 +66,7 @@ public class TimedHttpClientTest {
     @Test
     public void shouldTimeRequest() throws IOException {
         context.checking(new Expectations() {{
-            allowing(delegate).get(with(any(URL.class)));
+            allowing(delegate).get(with(any(Url.class)));
             one(clock).create(); will(returnValue(new Date(0)));
             one(clock).create(); will(returnValue(new Date(millis(100).inMillis())));
         }});
@@ -76,9 +75,9 @@ public class TimedHttpClientTest {
     }
 
     @Test
-    public void shouldLogDetails() throws MalformedURLException {
+    public void shouldLogDetails() {
         context.checking(new Expectations() {{
-            allowing(delegate).get(with(any(URL.class))); will(returnValue(new DefaultHttpResponse(200, "OK", "nothing", noHeaders())));
+            allowing(delegate).get(with(any(Url.class))); will(returnValue(new DefaultHttpResponse(200, "OK", "nothing", noHeaders())));
         }});
         timedHttpClient(delegate, new FixedClock(), logger).get(anyUrl());
         log4J.assertThat(containsString("GET http://whatever was 200 (OK), took Duration 0 MILLISECONDS"));
@@ -89,8 +88,8 @@ public class TimedHttpClientTest {
         timedHttpClient(delegate, clock, Object.class).get(anyUrl());
     }
 
-    private static URL anyUrl() throws MalformedURLException {
-        return new URL("http://whatever");
+    private static Url anyUrl() {
+        return new Url("http://whatever");
     }
 
     @After

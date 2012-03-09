@@ -32,9 +32,13 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 
 import java.net.URL;
 
+import static bad.robot.http.RedirectedUrl.redirect;
+import static bad.robot.http.To.to;
 import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithShortTimeout;
 
 public class HttpClients {
+
+    public static final int RedirectPort = 80;
 
     public static CommonHttpClient anApacheClient() {
         return new ApacheCommonHttpClient();
@@ -71,38 +75,38 @@ public class HttpClients {
         }
 
         @Override
-        public CommonHttpClient with(Observer observer) {
+        public CommonHttpClient with(Observer observer) {                        
             return this;
         }
 
         @Override
-        public HttpResponse get(URL url) throws HttpException {
+        public HttpResponse get(Url url) throws HttpException {
             initialiseHttpClient();
-            return httpClient.get(url);
+            return httpClient.get(redirect(url, to(RedirectPort)));
         }
 
         @Override
-        public HttpResponse get(URL url, Headers headers) throws HttpException {
+        public HttpResponse get(Url url, Headers headers) throws HttpException {
             initialiseHttpClient();
-            return httpClient.get(url, headers);
+            return httpClient.get(redirect(url, to(RedirectPort)), headers);
         }
 
         @Override
-        public HttpResponse post(URL url, HttpPost message) throws HttpException {
+        public HttpResponse post(Url url, HttpPost message) throws HttpException {
             initialiseHttpClient();
-            return httpClient.post(url, message);
+            return httpClient.post(redirect(url, to(RedirectPort)), message);
         }
 
         @Override
-        public HttpResponse put(URL url, HttpPut message) throws HttpException {
+        public HttpResponse put(Url url, HttpPut message) throws HttpException {
             initialiseHttpClient();
-            return httpClient.put(url, message);
+            return httpClient.put(redirect(url, to(RedirectPort)), message);
         }
 
         @Override
-        public HttpResponse delete(URL url) throws HttpException {
+        public HttpResponse delete(Url url) throws HttpException {
             initialiseHttpClient();
-            return httpClient.delete(url);
+            return httpClient.delete(redirect(url, to(RedirectPort)));
         }
 
         @Override
@@ -116,4 +120,6 @@ public class HttpClients {
                 httpClient = new ApacheHttpClient(apacheBuilder);
         }
     }
+
 }
+

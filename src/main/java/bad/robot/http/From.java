@@ -21,17 +21,18 @@
 
 package bad.robot.http;
 
-public interface HttpClient {
+public class From<T> {
+    private final T t;
 
-    HttpResponse get(Url url) throws HttpException;
+    private From(T t) {
+        this.t = t;
+    }
 
-    HttpResponse get(Url url, Headers headers) throws HttpException;
+    public static <T> From<T> from(T t) {
+        return new From<T>(t);
+    }
 
-    HttpResponse post(Url url, HttpPost message) throws HttpException;
-
-    HttpResponse put(Url url, HttpPut message) throws HttpException;
-
-    HttpResponse delete(Url url) throws HttpException;
-
-    void shutdown();
+    public T value() {
+        return t;
+    }
 }

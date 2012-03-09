@@ -21,17 +21,30 @@
 
 package bad.robot.http;
 
-public interface HttpClient {
+import java.net.MalformedURLException;
+import java.net.URL;
 
-    HttpResponse get(Url url) throws HttpException;
+public class Url {
 
-    HttpResponse get(Url url, Headers headers) throws HttpException;
+    private final URL url;
 
-    HttpResponse post(Url url, HttpPost message) throws HttpException;
+    public Url(URL url) {
+        this.url = url;
+    }
 
-    HttpResponse put(Url url, HttpPut message) throws HttpException;
+    public Url(String url) {
+        try {
+            this.url = new URL(url);
+        } catch (MalformedURLException e) {
+            throw new HttpException(e);
+        }
+    }
 
-    HttpResponse delete(Url url) throws HttpException;
+    public String toExternalForm() {
+        return url.toExternalForm();
+    }
 
-    void shutdown();
+    public URL toURL() {
+        return url;
+    }
 }

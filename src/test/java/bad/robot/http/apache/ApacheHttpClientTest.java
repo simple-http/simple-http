@@ -37,8 +37,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.SimpleHeader.header;
@@ -76,7 +74,7 @@ public class ApacheHttpClientTest {
     }
 
     @Test (expected = HttpException.class)
-    public void wrapExceptionsForGet() throws MalformedURLException {
+    public void wrapExceptionsForGet() {
         context.checking(new Expectations() {{
             one(builder).build(); will(returnValue(client));
             one(client); will(throwException(new IOException()));
@@ -87,7 +85,7 @@ public class ApacheHttpClientTest {
 
     @Test
     public void shouldGotoUrl() throws IOException {
-        URL url = anyUrl();
+        Url url = anyUrl();
         expectingHttpClientExecuteWith(requestWith(url));
         ApacheHttpClient http = new ApacheHttpClient(builder);
         http.get(url);
@@ -95,7 +93,7 @@ public class ApacheHttpClientTest {
 
     @Test
     public void shouldUseHttpResponseHandlerToProcessTheResponse_WhichCleansUpAfterConsumption() throws IOException {
-        URL url = anyUrl();
+        Url url = anyUrl();
         context.checking(new Expectations(){{
             one(builder).build(); will(returnValue(client));
             one(client).execute(with(any(HttpUriRequest.class)), (ResponseHandler) with(instanceOf(HttpResponseHandler.class))); will(returnValue(response));
@@ -199,8 +197,8 @@ public class ApacheHttpClientTest {
         }});
     }
 
-    private static URL anyUrl() throws MalformedURLException {
-        return new URL("http://not.real.url");
+    private static Url anyUrl() {
+        return new Url("http://not.real.url");
     }
 
 }

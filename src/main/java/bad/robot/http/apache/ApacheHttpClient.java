@@ -28,7 +28,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.*;
 
-import java.net.URL;
 import java.util.concurrent.Callable;
 
 import static bad.robot.http.SimpleHeaders.noHeaders;
@@ -45,19 +44,19 @@ public class ApacheHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse get(URL url, Headers headers) throws HttpException {
+    public HttpResponse get(Url url, Headers headers) throws HttpException {
         HttpGet get = new HttpGet(url.toExternalForm());
         get.setHeaders(asApacheBasicHeader(headers));
         return execute(get);
     }
 
     @Override
-    public HttpResponse get(URL url) throws HttpException {
+    public HttpResponse get(Url url) throws HttpException {
         return get(url, noHeaders());
     }
 
     @Override
-    public HttpResponse post(URL url, bad.robot.http.HttpPost message) throws HttpException {
+    public HttpResponse post(Url url, bad.robot.http.HttpPost message) throws HttpException {
         HttpPost post = new HttpPost(url.toExternalForm());
         for (Header header : message.getHeaders())
             post.addHeader(header.name(), header.value());
@@ -66,7 +65,7 @@ public class ApacheHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse put(URL url, bad.robot.http.HttpPut message) {
+    public HttpResponse put(Url url, bad.robot.http.HttpPut message) {
         HttpPut put = new HttpPut(url.toExternalForm());
         for (Header header : message.getHeaders())
             put.addHeader(header.name(), header.value());
@@ -75,7 +74,7 @@ public class ApacheHttpClient implements HttpClient {
     }
 
     @Override
-    public HttpResponse delete(URL url) throws HttpException {
+    public HttpResponse delete(Url url) throws HttpException {
         return execute(new HttpDelete(url.toExternalForm()));
     }
 
