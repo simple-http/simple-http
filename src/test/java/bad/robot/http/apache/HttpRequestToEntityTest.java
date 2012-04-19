@@ -21,7 +21,6 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.FormParameters;
 import bad.robot.http.FormUrlEncodedMessage;
 import bad.robot.http.UnencodedStringMessage;
 import org.apache.commons.io.IOUtils;
@@ -30,6 +29,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static bad.robot.http.CharacterSet.UTF_8;
 import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.matchers.Matchers.apacheHeader;
 import static org.hamcrest.core.Is.is;
@@ -41,8 +41,7 @@ public class HttpRequestToEntityTest {
 
     @Test
     public void shouldConvertEncodedContent() throws IOException {
-        FormParameters tuples = params("name", "I'm a cheese sandwich");
-        HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(tuples));
+        HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(params("name", "I'm a cheese sandwich")));
         HttpEntity entity = converter.asHttpEntity();
 
         String content = IOUtils.toString(entity.getContent());
@@ -52,9 +51,16 @@ public class HttpRequestToEntityTest {
     }
 
     @Test
+    public void shouldAllowAlternateEncoding() throws IOException {
+        HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(params("name", "bob"), UTF_8));
+        HttpEntity entity = converter.asHttpEntity();
+
+        assertThat(entity.getContentType(), is(apacheHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")));
+    }
+
+    @Test
     public void shouldIgnoreDuplicateKeysInEncodedContent() throws IOException {
-        FormParameters tuples = params("name", "value", "name", "anotherValue");
-        HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(tuples));
+        HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(params("name", "value", "name", "anotherValue")));
         HttpEntity entity = converter.asHttpEntity();
 
         String content = IOUtils.toString(entity.getContent());

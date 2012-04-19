@@ -59,7 +59,7 @@ class HttpRequestToEntity implements HttpRequestVisitor {
     public void visit(FormUrlEncodedMessage formUrlEncodedMessage) {
         try {
             FormParameters content = formUrlEncodedMessage.getContent();
-            entity = new UrlEncodedFormEntity(content.transform(asApacheNameValuePair()));
+            entity = new UrlEncodedFormEntity(content.transform(asApacheNameValuePair()), formUrlEncodedMessage.characterSet());
         } catch (UnsupportedEncodingException e) {
             throw new HttpException(e);
         }
@@ -69,7 +69,7 @@ class HttpRequestToEntity implements HttpRequestVisitor {
     public void visit(UnencodedStringMessage unencodedStringMessage) {
         try {
             StringMessageContent content = unencodedStringMessage.getContent();
-            entity = new StringEntity(content.asString());
+            entity = new StringEntity(content.asString(), unencodedStringMessage.characterSet());
         } catch (UnsupportedEncodingException e) {
             throw new HttpException(e);
         }        

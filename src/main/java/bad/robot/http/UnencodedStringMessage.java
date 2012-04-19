@@ -21,20 +21,31 @@
 
 package bad.robot.http;
 
+import static bad.robot.http.CharacterSet.defaultCharacterSet;
 import static bad.robot.http.SimpleHeaders.noHeaders;
 
 public class UnencodedStringMessage implements HttpPut, HttpPost {
 
     private final String content;
     private final Headers headers;
+    private final CharacterSet characterSet;
 
     public UnencodedStringMessage(String content) {
         this(content, noHeaders());
     }
 
     public UnencodedStringMessage(String content, Headers headers) {
+        this(content, headers, defaultCharacterSet);
+    }
+
+    public UnencodedStringMessage(String content, CharacterSet characterSet) {
+        this(content, noHeaders(), characterSet);
+    }
+
+    public UnencodedStringMessage(String content, Headers headers, CharacterSet characterSet) {
         this.content = content;
         this.headers = headers;
+        this.characterSet = characterSet;
     }
 
     @Override
@@ -45,6 +56,10 @@ public class UnencodedStringMessage implements HttpPut, HttpPost {
     @Override
     public Headers getHeaders() {
         return headers;
+    }
+
+    public String characterSet() {
+        return characterSet.asString();
     }
 
     @Override

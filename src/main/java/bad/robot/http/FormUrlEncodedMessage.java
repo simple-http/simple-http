@@ -21,20 +21,31 @@
 
 package bad.robot.http;
 
+import static bad.robot.http.CharacterSet.defaultCharacterSet;
 import static bad.robot.http.SimpleHeaders.noHeaders;
 
 public class FormUrlEncodedMessage implements HttpPost {
 
     private final Headers headers;
     private final FormParameters content;
+    private final CharacterSet characterSet;
 
     public FormUrlEncodedMessage(FormParameters content) {
         this(content, noHeaders());
     }
 
     public FormUrlEncodedMessage(FormParameters content, Headers headers) {
+        this(content, headers, defaultCharacterSet);
+    }
+
+    public FormUrlEncodedMessage(FormParameters content, CharacterSet characterSet) {
+        this(content, noHeaders(), characterSet);
+    }
+
+    public FormUrlEncodedMessage(FormParameters content, Headers headers, CharacterSet characterSet) {
         this.headers = headers;
         this.content = content;
+        this.characterSet = characterSet;
     }
 
     @Override
@@ -46,6 +57,10 @@ public class FormUrlEncodedMessage implements HttpPost {
     @Override
     public FormParameters getContent() {
         return content;
+    }
+
+    public String characterSet() {
+        return characterSet.asString();
     }
 
     @Override
