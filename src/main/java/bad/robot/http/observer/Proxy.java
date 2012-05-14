@@ -27,7 +27,11 @@ import org.littleshoot.proxy.*;
 
 import java.util.HashMap;
 
+import static org.apache.commons.lang3.StringUtils.contains;
+
 public class Proxy {
+
+    public static final String RedirectPortHeader = "bad.robot.http.original.port";
 
     private final DefaultHttpProxyServer proxy;
 
@@ -35,7 +39,9 @@ public class Proxy {
         proxy = new DefaultHttpProxyServer(8081, new HttpRequestFilter() {
             @Override
             public void filter(HttpRequest request) {
-//                request.setUri(request.getUri());
+                String pragma = request.getHeader("Pragma");
+                if (contains(pragma, RedirectPortHeader))
+                    request.setUri(request.getUri());
                 System.out.println(request);
             }
         }, new HashMap<String, HttpFilter>() {
@@ -54,10 +60,19 @@ public class Proxy {
     }
 
     public void start() {
-        proxy.start();
+        new Thread() {
+            @Override
+            public void run() {
+                proxy.start();
+            }
+        }.start();
     }
 
     public void stop() {
         proxy.stop();
+    }
+
+    public static void main(String[] args) {
+        new Proxy().start();
     }
 }

@@ -38,7 +38,7 @@ import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithSh
 
 public class HttpClients {
 
-    public static final int RedirectPort = 80;
+    public static final int RedirectPort = 7080;
 
     public static CommonHttpClient anApacheClient() {
         return new ApacheCommonHttpClient();

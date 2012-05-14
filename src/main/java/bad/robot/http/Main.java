@@ -21,36 +21,51 @@
 
 package bad.robot.http;
 
+import bad.robot.http.apache.ApacheHttpAuthenticationCredentials;
 import bad.robot.http.observer.Proxy;
-import bad.robot.http.observer.ProxyObserver;
-import com.google.code.tempusfugit.temporal.Condition;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.concurrent.TimeoutException;
 
-import static bad.robot.http.HttpClients.anApacheClient;
-import static com.google.code.tempusfugit.temporal.Duration.millis;
-import static com.google.code.tempusfugit.temporal.Duration.seconds;
-import static com.google.code.tempusfugit.temporal.Timeout.timeout;
-import static com.google.code.tempusfugit.temporal.WaitFor.waitOrTimeout;
+import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithShortTimeout;
 
 public class Main {
 
     public static void main(String... args) throws TimeoutException, InterruptedException {
-        Proxy proxy = new Proxy();
-        proxy.start();
-        final HttpResponse response;
+        Proxy server = new Proxy();
+        server.start();
         try {
-            response = anApacheClient().with(new ProxyObserver()).with(millis(200)).get(new Url("http://www.google.com:8080"));
-            waitOrTimeout(new Condition() {
-                @Override
-                public boolean isSatisfied() {
-                    return response.ok();
-                }
-            }, timeout(seconds(2)));
+            System.out.println("hello");
+            URL proxy = new URL("http://hk-proxy.ap.hedani.net:8080");
+            URL altProxy = new URL("http://ocs-proxy.eu.hedani.net:8080");
+            URL littleProxy = new URL("http://localhost:8081");
+
+//            final HttpResponse response = anApacheClient().withProxy(new URL("http://localhost:8081")).with(millis(200)).get(new Url("http://localhost:8080"));
+
+// Works
+            HttpClient http = anApacheClientWithShortTimeout()
+                    .withProxy(new HttpHost(proxy.getHost(), proxy.getPort(), proxy.getProtocol()))
+                    .with(new ApacheHttpAuthenticationCredentials(AuthScope.ANY, new UsernamePasswordCredentials("tweston2", "$uperKungFu69")))
+                    .build();
+
+
+// target server fails to response
+//            HttpClient bust = anApacheClientWithShortTimeout().build();
+
+            HttpResponse response = http.execute(new HttpGet(new URI("http://localhost:8999")));
+            System.out.println(response);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            proxy.stop();
+            server.stop();
         }
     }
 

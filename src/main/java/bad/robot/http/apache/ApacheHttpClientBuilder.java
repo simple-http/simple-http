@@ -23,14 +23,26 @@ package bad.robot.http.apache;
 
 import bad.robot.http.Builder;
 import com.google.code.tempusfugit.temporal.Duration;
+import org.apache.http.ConnectionReuseStrategy;
+import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.client.*;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.conn.params.ConnRouteParams;
+import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.conn.routing.HttpRoutePlanner;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpProcessor;
+import org.apache.http.protocol.HttpRequestExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +50,8 @@ import java.util.List;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
 import static com.google.code.tempusfugit.temporal.Duration.seconds;
 import static org.apache.http.client.params.ClientPNames.*;
-import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
+import static org.apache.http.conn.routing.RouteInfo.LayerType.PLAIN;
+import static org.apache.http.conn.routing.RouteInfo.TunnelType;
 import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
 import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
 import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
@@ -77,7 +90,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     public org.apache.http.client.HttpClient build() {
         HttpParams httpParameters = createAndConfigureHttpParameters();
         ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager(httpParameters, createSchemeRegistry());
-        DefaultHttpClient client = new DefaultHttpClient(connectionManager, httpParameters);
+        DefaultHttpClient client = new ProxyTunnellingHttpClient(connectionManager, httpParameters, proxy);
         setupAuthorisation(client);
         return client;
     }
@@ -97,7 +110,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         parameters.setParameter(ALLOW_CIRCULAR_REDIRECTS, true);
         parameters.setParameter(HANDLE_AUTHENTICATION, true);
         parameters.setParameter(USE_EXPECT_CONTINUE, true);
-        parameters.setParameter(DEFAULT_PROXY, proxy);
+//        parameters.setParameter(DEFAULT_PROXY, proxy);
         HttpClientParams.setRedirecting(parameters, true);
         return parameters;
     }
@@ -116,4 +129,21 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
             client.getCredentialsProvider().setCredentials(credentials.getScope(), credentials.getUser());
     }
 
+    private static class ProxyTunnellingHttpClient extends DefaultHttpClient {
+        public ProxyTunnellingHttpClient(ThreadSafeClientConnManager connectionManager, HttpParams httpParameters, final HttpHost proxy) {
+            super(connectionManager, httpParameters);
+            setRoutePlanner(new HttpRoutePlanner() {
+                @Override
+                public HttpRoute determineRoute(HttpHost target, HttpRequest request, HttpContext context) throws HttpException {
+                    HttpHost[] proxies = {new HttpHost("localhost", 8081), proxy};
+                    return new HttpRoute(target, ConnRouteParams.getLocalAddress(request.getParams()), proxies, "https".equalsIgnoreCase(target.getSchemeName()), TunnelType.TUNNELLED, PLAIN);
+                }
+            });
+        }
+
+        @Override
+        protected RequestDirector createClientRequestDirector(HttpRequestExecutor requestExec, ClientConnectionManager conman, ConnectionReuseStrategy reustrat, ConnectionKeepAliveStrategy kastrat, HttpRoutePlanner rouplan, HttpProcessor httpProcessor, HttpRequestRetryHandler retryHandler, RedirectStrategy redirectStrategy, AuthenticationHandler targetAuthHandler, AuthenticationHandler proxyAuthHandler, UserTokenHandler stateHandler, HttpParams params) {
+            return new ProxyTunnellingRequestDirector(requestExec, conman, reustrat, kastrat, rouplan, httpProcessor, retryHandler, redirectStrategy, targetAuthHandler, proxyAuthHandler, stateHandler, params);
+        }
+    }
 }

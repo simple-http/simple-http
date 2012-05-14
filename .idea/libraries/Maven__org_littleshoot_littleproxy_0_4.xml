@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.littleshoot:littleproxy:0.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../tools/apache/apache-maven-2.2.1/repository/org/littleshoot/littleproxy/0.4/littleproxy-0.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../tools/apache/apache-maven-2.2.1/repository/org/littleshoot/littleproxy/0.4/littleproxy-0.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../tools/apache/apache-maven-2.2.1/repository/org/littleshoot/littleproxy/0.4/littleproxy-0.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: cglib:cglib-full:2.0">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-full/2.0/cglib-full-2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../tools/apache/apache-maven-2.2.1/repository/cglib/cglib-full/2.0/cglib-full-2.0.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-full/2.0/cglib-full-2.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../tools/apache/apache-maven-2.2.1/repository/cglib/cglib-full/2.0/cglib-full-2.0-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/cglib/cglib-full/2.0/cglib-full-2.0-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../tools/apache/apache-maven-2.2.1/repository/cglib/cglib-full/2.0/cglib-full-2.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
