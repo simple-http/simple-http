@@ -27,7 +27,7 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HttpMessageContentStringMatcher extends TypeSafeMatcher<HttpMessage> {
+class HttpMessageContentStringMatcher extends TypeSafeMatcher<HttpMessage> {
 
     private final Matcher<String> matcher;
 

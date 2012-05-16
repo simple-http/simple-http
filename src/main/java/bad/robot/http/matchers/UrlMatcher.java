@@ -28,7 +28,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.net.URL;
 
-public class UrlMatcher extends TypeSafeMatcher<URL> {
+class UrlMatcher extends TypeSafeMatcher<URL> {
 
     private final String path;
 

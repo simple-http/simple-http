@@ -28,7 +28,7 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HttpMessageHeaderStringMatcher extends TypeSafeMatcher<HttpMessage> {
+class HttpMessageHeaderStringMatcher extends TypeSafeMatcher<HttpMessage> {
 
     private final HeaderStringMatcher delegate;
 

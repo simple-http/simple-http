@@ -26,7 +26,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HeaderMatcher extends TypeSafeMatcher<Header> {
+class HeaderMatcher extends TypeSafeMatcher<Header> {
 
     private final Header header;
 

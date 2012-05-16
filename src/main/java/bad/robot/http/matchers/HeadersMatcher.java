@@ -29,7 +29,7 @@ import org.hamcrest.TypeSafeMatcher;
 import java.util.Arrays;
 import java.util.List;
 
-public class HeadersMatcher extends TypeSafeMatcher<Headers> {
+class HeadersMatcher extends TypeSafeMatcher<Headers> {
 
     private final List<Header> expected;
 

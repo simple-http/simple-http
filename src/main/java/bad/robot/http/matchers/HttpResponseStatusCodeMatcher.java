@@ -24,13 +24,14 @@ package bad.robot.http.matchers;
 import bad.robot.http.HttpResponse;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HttpResponseStatusCodeMatcher extends TypeSafeMatcher<HttpResponse> {
+class HttpResponseStatusCodeMatcher extends TypeSafeMatcher<HttpResponse> {
     private final int expected;
 
     @Factory
-    public static HttpResponseStatusCodeMatcher hasStatus(int expected) {
+    public static Matcher<HttpResponse> hasStatus(int expected) {
         return new HttpResponseStatusCodeMatcher(expected);
     }
 

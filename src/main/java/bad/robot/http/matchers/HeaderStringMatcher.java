@@ -27,7 +27,7 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HeaderStringMatcher extends TypeSafeMatcher<Header> {
+class HeaderStringMatcher extends TypeSafeMatcher<Header> {
 
     private final String name;
     private final Matcher<String> valueMatcher;

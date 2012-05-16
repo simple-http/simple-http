@@ -26,7 +26,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HttpResponseStatusMessageMatcher extends TypeSafeMatcher<HttpResponse> {
+class HttpResponseStatusMessageMatcher extends TypeSafeMatcher<HttpResponse> {
     private final String expected;
 
     @Factory
