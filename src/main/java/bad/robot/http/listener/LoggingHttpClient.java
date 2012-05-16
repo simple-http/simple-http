@@ -28,6 +28,8 @@ import java.net.URL;
 
 public class LoggingHttpClient implements HttpClient {
 
+    private static final String lineSeparator = System.getProperty("line.separator");
+
     private final HttpClient delegate;
     private final Logger log;
 
@@ -104,7 +106,7 @@ public class LoggingHttpClient implements HttpClient {
     private String message(URL url, HttpRequest request, HttpResponse response) {
         return new StringBuilder()
             .append(request(url, request))
-            .append("\n")
+            .append(lineSeparator)
             .append(response(response))
             .toString();
     }
@@ -117,10 +119,10 @@ public class LoggingHttpClient implements HttpClient {
     
     private String response(HttpResponse response) {
         StringBuilder builder = new StringBuilder();
-        builder.append("HTTP/1.1 ").append(response.getStatusCode()).append(" ").append(response.getStatusMessage()).append("\n");
+        builder.append("HTTP/1.1 ").append(response.getStatusCode()).append(" ").append(response.getStatusMessage()).append(lineSeparator);
         for (Header header : response.getHeaders())
-            builder.append(header.name()).append(": ").append(header.value()).append("\n");
-        builder.append("\n").append(response.getContent().asString());
+            builder.append(header.name()).append(": ").append(header.value()).append(lineSeparator);
+        builder.append(lineSeparator).append(response.getContent().asString());
         return builder.toString();
     }
 
@@ -155,10 +157,10 @@ public class LoggingHttpClient implements HttpClient {
         }
 
         private void asHttpString(HttpMessage message, String method) {
-            builder.append(method).append(" ").append(url.toExternalForm()).append(" HTTP/1.1").append("\n");
+            builder.append(method).append(" ").append(url.toExternalForm()).append(" HTTP/1.1").append(lineSeparator);
             for (Header header : message.getHeaders())
-                builder.append(header.name()).append(": ").append(header.value()).append("\n");
-            builder.append("\n").append(message.getContent().asString());
+                builder.append(header.name()).append(": ").append(header.value()).append(lineSeparator);
+            builder.append(lineSeparator).append(message.getContent().asString());
         }
 
         public String asString() {

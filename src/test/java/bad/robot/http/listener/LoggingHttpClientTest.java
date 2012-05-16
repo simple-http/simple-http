@@ -48,6 +48,7 @@ import static org.hamcrest.Matchers.containsString;
 @RunWith(JMock.class)
 public class LoggingHttpClientTest {
 
+    public static final String lineSeparator = System.getProperty("line.separator");
     private final Mockery context = new Mockery();
     private final Clock mock = new Clock() {
         @Override
@@ -58,7 +59,7 @@ public class LoggingHttpClientTest {
     private final Logger logger = Logger.getLogger(this.getClass());
     private final Log4J log4J = Log4J.appendTo(logger, INFO);
     private final HttpClient client = context.mock(HttpClient.class);
-    
+
     private final LoggingHttpClient http = new LoggingHttpClient(client, logger);
 
     @Test
@@ -72,22 +73,22 @@ public class LoggingHttpClientTest {
     public void shouldLogGetWithHeaders() throws MalformedURLException {
         expectingHttpClientCall();
         http.get(anyUrl(), headers(header("Accept", "text/plain"), header("Host", "127.0.0.1")));
-        log4J.assertThat(containsString("GET http://baddotrobot.com HTTP/1.1\nAccept: text/plain\nHost: 127.0.0.1"));
+        log4J.assertThat(containsString("GET http://baddotrobot.com HTTP/1.1" + lineSeparator + "Accept: text/plain" + lineSeparator + "Host: 127.0.0.1"));
     }
-    
+
     @Test
     public void shouldLogPostFormUrlEncoded() throws MalformedURLException {
         expectingHttpClientCall();
         http.post(anyUrl(), new FormUrlEncodedMessage(
-            params(
-                "first name", "bob la rock",
-                "age", "28"
-            ),
-            headers(
-                header("Accept", "text/plain"),
-                header("Host", "127.0.0.1"))
+                params(
+                        "first name", "bob la rock",
+                        "age", "28"
+                ),
+                headers(
+                        header("Accept", "text/plain"),
+                        header("Host", "127.0.0.1"))
         ));
-        log4J.assertThat(containsString("POST http://baddotrobot.com HTTP/1.1\n"));
+        log4J.assertThat(containsString("POST http://baddotrobot.com HTTP/1.1" + lineSeparator));
         log4J.assertThat(containsString("Accept: text/plain"));
         log4J.assertThat(containsString("Host: 127.0.0.1"));
         log4J.assertThat(containsString("Content-Type: application/x-www-form-urlencoded"));
