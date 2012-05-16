@@ -31,7 +31,7 @@ import java.io.IOException;
 
 import static bad.robot.http.CharacterSet.UTF_8;
 import static bad.robot.http.FormParameters.params;
-import static bad.robot.http.matchers.Matchers.apacheHeader;
+import static bad.robot.http.matchers.Matchers.ApacheMatchers.apacheHeader;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 

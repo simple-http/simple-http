@@ -72,4 +72,8 @@ public class FormParameters implements MessageContent {
         }
     }
 
+    @Override
+    public String toString() {
+        return asString();
+    }
 }

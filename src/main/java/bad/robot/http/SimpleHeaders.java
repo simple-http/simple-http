@@ -69,6 +69,11 @@ public class SimpleHeaders implements Headers {
             public Iterator<Header> iterator() {
                 return new EmptyIterator<Header>();
             }
+
+            @Override
+            public String toString() {
+                return "";
+            }
         };
     }
 }

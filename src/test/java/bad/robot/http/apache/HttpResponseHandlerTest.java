@@ -36,7 +36,10 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static bad.robot.http.SimpleHeader.header;
-import static bad.robot.http.matchers.Matchers.*;
+import static bad.robot.http.matchers.HttpResponseStatusCodeMatcher.hasStatus;
+import static bad.robot.http.matchers.Matchers.HttpMessageMatchers.hasContent;
+import static bad.robot.http.matchers.Matchers.HttpMessageMatchers.hasHeader;
+import static bad.robot.http.matchers.Matchers.HttpResponseMatchers.hasStatusMessage;
 import static org.apache.http.HttpVersion.HTTP_1_1;
 import static org.junit.Assert.assertThat;
 

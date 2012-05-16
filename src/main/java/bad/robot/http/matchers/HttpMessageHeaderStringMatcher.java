@@ -22,28 +22,29 @@
 package bad.robot.http.matchers;
 
 import bad.robot.http.Header;
-import bad.robot.http.HttpResponse;
+import bad.robot.http.HttpMessage;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-public class HttpResponseHeaderMatcher extends TypeSafeMatcher<HttpResponse> {
+public class HttpMessageHeaderStringMatcher extends TypeSafeMatcher<HttpMessage> {
 
-    private final Header expected;
+    private final HeaderStringMatcher delegate;
 
     @Factory
-    public static HttpResponseHeaderMatcher hasHeader(Header expected) {
-        return new HttpResponseHeaderMatcher(expected);
+    public static HttpMessageHeaderStringMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
+        return new HttpMessageHeaderStringMatcher(name, matcher);
     }
 
-    private HttpResponseHeaderMatcher(Header expected) {
-        this.expected = expected;
+    public HttpMessageHeaderStringMatcher(String name, Matcher<String> matcher) {
+        this.delegate = HeaderStringMatcher.hasHeaderWithValue(name, matcher);
     }
 
     @Override
-    public boolean matchesSafely(HttpResponse actual) {
+    public boolean matchesSafely(HttpMessage actual) {
         for (Header header : actual.getHeaders()) {
-            if (HeaderMatcher.hasHeader(expected).matches(header))
+            if (delegate.matches(header))
                 return true;
         }
         return false;
@@ -51,6 +52,6 @@ public class HttpResponseHeaderMatcher extends TypeSafeMatcher<HttpResponse> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendValue(expected);
+        delegate.describeTo(description);
     }
 }

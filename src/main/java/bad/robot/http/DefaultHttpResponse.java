@@ -62,10 +62,10 @@ public class DefaultHttpResponse implements HttpResponse {
 
     @Override
     public String toString() {
-        return "DefaultHttpResponse{statusCode=" + statusCode +
-                ", statusMessage='" + statusMessage + '\'' +
-                ", content='" + content + '\'' +
-                ", headers='" + headers + '\'' +
+        return this.getClass().getSimpleName() + "{statusCode=" + statusCode +
+                ", statusMessage='" + statusMessage + "\'" +
+                ", content='" + content + "\'" +
+                ", headers='" + headers + "\'" +
                 '}';
     }
 }

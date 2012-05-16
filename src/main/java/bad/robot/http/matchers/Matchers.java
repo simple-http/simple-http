@@ -23,6 +23,7 @@ package bad.robot.http.matchers;
 
 import bad.robot.http.Header;
 import bad.robot.http.Headers;
+import bad.robot.http.HttpMessage;
 import bad.robot.http.HttpResponse;
 import bad.robot.http.matchers.apache.ApacheHeaderMatcher;
 import bad.robot.http.matchers.apache.ApacheHttpUriRequestContentMatcher;
@@ -37,48 +38,66 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class Matchers {
 
-    public static Matcher<HttpResponse> hasStatus(int status) {
-        return HttpResponseStatusCodeMatcher.hasStatus(status);
+    public static class HeaderMatchers {
+        public static Matcher<Header> hasHeader(Header header) {
+            return HeaderMatcher.hasHeader(header);
+        }
+
+        public static Matcher<Header> hasHeaderWithValue(String name, Matcher<String> value) {
+            return HeaderStringMatcher.hasHeaderWithValue(name, value);
+        }
     }
 
-    public static Matcher<HttpResponse> hasStatusMessage(String message) {
-        return HttpResponseStatusMessageMatcher.hasStatusMessage(message);
+    public static class HttpMessageMatchers {
+        public static Matcher<HttpMessage> hasContent(String content) {
+            return HttpMessageContentStringMatcher.hasContent(equalTo(content));
+        }
+
+        public static Matcher<HttpMessage> hasContent(Matcher<String> content) {
+            return HttpMessageContentStringMatcher.hasContent(content);
+        }
+
+        public static Matcher<HttpMessage> hasHeader(Header header) {
+            return HttpMessageHeaderMatcher.hasHeader(header);
+        }
+
+        public static Matcher<HttpMessage> hasHeader(String name, Matcher<String> value) {
+            return HttpMessageHeaderStringMatcher.hasHeaderWithValue(name, value);
+        }
     }
 
-    public static Matcher<HttpResponse> hasContent(String content) {
-        return HttpResponseMessageContentStringMatcher.hasContent(equalTo(content));
+    public static class HttpResponseMatchers {
+        public static Matcher<HttpResponse> hasStatus(int status) {
+            return HttpResponseStatusCodeMatcher.hasStatus(status);
+        }
+
+        public static Matcher<HttpResponse> hasStatusMessage(String message) {
+            return HttpResponseStatusMessageMatcher.hasStatusMessage(message);
+        }
+
     }
 
-    public static Matcher<HttpResponse> hasContent(Matcher<String> content) {
-        return HttpResponseMessageContentStringMatcher.hasContent(content);
+    public static class UrlMatchers {
+        public static Matcher<URL> containsPath(String path) {
+            return UrlMatcher.containsPath(path);
+        }
     }
 
-    public static Matcher<HttpResponse> hasHeader(Header header) {
-        return HttpResponseHeaderMatcher.hasHeader(header);
-    }
+    public static class ApacheMatchers {
+        public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
+            return ApacheHeaderMatcher.apacheHeader(name, value);
+        }
 
-    public static Matcher<HttpResponse> hasHeader(String name, Matcher<String> value) {
-        return HttpResponseHeaderStringMatcher.hasHeaderWithValue(name, value);
-    }
+        public static Matcher<HttpUriRequest> requestContaining(Headers headers) {
+            return ApacheHttpUriRequestHeaderMatcher.requestContaining(headers);
+        }
 
-    public static Matcher<URL> containsPath(String path) {
-        return UrlMatcher.containsPath(path);
-    }
+        public static Matcher<HttpUriRequest> requestWith(URL url) {
+            return ApacheHttpUriRequestUrlMatcher.requestWith(url);
+        }
 
-    public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
-        return ApacheHeaderMatcher.apacheHeader(name, value);
+        public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
+            return ApacheHttpUriRequestContentMatcher.messageContaining(content);
+        }
     }
-    
-    public static Matcher<HttpUriRequest> requestContaining(Headers headers) {
-        return ApacheHttpUriRequestHeaderMatcher.requestContaining(headers);
-    }
-
-    public static Matcher<HttpUriRequest> requestWith(URL url) {
-        return ApacheHttpUriRequestUrlMatcher.requestWith(url);
-    }
-
-    public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
-        return ApacheHttpUriRequestContentMatcher.messageContaining(content);
-    }
-
 }

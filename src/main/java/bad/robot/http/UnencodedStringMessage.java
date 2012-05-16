@@ -66,4 +66,12 @@ public class UnencodedStringMessage implements HttpPut, HttpPost {
     public void accept(HttpRequestVisitor visitor) {
         visitor.visit(this);
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+                "content='" + content + "\', " +
+                "headers='" + headers + "\'" +
+                '}';
+    }
 }
