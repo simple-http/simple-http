@@ -38,17 +38,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class Matchers {
 
-    public static class HeaderMatchers {
-        public static Matcher<Header> hasHeader(Header header) {
-            return HeaderMatcher.hasHeader(header);
-        }
-
-        public static Matcher<Header> hasHeaderWithValue(String name, Matcher<String> value) {
-            return HeaderStringMatcher.hasHeaderWithValue(name, value);
-        }
-    }
-
-    public static class HttpMessageMatchers {
         public static Matcher<HttpMessage> hasContent(String content) {
             return HttpMessageContentStringMatcher.hasContent(equalTo(content));
         }
@@ -64,9 +53,7 @@ public class Matchers {
         public static Matcher<HttpMessage> hasHeader(String name, Matcher<String> value) {
             return HttpMessageHeaderStringMatcher.hasHeaderWithValue(name, value);
         }
-    }
 
-    public static class HttpResponseMatchers {
         public static Matcher<HttpResponse> hasStatus(int status) {
             return HttpResponseStatusCodeMatcher.hasStatus(status);
         }
@@ -75,15 +62,10 @@ public class Matchers {
             return HttpResponseStatusMessageMatcher.hasStatusMessage(message);
         }
 
-    }
-
-    public static class UrlMatchers {
         public static Matcher<URL> containsPath(String path) {
             return UrlMatcher.containsPath(path);
         }
-    }
 
-    public static class ApacheMatchers {
         public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
             return ApacheHeaderMatcher.apacheHeader(name, value);
         }
@@ -99,5 +81,4 @@ public class Matchers {
         public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
             return ApacheHttpUriRequestContentMatcher.messageContaining(content);
         }
-    }
 }

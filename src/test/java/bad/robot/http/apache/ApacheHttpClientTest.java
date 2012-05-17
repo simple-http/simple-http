@@ -44,7 +44,7 @@ import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
 import static bad.robot.http.SimpleHeaders.noHeaders;
-import static bad.robot.http.matchers.Matchers.ApacheMatchers.*;
+import static bad.robot.http.matchers.Matchers.*;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsAnything.any;

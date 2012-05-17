@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
-import static bad.robot.http.matchers.Matchers.HttpMessageMatchers.hasHeader;
+import static bad.robot.http.matchers.Matchers.hasHeader;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
