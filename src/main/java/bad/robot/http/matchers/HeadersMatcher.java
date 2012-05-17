@@ -24,6 +24,7 @@ package bad.robot.http.matchers;
 import bad.robot.http.Header;
 import bad.robot.http.Headers;
 import org.hamcrest.Description;
+import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Arrays;
@@ -33,24 +34,31 @@ class HeadersMatcher extends TypeSafeMatcher<Headers> {
 
     private final List<Header> expected;
 
+    @Factory
+    public static HeadersMatcher hasHeaders(Header... headers) {
+        return new HeadersMatcher(headers);
+    }
+
+    @Factory
+    public static HeadersMatcher hasHeader(Header header) {
+        return new HeadersMatcher(new Header[] {header});
+    }
+
     private HeadersMatcher(Header[] expected) {
         this.expected = Arrays.asList(expected);
     }
 
-    public static HeadersMatcher headers(Header... headers) {
-        return new HeadersMatcher(headers);
-    }
-
     @Override
     public boolean matchesSafely(Headers actual) {
-        for (Header header : actual) 
-            if (!expected.contains(header))
-                return false;
-        return true;
+        int matches = 0;
+        for (Header header : actual)
+            if (expected.contains(header))
+                matches++;
+        return matches == expected.size();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendValue(expected);
+        description.appendText("headers to contain ").appendValue(expected);
     }
 }
