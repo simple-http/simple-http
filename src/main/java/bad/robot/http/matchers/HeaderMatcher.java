@@ -31,7 +31,7 @@ class HeaderMatcher extends TypeSafeMatcher<Header> {
     private final Header header;
 
     @Factory
-    public static HeaderMatcher hasHeader(Header expected) {
+    public static HeaderMatcher isHeader(Header expected) {
         return new HeaderMatcher(expected);
     }
 

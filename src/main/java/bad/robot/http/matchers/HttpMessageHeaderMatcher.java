@@ -43,7 +43,7 @@ class HttpMessageHeaderMatcher extends TypeSafeMatcher<HttpMessage> {
     @Override
     public boolean matchesSafely(HttpMessage actual) {
         for (Header header : actual.getHeaders()) {
-            if (HeaderMatcher.hasHeader(expected).matches(header))
+            if (HeaderMatcher.isHeader(expected).matches(header))
                 return true;
         }
         return false;
