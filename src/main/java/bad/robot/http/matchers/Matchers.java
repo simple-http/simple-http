@@ -36,6 +36,9 @@ import java.net.URL;
 
 import static org.hamcrest.Matchers.equalTo;
 
+/**
+ * This is your first port of call if you're looking for helpful HTTP related {@link Matcher}s.
+ */
 public class Matchers {
 
         public static Matcher<HttpMessage> hasContent(String content) {
@@ -50,7 +53,7 @@ public class Matchers {
             return HttpMessageHeaderMatcher.hasHeader(header);
         }
 
-        public static Matcher<HttpMessage> hasHeader(String name, Matcher<String> value) {
+        public static Matcher<HttpMessage> hasHeaderWithValue(String name, Matcher<String> value) {
             return HttpMessageHeaderValueMatcher.hasHeaderWithValue(name, value);
         }
 

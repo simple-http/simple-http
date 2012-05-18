@@ -42,7 +42,8 @@ import static org.junit.Assert.assertThat;
 public class HttpMessageHeaderValueMatcherTest {
 
     private final SimpleHeader header = header("Accept", "text/html");
-    private final HttpPost request = new UnencodedStringMessage("body", headers(header));
+    private final SimpleHeader anotherHeader = header("Accept-Language", "en-US");
+    private final HttpPost request = new UnencodedStringMessage("body", headers(anotherHeader, header));
 
     @Test
     @Ignore("an example only")
@@ -56,19 +57,20 @@ public class HttpMessageHeaderValueMatcherTest {
 
     @Test
     public void matches() {
-        assertThat(hasHeaderWithValue("Accept", is("text/html")).matches(request), is(true));
+        assertThat(hasHeaderWithValue("Accept", equalTo("text/html")).matches(request), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasHeaderWithValue("Accept", is("application/json")).matches(request), is(false));
-        assertThat(hasHeaderWithValue("accept", is("text/html")).matches(header), is(false));
+        assertThat(hasHeaderWithValue("Accept", equalTo("application/json")).matches(request), is(false));
+        assertThat(hasHeaderWithValue("accept", equalTo("text/html")).matches(header), is(false));
+        assertThat(hasHeaderWithValue("Accept-Language", equalTo("text/html")).matches(header), is(false));
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasHeaderWithValue("Accept", is("application/json")).describeTo(description);
+        hasHeaderWithValue("Accept", equalTo("application/json")).describeTo(description);
         assertThat(description.toString(), allOf(
                 containsString("a HttpMessage with"),
                 containsString("Accept"),

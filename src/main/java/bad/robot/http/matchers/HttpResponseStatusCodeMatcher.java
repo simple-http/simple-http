@@ -21,6 +21,7 @@
 
 package bad.robot.http.matchers;
 
+import bad.robot.http.HttpMessage;
 import bad.robot.http.HttpResponse;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
@@ -28,6 +29,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 class HttpResponseStatusCodeMatcher extends TypeSafeMatcher<HttpResponse> {
+
     private final int expected;
 
     @Factory
@@ -46,6 +48,7 @@ class HttpResponseStatusCodeMatcher extends TypeSafeMatcher<HttpResponse> {
 
     @Override
     public void describeTo(Description description) {
+        description.appendText("a ").appendText(HttpMessage.class.getSimpleName()).appendText(" with status code ");
         description.appendValue(expected);
     }
 }
