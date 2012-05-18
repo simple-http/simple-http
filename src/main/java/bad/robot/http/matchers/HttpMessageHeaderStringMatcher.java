@@ -30,7 +30,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 class HttpMessageHeaderStringMatcher extends TypeSafeMatcher<HttpMessage> {
 
-    private final HeaderStringMatcher delegate;
+    private final HeaderValueMatcher delegate;
 
     @Factory
     public static HttpMessageHeaderStringMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
@@ -38,7 +38,7 @@ class HttpMessageHeaderStringMatcher extends TypeSafeMatcher<HttpMessage> {
     }
 
     public HttpMessageHeaderStringMatcher(String name, Matcher<String> matcher) {
-        this.delegate = HeaderStringMatcher.hasHeaderWithValue(name, matcher);
+        this.delegate = HeaderValueMatcher.hasHeaderWithValue(name, matcher);
     }
 
     @Override

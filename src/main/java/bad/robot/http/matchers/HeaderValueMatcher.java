@@ -27,17 +27,17 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HeaderStringMatcher extends TypeSafeMatcher<Header> {
+class HeaderValueMatcher extends TypeSafeMatcher<Header> {
 
     private final String name;
     private final Matcher<String> valueMatcher;
 
     @Factory
-    public static HeaderStringMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
-        return new HeaderStringMatcher(name, matcher);
+    public static HeaderValueMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
+        return new HeaderValueMatcher(name, matcher);
     }
 
-    public HeaderStringMatcher(String name, Matcher<String> valueMatcher) {
+    public HeaderValueMatcher(String name, Matcher<String> valueMatcher) {
         this.name = name;
         this.valueMatcher = valueMatcher;
     }
@@ -51,7 +51,7 @@ class HeaderStringMatcher extends TypeSafeMatcher<Header> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("header ").appendValue(name).appendText(" with value of ");
+        description.appendText("header ").appendValue(name).appendText(" with value ");
         valueMatcher.describeTo(description);
     }
 }
