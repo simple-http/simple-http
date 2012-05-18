@@ -21,12 +21,14 @@
 
 package bad.robot.http.matchers;
 
+import bad.robot.http.HttpMessage;
 import bad.robot.http.HttpResponse;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
 
 class HttpResponseStatusMessageMatcher extends TypeSafeMatcher<HttpResponse> {
+
     private final String expected;
 
     @Factory
@@ -45,6 +47,7 @@ class HttpResponseStatusMessageMatcher extends TypeSafeMatcher<HttpResponse> {
 
     @Override
     public void describeTo(Description description) {
+        description.appendText("a ").appendText(HttpMessage.class.getSimpleName()).appendText(" with status message ");
         description.appendValue(expected);
     }
 }
