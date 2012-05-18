@@ -62,7 +62,11 @@ public class Matchers {
         }
 
         public static Matcher<HttpResponse> hasStatusMessage(String message) {
-            return HttpResponseStatusMessageMatcher.hasStatusMessage(message);
+            return HttpResponseStatusMessageMatcher.hasStatusMessage(equalTo(message));
+        }
+
+        public static Matcher<HttpResponse> hasStatusMessage(Matcher<String> matcher) {
+            return HttpResponseStatusMessageMatcher.hasStatusMessage(matcher);
         }
 
         public static Matcher<URL> containsPath(String path) {

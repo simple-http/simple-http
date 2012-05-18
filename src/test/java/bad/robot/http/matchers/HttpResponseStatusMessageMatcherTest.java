@@ -40,24 +40,24 @@ public class HttpResponseStatusMessageMatcherTest {
 
     @Test
     public void exampleUsage() throws MalformedURLException {
-        assertThat(response, hasStatusMessage("OK"));
+        assertThat(response, hasStatusMessage(equalTo("OK")));
     }
 
     @Test
     public void matches() {
-        assertThat(hasStatusMessage("OK").matches(response), is(true));
+        assertThat(hasStatusMessage(equalTo("OK")).matches(response), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasStatusMessage("Not Found").matches(response), is(false));
-        assertThat(hasStatusMessage("ok").matches(response), is(false));
+        assertThat(hasStatusMessage(equalTo("Not Found")).matches(response), is(false));
+        assertThat(hasStatusMessage(equalTo("ok")).matches(response), is(false));
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasStatusMessage("OK").describeTo(description);
+        hasStatusMessage(equalTo("OK")).describeTo(description);
         assertThat(description.toString(), allOf(
             containsString("a HttpMessage with status message"),
             containsString("OK"))

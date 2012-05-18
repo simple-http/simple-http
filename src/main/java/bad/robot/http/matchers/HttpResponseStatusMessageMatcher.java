@@ -25,29 +25,30 @@ import bad.robot.http.HttpMessage;
 import bad.robot.http.HttpResponse;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 class HttpResponseStatusMessageMatcher extends TypeSafeMatcher<HttpResponse> {
 
-    private final String expected;
+    private final Matcher<String> delegate;
 
     @Factory
-    public static HttpResponseStatusMessageMatcher hasStatusMessage(String expected) {
-        return new HttpResponseStatusMessageMatcher(expected);
+    public static HttpResponseStatusMessageMatcher hasStatusMessage(Matcher<String> matcher) {
+        return new HttpResponseStatusMessageMatcher(matcher);
     }
 
-    private HttpResponseStatusMessageMatcher(String expected) {
-        this.expected = expected;
+    private HttpResponseStatusMessageMatcher(Matcher<String> matcher) {
+        this.delegate = matcher;
     }
 
     @Override
     public boolean matchesSafely(HttpResponse actual) {
-        return actual.getStatusMessage().equals(expected);
+        return delegate.matches(actual.getStatusMessage());
     }
 
     @Override
     public void describeTo(Description description) {
         description.appendText("a ").appendText(HttpMessage.class.getSimpleName()).appendText(" with status message ");
-        description.appendValue(expected);
+        delegate.describeTo(description);
     }
 }
