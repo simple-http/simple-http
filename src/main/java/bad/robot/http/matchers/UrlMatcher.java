@@ -66,6 +66,6 @@ class UrlMatcher extends TypeSafeMatcher<URL> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("with a URL containing the text ").appendValue(path);
+        description.appendText("a URL containing the text ").appendValue(path);
     }
 }
