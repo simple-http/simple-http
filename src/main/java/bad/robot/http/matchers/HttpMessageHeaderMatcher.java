@@ -51,6 +51,7 @@ class HttpMessageHeaderMatcher extends TypeSafeMatcher<HttpMessage> {
 
     @Override
     public void describeTo(Description description) {
+        description.appendText("a ").appendText(HttpMessage.class.getSimpleName()).appendText(" with the header ");
         description.appendValue(expected);
     }
 }

@@ -35,12 +35,12 @@ public class SimpleHeaders implements Headers {
 
     private final List<Header> headers;
 
-    private SimpleHeaders(List<Header> pairs) {
-        headers = new ArrayList<Header>(pairs);
+    private SimpleHeaders(List<Header> headers) {
+        this.headers = new ArrayList<Header>(headers);
     }
 
-    public static SimpleHeaders headers(Header... pairs) {
-        return new SimpleHeaders(Arrays.asList(pairs));
+    public static SimpleHeaders headers(Header... headers) {
+        return new SimpleHeaders(Arrays.asList(headers));
     }
 
     @Override
