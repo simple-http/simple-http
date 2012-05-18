@@ -28,16 +28,16 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HttpMessageHeaderStringMatcher extends TypeSafeMatcher<HttpMessage> {
+class HttpMessageHeaderValueMatcher extends TypeSafeMatcher<HttpMessage> {
 
     private final HeaderValueMatcher delegate;
 
     @Factory
-    public static HttpMessageHeaderStringMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
-        return new HttpMessageHeaderStringMatcher(name, matcher);
+    public static HttpMessageHeaderValueMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
+        return new HttpMessageHeaderValueMatcher(name, matcher);
     }
 
-    public HttpMessageHeaderStringMatcher(String name, Matcher<String> matcher) {
+    public HttpMessageHeaderValueMatcher(String name, Matcher<String> matcher) {
         this.delegate = HeaderValueMatcher.hasHeaderWithValue(name, matcher);
     }
 
@@ -52,6 +52,7 @@ class HttpMessageHeaderStringMatcher extends TypeSafeMatcher<HttpMessage> {
 
     @Override
     public void describeTo(Description description) {
+        description.appendText("a ").appendText(HttpMessage.class.getSimpleName()).appendText(" with ");
         delegate.describeTo(description);
     }
 }

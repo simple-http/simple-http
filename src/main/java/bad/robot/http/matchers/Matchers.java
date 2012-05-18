@@ -51,7 +51,7 @@ public class Matchers {
         }
 
         public static Matcher<HttpMessage> hasHeader(String name, Matcher<String> value) {
-            return HttpMessageHeaderStringMatcher.hasHeaderWithValue(name, value);
+            return HttpMessageHeaderValueMatcher.hasHeaderWithValue(name, value);
         }
 
         public static Matcher<HttpResponse> hasStatus(int status) {
