@@ -33,6 +33,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.hamcrest.Matcher;
 
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -47,6 +48,14 @@ public class Matchers {
 
         public static Matcher<HttpMessage> hasContent(Matcher<String> content) {
             return HttpMessageContentStringMatcher.hasContent(content);
+        }
+
+        public static Matcher<HttpMessage> hasBinaryContent(Matcher<byte[]> content) {
+            return HttpMessageContentByteArrayMatcher.hasContent(content, Charset.defaultCharset().name());
+        }
+
+        public static Matcher<HttpMessage> hasBinaryContent(Matcher<byte[]> content, String characterSet) {
+            return HttpMessageContentByteArrayMatcher.hasContent(content, characterSet);
         }
 
         public static Matcher<HttpMessage> hasHeader(Header header) {
