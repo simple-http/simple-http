@@ -27,13 +27,20 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import static org.hamcrest.Matchers.equalTo;
+
 class HttpMessageContentStringMatcher<T extends HttpMessage> extends TypeSafeMatcher<T> {
 
     private final Matcher<String> matcher;
 
     @Factory
-    public static <T extends HttpMessage> Matcher<T> hasContent(Matcher<String> matcher) {
+    public static <T extends HttpMessage> Matcher<T> content(Matcher<String> matcher) {
         return new HttpMessageContentStringMatcher<T>(matcher);
+    }
+
+    @Factory
+    public static <T extends HttpMessage> Matcher<T> content(String content) {
+        return new HttpMessageContentStringMatcher<T>(equalTo(content));
     }
 
     public HttpMessageContentStringMatcher(Matcher<String> matcher) {

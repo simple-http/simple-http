@@ -73,7 +73,7 @@ public class HttpResponseHandlerTest {
     @Test
     public void shouldConvertEmptyBody() throws IOException {
         HttpResponse response = handler.handleResponse(anApacheOkResponse);
-        assertThat(response, hasContent(""));
+        assertThat(response, has(content("")));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class HttpResponseHandlerTest {
             one(consumer).toString(body); will(returnValue("I'm a http message body"));
         }});
         HttpResponse response = handler.handleResponse(anApacheResponseWithBody);
-        assertThat(response, hasContent("I'm a http message body"));
+        assertThat(response, has(content("I'm a http message body")));
     }
 
     @Test

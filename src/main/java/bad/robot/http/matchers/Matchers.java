@@ -21,10 +21,7 @@
 
 package bad.robot.http.matchers;
 
-import bad.robot.http.Header;
-import bad.robot.http.Headers;
-import bad.robot.http.HttpMessage;
-import bad.robot.http.HttpResponse;
+import bad.robot.http.*;
 import bad.robot.http.matchers.apache.ApacheHeaderMatcher;
 import bad.robot.http.matchers.apache.ApacheHttpUriRequestContentMatcher;
 import bad.robot.http.matchers.apache.ApacheHttpUriRequestHeaderMatcher;
@@ -42,59 +39,71 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class Matchers {
 
-        public static <T extends HttpMessage> Matcher<T> hasContent(String content) {
-            return HttpMessageContentStringMatcher.<T>hasContent(equalTo(content));
-        }
+    public static <T> Matcher<T> has(Matcher<T> matcher) {
+        return matcher;
+    }
 
-        public static <T extends HttpMessage> Matcher<T> hasContent(Matcher<String> content) {
-            return HttpMessageContentStringMatcher.<T>hasContent(content);
-        }
+    public static Matcher<HttpPost> post(Matcher<? extends HttpMessage> matcher) {
+        return (Matcher<HttpPost>) matcher;
+    }
 
-        public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content) {
-            return HttpMessageContentByteArrayMatcher.<T>hasContent(content, Charset.defaultCharset().name());
-        }
+    public static Matcher<HttpPut> put(Matcher<? extends HttpMessage> matcher) {
+        return (Matcher<HttpPut>) matcher;
+    }
 
-        public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content, String characterSet) {
-            return HttpMessageContentByteArrayMatcher.<T>hasContent(content, characterSet);
-        }
+    public static <T extends HttpMessage> Matcher<T> content(String content) {
+        return HttpMessageContentStringMatcher.<T>content(content);
+    }
 
-        public static <T extends HttpMessage> Matcher<T> hasHeader(Header header) {
-            return HttpMessageHeaderMatcher.<T>hasHeader(header);
-        }
+    public static <T extends HttpMessage> Matcher<T> content(Matcher<String> mather) {
+        return HttpMessageContentStringMatcher.<T>content(mather);
+    }
 
-        public static <T extends HttpMessage> Matcher<T> hasHeaderWithValue(String name, Matcher<String> value) {
-            return HttpMessageHeaderValueMatcher.<T>hasHeaderWithValue(name, value);
-        }
+    public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content) {
+        return HttpMessageContentByteArrayMatcher.<T>hasContent(content, Charset.defaultCharset().name());
+    }
 
-        public static Matcher<HttpResponse> hasStatus(int status) {
-            return HttpResponseStatusCodeMatcher.hasStatus(status);
-        }
+    public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content, String characterSet) {
+        return HttpMessageContentByteArrayMatcher.<T>hasContent(content, characterSet);
+    }
 
-        public static Matcher<HttpResponse> hasStatusMessage(String message) {
-            return HttpResponseStatusMessageMatcher.hasStatusMessage(equalTo(message));
-        }
+    public static <T extends HttpMessage> Matcher<T> hasHeader(Header header) {
+        return HttpMessageHeaderMatcher.<T>hasHeader(header);
+    }
 
-        public static Matcher<HttpResponse> hasStatusMessage(Matcher<String> matcher) {
-            return HttpResponseStatusMessageMatcher.hasStatusMessage(matcher);
-        }
+    public static <T extends HttpMessage> Matcher<T> hasHeaderWithValue(String name, Matcher<String> value) {
+        return HttpMessageHeaderValueMatcher.<T>hasHeaderWithValue(name, value);
+    }
 
-        public static Matcher<URL> containsPath(String path) {
-            return UrlMatcher.containsPath(path);
-        }
+    public static Matcher<HttpResponse> hasStatus(int status) {
+        return HttpResponseStatusCodeMatcher.hasStatus(status);
+    }
 
-        public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
-            return ApacheHeaderMatcher.apacheHeader(name, value);
-        }
+    public static Matcher<HttpResponse> hasStatusMessage(String message) {
+        return HttpResponseStatusMessageMatcher.hasStatusMessage(equalTo(message));
+    }
 
-        public static Matcher<HttpUriRequest> requestContaining(Headers headers) {
-            return ApacheHttpUriRequestHeaderMatcher.requestContaining(headers);
-        }
+    public static Matcher<HttpResponse> hasStatusMessage(Matcher<String> matcher) {
+        return HttpResponseStatusMessageMatcher.hasStatusMessage(matcher);
+    }
 
-        public static Matcher<HttpUriRequest> requestWith(URL url) {
-            return ApacheHttpUriRequestUrlMatcher.requestWith(url);
-        }
+    public static Matcher<URL> containsPath(String path) {
+        return UrlMatcher.containsPath(path);
+    }
 
-        public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
-            return ApacheHttpUriRequestContentMatcher.messageContaining(content);
-        }
+    public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
+        return ApacheHeaderMatcher.apacheHeader(name, value);
+    }
+
+    public static Matcher<HttpUriRequest> requestContaining(Headers headers) {
+        return ApacheHttpUriRequestHeaderMatcher.requestContaining(headers);
+    }
+
+    public static Matcher<HttpUriRequest> requestWith(URL url) {
+        return ApacheHttpUriRequestUrlMatcher.requestWith(url);
+    }
+
+    public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
+        return ApacheHttpUriRequestContentMatcher.messageContaining(content);
+    }
 }
