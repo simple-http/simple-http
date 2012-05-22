@@ -79,8 +79,8 @@ public class Matchers {
         return HttpMessageHeaderValueMatcher.<T>hasHeaderWithValue(name, value);
     }
 
-    public static Matcher<HttpResponse> hasStatus(int status) {
-        return HttpResponseStatusCodeMatcher.hasStatus(status);
+    public static Matcher<HttpResponse> status(int status) {
+        return HttpResponseStatusCodeMatcher.status(status);
     }
 
     public static Matcher<HttpResponse> hasStatusMessage(String message) {

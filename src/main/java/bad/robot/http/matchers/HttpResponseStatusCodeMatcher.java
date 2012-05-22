@@ -33,7 +33,7 @@ class HttpResponseStatusCodeMatcher extends TypeSafeMatcher<HttpResponse> {
     private final int expected;
 
     @Factory
-    public static Matcher<HttpResponse> hasStatus(int expected) {
+    public static Matcher<HttpResponse> status(int expected) {
         return new HttpResponseStatusCodeMatcher(expected);
     }
 

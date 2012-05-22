@@ -61,7 +61,7 @@ public class HttpResponseHandlerTest {
     @Test
     public void shouldConvertStatusCode() throws IOException {
         HttpResponse response = handler.handleResponse(anApacheOkResponse);
-        assertThat(response, hasStatus(200));
+        assertThat(response, status(200));
     }
 
     @Test

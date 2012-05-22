@@ -30,7 +30,8 @@ import java.net.MalformedURLException;
 
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
-import static bad.robot.http.matchers.HttpResponseStatusCodeMatcher.hasStatus;
+import static bad.robot.http.matchers.HttpResponseStatusCodeMatcher.status;
+import static bad.robot.http.matchers.Matchers.has;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -40,23 +41,23 @@ public class HttpResponseStatusCodeMatcherTest {
 
     @Test
     public void exampleUsage() throws MalformedURLException {
-        assertThat(response, hasStatus(200));
+        assertThat(response, has(status(200)));
     }
 
     @Test
     public void matches() {
-        assertThat(hasStatus(200).matches(response), is(true));
+        assertThat(status(200).matches(response), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasStatus(201).matches(response), is(false));
+        assertThat(status(201).matches(response), is(false));
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasStatus(200).describeTo(description);
+        status(200).describeTo(description);
         assertThat(description.toString(), allOf(
             containsString("a HttpMessage with status code"),
             containsString("200"))
