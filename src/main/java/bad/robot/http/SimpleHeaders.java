@@ -21,7 +21,8 @@
 
 package bad.robot.http;
 
-import jedi.functional.EmptyIterator;
+
+import bad.robot.EmptyIterator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,4 +77,5 @@ public class SimpleHeaders implements Headers {
             }
         };
     }
+
 }
