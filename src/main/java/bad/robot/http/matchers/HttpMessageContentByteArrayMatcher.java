@@ -29,6 +29,8 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.io.UnsupportedEncodingException;
 
+import static org.hamcrest.Matchers.equalTo;
+
 class HttpMessageContentByteArrayMatcher<T extends HttpMessage> extends TypeSafeMatcher<T> {
 
     private final Matcher<byte[]> matcher;
@@ -36,8 +38,13 @@ class HttpMessageContentByteArrayMatcher<T extends HttpMessage> extends TypeSafe
     private String characterSet;
 
     @Factory
-    public static <T extends HttpMessage> Matcher<T> hasContent(Matcher<byte[]> content, String characterSet) {
+    public static <T extends HttpMessage> Matcher<T> content(Matcher<byte[]> content, String characterSet) {
         return new HttpMessageContentByteArrayMatcher(content, characterSet);
+    }
+
+    @Factory
+    public static <T extends HttpMessage> Matcher<T> content(byte[] content, String characterSet) {
+        return new HttpMessageContentByteArrayMatcher(equalTo(content), characterSet);
     }
 
     public HttpMessageContentByteArrayMatcher(Matcher<byte[]> matcher, String characterSet) {

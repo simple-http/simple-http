@@ -28,7 +28,8 @@ import org.junit.Test;
 
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
-import static bad.robot.http.matchers.Matchers.hasBinaryContent;
+import static bad.robot.http.matchers.Matchers.binaryContent;
+import static bad.robot.http.matchers.Matchers.has;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -39,29 +40,30 @@ public class HttpMessageContentByteArrayMatcherTest {
 
     @Test
     public void exampleUsage() {
-        assertThat(response, hasBinaryContent(is(expected)));
-        assertThat(response, hasBinaryContent(is(expected), "UTF-8"));
+        assertThat(response, has(binaryContent(expected)));
+        assertThat(response, has(binaryContent(equalTo(expected))));
+        assertThat(response, has(binaryContent(equalTo(expected), "UTF-8")));
     }
 
     @Test
     public void matches() {
-        assertThat(hasBinaryContent(is(expected)).matches(response), is(true));
+        assertThat(binaryContent(equalTo(expected)).matches(response), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasBinaryContent(is("not expected".getBytes())).matches(response), is(false));
+        assertThat(binaryContent(equalTo("not expected".getBytes())).matches(response), is(false));
     }
 
     @Test (expected = RuntimeException.class)
     public void unsupportedEncodingThrowsException() {
-        hasBinaryContent(is(expected), "Marmite-Land").matches(response);
+        binaryContent(equalTo(expected), "Marmite-Land").matches(response);
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasBinaryContent(is(expected)).describeTo(description);
+        binaryContent(equalTo(expected)).describeTo(description);
         assertThat(description.toString(), allOf(
             containsString("a HttpMessage with binary content"),
             containsString("<101>, <120>, <112>, <101>, <99>, <116>, <101>, <100>, <32>, <98>, <111>, <100>, <121>"))

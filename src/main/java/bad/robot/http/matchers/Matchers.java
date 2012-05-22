@@ -59,12 +59,16 @@ public class Matchers {
         return HttpMessageContentStringMatcher.<T>content(mather);
     }
 
-    public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content) {
-        return HttpMessageContentByteArrayMatcher.<T>hasContent(content, Charset.defaultCharset().name());
+    public static <T extends HttpMessage> Matcher<T> binaryContent(Matcher<byte[]> matcher) {
+        return HttpMessageContentByteArrayMatcher.<T>content(matcher, Charset.defaultCharset().name());
     }
 
-    public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content, String characterSet) {
-        return HttpMessageContentByteArrayMatcher.<T>hasContent(content, characterSet);
+    public static <T extends HttpMessage> Matcher<T> binaryContent(byte[] content) {
+        return HttpMessageContentByteArrayMatcher.<T>content(content, Charset.defaultCharset().name());
+    }
+
+    public static <T extends HttpMessage> Matcher<T> binaryContent(Matcher<byte[]> matcher, String characterSet) {
+        return HttpMessageContentByteArrayMatcher.<T>content(matcher, characterSet);
     }
 
     public static <T extends HttpMessage> Matcher<T> hasHeader(Header header) {
