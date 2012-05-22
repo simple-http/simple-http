@@ -33,7 +33,7 @@ class HttpMessageHeaderMatcher<T extends HttpMessage> extends TypeSafeMatcher<T>
     private final Header expected;
 
     @Factory
-    public static <T extends HttpMessage> Matcher<T> hasHeader(Header expected) {
+    public static <T extends HttpMessage> Matcher<T> has(Header expected) {
         return new HttpMessageHeaderMatcher(expected);
     }
 

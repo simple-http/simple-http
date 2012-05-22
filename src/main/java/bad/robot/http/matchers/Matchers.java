@@ -71,8 +71,8 @@ public class Matchers {
         return HttpMessageContentByteArrayMatcher.<T>content(matcher, characterSet);
     }
 
-    public static <T extends HttpMessage> Matcher<T> hasHeader(Header header) {
-        return HttpMessageHeaderMatcher.<T>hasHeader(header);
+    public static <T extends HttpMessage> Matcher<T> has(Header header) {
+        return HttpMessageHeaderMatcher.<T>has(header);
     }
 
     public static <T extends HttpMessage> Matcher<T> hasHeaderWithValue(String name, Matcher<String> value) {

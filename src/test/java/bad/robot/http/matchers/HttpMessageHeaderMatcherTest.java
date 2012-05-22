@@ -21,11 +21,11 @@
 
 package bad.robot.http.matchers;
 
-import bad.robot.http.HttpPost;
-import bad.robot.http.HttpResponse;
-import bad.robot.http.SimpleHeader;
-import bad.robot.http.UnencodedStringMessage;
+import bad.robot.http.*;
 import org.hamcrest.StringDescription;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -35,7 +35,8 @@ import java.net.URL;
 import static bad.robot.http.HttpClients.anApacheClient;
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
-import static bad.robot.http.matchers.HttpMessageHeaderMatcher.hasHeader;
+import static bad.robot.http.matchers.HttpMessageHeaderMatcher.has;
+import static bad.robot.http.matchers.Matchers.put;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -44,31 +45,43 @@ public class HttpMessageHeaderMatcherTest {
     private final SimpleHeader header = header("Accept", "text/html");
     private final HttpPost request = new UnencodedStringMessage("body", headers(header));
 
+    private final Mockery context = new JUnit4Mockery();
+
     @Test
     @Ignore ("an example only")
     public void exampleUsage() throws MalformedURLException {
         HttpPost request = new UnencodedStringMessage("body", headers(header));
         HttpResponse response = anApacheClient().post(new URL("http://www.google.com"), request);
 
-        assertThat(request, hasHeader(header("Accept", "text/html")));
-        assertThat(response, hasHeader(header("Content-Type", "tex/html")));
+        assertThat(request, has(header("Accept", "text/html")));
+        assertThat(response, has(header("Content-Type", "tex/html")));
+    }
+
+    @Test
+    public void anotherExample() throws MalformedURLException {
+        final HttpClient http = context.mock(HttpClient.class);
+        context.checking(new Expectations() {{
+            one(http).put(with(any(URL.class)), with(put(has(header("Accept", "text/html")))));
+        }});
+        http.put(new URL("http://www.google.com"), new UnencodedStringMessage("content", headers(header("Accept", "text/html"))));
+        context.assertIsSatisfied();
     }
 
     @Test
     public void matches() {
-        assertThat(hasHeader(header("Accept", "text/html")).matches(request), is(true));
+        assertThat(has(header("Accept", "text/html")).matches(request), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasHeader(header("Accept", "application/json")).matches(request), is(false));
-        assertThat(hasHeader(header("accept", "text/html")).matches(header), is(false));
+        assertThat(has(header("Accept", "application/json")).matches(request), is(false));
+        assertThat(has(header("accept", "text/html")).matches(header), is(false));
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasHeader(header("Accept", "application/json")).describeTo(description);
+        has(header("Accept", "application/json")).describeTo(description);
         assertThat(description.toString(), allOf(
                 containsString("a HttpMessage with the header"),
                 containsString("Accept"),

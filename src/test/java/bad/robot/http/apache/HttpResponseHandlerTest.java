@@ -88,8 +88,8 @@ public class HttpResponseHandlerTest {
     @Test
     public void shouldConvertHeaders() throws IOException {
         HttpResponse response = handler.handleResponse(anApacheResponseWithHeaders);
-        assertThat(response, hasHeader(header("Accept", "text/html")));
-        assertThat(response, hasHeader(header("Content-Type", "application/json")));
+        assertThat(response, has(header("Accept", "text/html")));
+        assertThat(response, has(header("Content-Type", "application/json")));
     }
 
     @Test
