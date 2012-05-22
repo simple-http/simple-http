@@ -25,14 +25,15 @@ import bad.robot.http.Header;
 import bad.robot.http.HttpMessage;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HttpMessageHeaderMatcher extends TypeSafeMatcher<HttpMessage> {
+class HttpMessageHeaderMatcher<T extends HttpMessage> extends TypeSafeMatcher<T> {
 
     private final Header expected;
 
     @Factory
-    public static HttpMessageHeaderMatcher hasHeader(Header expected) {
+    public static <T extends HttpMessage> Matcher<T> hasHeader(Header expected) {
         return new HttpMessageHeaderMatcher(expected);
     }
 
@@ -41,7 +42,7 @@ class HttpMessageHeaderMatcher extends TypeSafeMatcher<HttpMessage> {
     }
 
     @Override
-    public boolean matchesSafely(HttpMessage actual) {
+    public boolean matchesSafely(T actual) {
         for (Header header : actual.getHeaders()) {
             if (HeaderMatcher.isHeader(expected).matches(header))
                 return true;

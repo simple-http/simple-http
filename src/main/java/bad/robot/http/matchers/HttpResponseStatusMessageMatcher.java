@@ -33,7 +33,7 @@ class HttpResponseStatusMessageMatcher extends TypeSafeMatcher<HttpResponse> {
     private final Matcher<String> delegate;
 
     @Factory
-    public static HttpResponseStatusMessageMatcher hasStatusMessage(Matcher<String> matcher) {
+    public static Matcher<HttpResponse> hasStatusMessage(Matcher<String> matcher) {
         return new HttpResponseStatusMessageMatcher(matcher);
     }
 

@@ -21,24 +21,24 @@
 
 package bad.robot.http.matchers;
 
-import bad.robot.http.FormParameters;
 import bad.robot.http.FormUrlEncodedMessage;
 import bad.robot.http.UnencodedStringMessage;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
+import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.matchers.HttpMessageContentStringMatcher.hasContent;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class HttpMessageContentStringMatcherTest {
 
-    private final FormUrlEncodedMessage message = new FormUrlEncodedMessage(FormParameters.params("first name", "bob"));
+    private final FormUrlEncodedMessage message = new FormUrlEncodedMessage(params("first name", "bob"));
 
     @Test
     public void exampleUsage() {
         assertThat(new UnencodedStringMessage("value"), hasContent(equalTo("value")));
-        assertThat(new UnencodedStringMessage("value"), hasContent(containsString("alu")));
+        assertThat(new FormUrlEncodedMessage(params("json", "{}")), hasContent(containsString("json")));
     }
 
     @Test

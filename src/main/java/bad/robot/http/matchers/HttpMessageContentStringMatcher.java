@@ -27,13 +27,13 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HttpMessageContentStringMatcher extends TypeSafeMatcher<HttpMessage> {
+class HttpMessageContentStringMatcher<T extends HttpMessage> extends TypeSafeMatcher<T> {
 
     private final Matcher<String> matcher;
 
     @Factory
-    public static HttpMessageContentStringMatcher hasContent(Matcher<String> matcher) {
-        return new HttpMessageContentStringMatcher(matcher);
+    public static <T extends HttpMessage> Matcher<T> hasContent(Matcher<String> matcher) {
+        return new HttpMessageContentStringMatcher<T>(matcher);
     }
 
     public HttpMessageContentStringMatcher(Matcher<String> matcher) {
@@ -41,7 +41,7 @@ class HttpMessageContentStringMatcher extends TypeSafeMatcher<HttpMessage> {
     }
 
     @Override
-    public boolean matchesSafely(HttpMessage actual) {
+    public boolean matchesSafely(T actual) {
         return matcher.matches(actual.getContent().asString());
     }
 

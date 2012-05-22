@@ -42,28 +42,28 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class Matchers {
 
-        public static Matcher<HttpMessage> hasContent(String content) {
-            return HttpMessageContentStringMatcher.hasContent(equalTo(content));
+        public static <T extends HttpMessage> Matcher<T> hasContent(String content) {
+            return HttpMessageContentStringMatcher.<T>hasContent(equalTo(content));
         }
 
-        public static Matcher<HttpMessage> hasContent(Matcher<String> content) {
-            return HttpMessageContentStringMatcher.hasContent(content);
+        public static <T extends HttpMessage> Matcher<T> hasContent(Matcher<String> content) {
+            return HttpMessageContentStringMatcher.<T>hasContent(content);
         }
 
-        public static Matcher<HttpMessage> hasBinaryContent(Matcher<byte[]> content) {
-            return HttpMessageContentByteArrayMatcher.hasContent(content, Charset.defaultCharset().name());
+        public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content) {
+            return HttpMessageContentByteArrayMatcher.<T>hasContent(content, Charset.defaultCharset().name());
         }
 
-        public static Matcher<HttpMessage> hasBinaryContent(Matcher<byte[]> content, String characterSet) {
-            return HttpMessageContentByteArrayMatcher.hasContent(content, characterSet);
+        public static <T extends HttpMessage> Matcher<T> hasBinaryContent(Matcher<byte[]> content, String characterSet) {
+            return HttpMessageContentByteArrayMatcher.<T>hasContent(content, characterSet);
         }
 
-        public static Matcher<HttpMessage> hasHeader(Header header) {
-            return HttpMessageHeaderMatcher.hasHeader(header);
+        public static <T extends HttpMessage> Matcher<T> hasHeader(Header header) {
+            return HttpMessageHeaderMatcher.<T>hasHeader(header);
         }
 
-        public static Matcher<HttpMessage> hasHeaderWithValue(String name, Matcher<String> value) {
-            return HttpMessageHeaderValueMatcher.hasHeaderWithValue(name, value);
+        public static <T extends HttpMessage> Matcher<T> hasHeaderWithValue(String name, Matcher<String> value) {
+            return HttpMessageHeaderValueMatcher.<T>hasHeaderWithValue(name, value);
         }
 
         public static Matcher<HttpResponse> hasStatus(int status) {

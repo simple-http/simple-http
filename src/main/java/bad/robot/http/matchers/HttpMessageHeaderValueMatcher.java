@@ -28,12 +28,12 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HttpMessageHeaderValueMatcher extends TypeSafeMatcher<HttpMessage> {
+class HttpMessageHeaderValueMatcher<T extends HttpMessage> extends TypeSafeMatcher<T> {
 
     private final HeaderValueMatcher delegate;
 
     @Factory
-    public static HttpMessageHeaderValueMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
+    public static <T extends HttpMessage> Matcher<T> hasHeaderWithValue(String name, Matcher<String> matcher) {
         return new HttpMessageHeaderValueMatcher(name, matcher);
     }
 
@@ -42,7 +42,7 @@ class HttpMessageHeaderValueMatcher extends TypeSafeMatcher<HttpMessage> {
     }
 
     @Override
-    public boolean matchesSafely(HttpMessage actual) {
+    public boolean matchesSafely(T actual) {
         for (Header header : actual.getHeaders()) {
             if (delegate.matches(header))
                 return true;

@@ -29,14 +29,14 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.io.UnsupportedEncodingException;
 
-class HttpMessageContentByteArrayMatcher extends TypeSafeMatcher<HttpMessage> {
+class HttpMessageContentByteArrayMatcher<T extends HttpMessage> extends TypeSafeMatcher<T> {
 
     private final Matcher<byte[]> matcher;
 
     private String characterSet;
 
     @Factory
-    public static Matcher<HttpMessage> hasContent(Matcher<byte[]> content, String characterSet) {
+    public static <T extends HttpMessage> Matcher<T> hasContent(Matcher<byte[]> content, String characterSet) {
         return new HttpMessageContentByteArrayMatcher(content, characterSet);
     }
 
@@ -46,7 +46,7 @@ class HttpMessageContentByteArrayMatcher extends TypeSafeMatcher<HttpMessage> {
     }
 
     @Override
-    public boolean matchesSafely(HttpMessage actual) {
+    public boolean matchesSafely(T actual) {
         try {
             return matcher.matches(actual.getContent().asString().getBytes(characterSet));
         } catch (UnsupportedEncodingException e) {
