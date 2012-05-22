@@ -35,7 +35,8 @@ import java.net.URL;
 import static bad.robot.http.HttpClients.anApacheClient;
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
-import static bad.robot.http.matchers.HttpMessageHeaderValueMatcher.hasHeaderWithValue;
+import static bad.robot.http.matchers.HttpMessageHeaderValueMatcher.headerWithValue;
+import static bad.robot.http.matchers.Matchers.has;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -51,26 +52,26 @@ public class HttpMessageHeaderValueMatcherTest {
         HttpPost request = new UnencodedStringMessage("body", headers(header));
         HttpResponse response = anApacheClient().post(new URL("http://www.google.com"), request);
 
-        assertThat(request, hasHeaderWithValue("Accept", containsString("html")));
-        assertThat(response, hasHeaderWithValue("Content-Type", not(containsString("xml"))));
+        assertThat(request, has(headerWithValue("Accept", containsString("html"))));
+        assertThat(response, has(headerWithValue("Content-Type", not(containsString("xml")))));
     }
 
     @Test
     public void matches() {
-        assertThat(hasHeaderWithValue("Accept", equalTo("text/html")).matches(request), is(true));
+        assertThat(headerWithValue("Accept", equalTo("text/html")).matches(request), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasHeaderWithValue("Accept", equalTo("application/json")).matches(request), is(false));
-        assertThat(hasHeaderWithValue("accept", equalTo("text/html")).matches(header), is(false));
-        assertThat(hasHeaderWithValue("Accept-Language", equalTo("text/html")).matches(header), is(false));
+        assertThat(headerWithValue("Accept", equalTo("application/json")).matches(request), is(false));
+        assertThat(headerWithValue("accept", equalTo("text/html")).matches(header), is(false));
+        assertThat(headerWithValue("Accept-Language", equalTo("text/html")).matches(header), is(false));
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasHeaderWithValue("Accept", equalTo("application/json")).describeTo(description);
+        headerWithValue("Accept", equalTo("application/json")).describeTo(description);
         assertThat(description.toString(), allOf(
                 containsString("a HttpMessage with"),
                 containsString("Accept"),

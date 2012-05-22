@@ -28,13 +28,20 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import static org.hamcrest.Matchers.equalTo;
+
 class HttpResponseStatusMessageMatcher extends TypeSafeMatcher<HttpResponse> {
 
     private final Matcher<String> delegate;
 
     @Factory
-    public static Matcher<HttpResponse> hasStatusMessage(Matcher<String> matcher) {
+    public static Matcher<HttpResponse> statusMessage(Matcher<String> matcher) {
         return new HttpResponseStatusMessageMatcher(matcher);
+    }
+
+    @Factory
+    public static Matcher<HttpResponse> statusMessage(String message) {
+        return new HttpResponseStatusMessageMatcher(equalTo(message));
     }
 
     private HttpResponseStatusMessageMatcher(Matcher<String> matcher) {

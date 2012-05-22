@@ -30,7 +30,8 @@ import java.net.MalformedURLException;
 
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
-import static bad.robot.http.matchers.HttpResponseStatusMessageMatcher.hasStatusMessage;
+import static bad.robot.http.matchers.HttpResponseStatusMessageMatcher.statusMessage;
+import static bad.robot.http.matchers.Matchers.has;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -40,24 +41,25 @@ public class HttpResponseStatusMessageMatcherTest {
 
     @Test
     public void exampleUsage() throws MalformedURLException {
-        assertThat(response, hasStatusMessage(equalTo("OK")));
+        assertThat(response, has(statusMessage("OK")));
+        assertThat(response, has(statusMessage(equalTo("OK"))));
     }
 
     @Test
     public void matches() {
-        assertThat(hasStatusMessage(equalTo("OK")).matches(response), is(true));
+        assertThat(statusMessage(equalTo("OK")).matches(response), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasStatusMessage(equalTo("Not Found")).matches(response), is(false));
-        assertThat(hasStatusMessage(equalTo("ok")).matches(response), is(false));
+        assertThat(statusMessage(equalTo("Not Found")).matches(response), is(false));
+        assertThat(statusMessage(equalTo("ok")).matches(response), is(false));
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasStatusMessage(equalTo("OK")).describeTo(description);
+        statusMessage(equalTo("OK")).describeTo(description);
         assertThat(description.toString(), allOf(
             containsString("a HttpMessage with status message"),
             containsString("OK"))

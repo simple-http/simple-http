@@ -33,7 +33,7 @@ class HttpMessageHeaderValueMatcher<T extends HttpMessage> extends TypeSafeMatch
     private final HeaderValueMatcher delegate;
 
     @Factory
-    public static <T extends HttpMessage> Matcher<T> hasHeaderWithValue(String name, Matcher<String> matcher) {
+    public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> matcher) {
         return new HttpMessageHeaderValueMatcher(name, matcher);
     }
 

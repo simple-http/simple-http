@@ -32,8 +32,6 @@ import org.hamcrest.Matcher;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import static org.hamcrest.Matchers.equalTo;
-
 /**
  * This is your first port of call if you're looking for helpful HTTP related {@link Matcher}s.
  */
@@ -75,20 +73,20 @@ public class Matchers {
         return HttpMessageHeaderMatcher.<T>has(header);
     }
 
-    public static <T extends HttpMessage> Matcher<T> hasHeaderWithValue(String name, Matcher<String> value) {
-        return HttpMessageHeaderValueMatcher.<T>hasHeaderWithValue(name, value);
+    public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> value) {
+        return HttpMessageHeaderValueMatcher.<T>headerWithValue(name, value);
     }
 
     public static Matcher<HttpResponse> status(int status) {
         return HttpResponseStatusCodeMatcher.status(status);
     }
 
-    public static Matcher<HttpResponse> hasStatusMessage(String message) {
-        return HttpResponseStatusMessageMatcher.hasStatusMessage(equalTo(message));
+    public static Matcher<HttpResponse> statusMessage(String message) {
+        return HttpResponseStatusMessageMatcher.statusMessage(message);
     }
 
-    public static Matcher<HttpResponse> hasStatusMessage(Matcher<String> matcher) {
-        return HttpResponseStatusMessageMatcher.hasStatusMessage(matcher);
+    public static Matcher<HttpResponse> statusMessage(Matcher<String> matcher) {
+        return HttpResponseStatusMessageMatcher.statusMessage(matcher);
     }
 
     public static Matcher<URL> containsPath(String path) {
