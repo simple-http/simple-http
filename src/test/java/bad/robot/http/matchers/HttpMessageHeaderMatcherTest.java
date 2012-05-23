@@ -42,7 +42,7 @@ import static org.junit.Assert.assertThat;
 
 public class HttpMessageHeaderMatcherTest {
 
-    private final SimpleHeader header = header("Accept", "text/html");
+    private final Header header = header("Accept", "text/html");
     private final HttpPost request = new UnencodedStringMessage("body", headers(header));
 
     private final Mockery context = new JUnit4Mockery();

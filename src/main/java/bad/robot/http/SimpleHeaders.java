@@ -40,7 +40,7 @@ public class SimpleHeaders implements Headers {
         this.headers = new ArrayList<Header>(headers);
     }
 
-    public static SimpleHeaders headers(Header... headers) {
+    public static Headers headers(Header... headers) {
         return new SimpleHeaders(Arrays.asList(headers));
     }
 

@@ -34,7 +34,7 @@ public class SimpleHeader implements Header {
         this.value = value;
     }
 
-    public static SimpleHeader header(String name, String value) {
+    public static Header header(String name, String value) {
         return new SimpleHeader(name, value);
     }
 

@@ -21,7 +21,7 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.SimpleHeaders;
+import bad.robot.http.Headers;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.junit.Test;
@@ -37,16 +37,17 @@ import static org.junit.Assert.assertThat;
 public class CoercionsTest {
 
     private final Header[] apacheHeaders = new Header[]{new BasicHeader("Accept", "text/html"), new BasicHeader("Location", "http://baddotrobot.com")};
-    private final SimpleHeaders simpleHttpHeaders = headers(header("Accept", "text/html"), header("Location", "http://baddotrobot.com"));
+    private final Headers simpleHttpHeaders = headers(header("Accept", "text/html"), header("Location", "http://baddotrobot.com"));
 
     @Test
     public void covertToApacheHeaders() {
-        Header[] headers = Coercions.asApacheBasicHeader(simpleHttpHeaders);
-        assertThat(asList(headers), hasItems(apacheHeader("Accept", "text/html"), apacheHeader("Location", "http://baddotrobot.com")));
+        assertThat(asList(Coercions.asApacheBasicHeader(simpleHttpHeaders)), hasItems(apacheHeader("Accept", "text/html"), apacheHeader("Location", "http://baddotrobot.com")));
     }
 
     @Test
     public void convertFromApacheHeaders() {
+        assertThat(Coercions.asHeaders(apacheHeaders), hasItems(header("Accept", "text/html"), header("Location", "http://baddotrobot.com")));
+        // is equivalent to
         assertThat(Coercions.asHeaders(apacheHeaders), has(header("Accept", "text/html"), header("Location", "http://baddotrobot.com")));
     }
 }

@@ -33,7 +33,7 @@ class HeaderValueMatcher extends TypeSafeMatcher<Header> {
     private final Matcher<String> valueMatcher;
 
     @Factory
-    public static HeaderValueMatcher hasHeaderWithValue(String name, Matcher<String> matcher) {
+    public static Matcher<Header> hasHeaderWithValue(String name, Matcher<String> matcher) {
         return new HeaderValueMatcher(name, matcher);
     }
 

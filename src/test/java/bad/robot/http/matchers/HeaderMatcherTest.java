@@ -22,7 +22,6 @@
 package bad.robot.http.matchers;
 
 import bad.robot.http.Header;
-import bad.robot.http.SimpleHeader;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
@@ -34,7 +33,7 @@ import static org.junit.Assert.assertThat;
 
 public class HeaderMatcherTest {
 
-    private final SimpleHeader header = header("Accept", "application/json, q=1; text/plain, q=0.5");
+    private final Header header = header("Accept", "application/json, q=1; text/plain, q=0.5");
 
     @Test
     public void exampleUsage() {

@@ -21,9 +21,9 @@
 
 package bad.robot.http.matchers;
 
+import bad.robot.http.Header;
 import bad.robot.http.HttpPost;
 import bad.robot.http.HttpResponse;
-import bad.robot.http.SimpleHeader;
 import bad.robot.http.UnencodedStringMessage;
 import org.hamcrest.StringDescription;
 import org.junit.Ignore;
@@ -42,8 +42,8 @@ import static org.junit.Assert.assertThat;
 
 public class HttpMessageHeaderValueMatcherTest {
 
-    private final SimpleHeader header = header("Accept", "text/html");
-    private final SimpleHeader anotherHeader = header("Accept-Language", "en-US");
+    private final Header header = header("Accept", "text/html");
+    private final Header anotherHeader = header("Accept-Language", "en-US");
     private final HttpPost request = new UnencodedStringMessage("body", headers(anotherHeader, header));
 
     @Test

@@ -21,7 +21,7 @@
 
 package bad.robot.http.matchers;
 
-import bad.robot.http.SimpleHeaders;
+import bad.robot.http.Headers;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ import static org.junit.Assert.assertThat;
 
 public class HeadersMatcherTest {
 
-    private final SimpleHeaders headers = headers(header("Accept", "application/json"), header("Accept-Language", "en_UK"));
+    private final Headers headers = headers(header("Accept", "application/json"), header("Accept-Language", "en_UK"));
 
     @Test
     public void exampleUsage() {
