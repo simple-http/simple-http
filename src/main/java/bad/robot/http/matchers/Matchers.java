@@ -73,6 +73,14 @@ public class Matchers {
         return HttpMessageHeaderMatcher.<T>has(header);
     }
 
+    public static Matcher<Headers> hasHeader(Header header) {
+        return HeadersMatcher.hasHeader(header);
+    }
+
+    public static Matcher<Headers> has(Header... headers) {
+        return HeadersMatcher.hasHeaders(headers);
+    }
+
     public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> value) {
         return HttpMessageHeaderValueMatcher.<T>headerWithValue(name, value);
     }
@@ -92,6 +100,8 @@ public class Matchers {
     public static Matcher<URL> containsPath(String path) {
         return UrlMatcher.containsPath(path);
     }
+
+    // TODO add matcher for Apache headers (plural)
 
     public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
         return ApacheHeaderMatcher.apacheHeader(name, value);

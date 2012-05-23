@@ -43,7 +43,7 @@ public class Coercions {
     public static Headers asHeaders(org.apache.http.Header[] headers) {
         List<Header> list = new ArrayList<Header>();
         for (org.apache.http.Header header : headers)
-            header(header.getName(), header.getValue());
+            list.add(header(header.getName(), header.getValue()));
         return headers(list.toArray(new Header[list.size()]));
     }
 }

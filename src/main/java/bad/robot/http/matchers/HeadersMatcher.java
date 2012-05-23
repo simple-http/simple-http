@@ -25,6 +25,7 @@ import bad.robot.http.Header;
 import bad.robot.http.Headers;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Arrays;
@@ -35,12 +36,12 @@ class HeadersMatcher extends TypeSafeMatcher<Headers> {
     private final List<Header> expected;
 
     @Factory
-    public static HeadersMatcher hasHeaders(Header... headers) {
+    public static Matcher<Headers> hasHeaders(Header... headers) {
         return new HeadersMatcher(headers);
     }
 
     @Factory
-    public static HeadersMatcher hasHeader(Header header) {
+    public static Matcher<Headers> hasHeader(Header header) {
         return new HeadersMatcher(new Header[] {header});
     }
 
