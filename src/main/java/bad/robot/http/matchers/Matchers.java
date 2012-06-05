@@ -77,6 +77,10 @@ public class Matchers {
         return HeadersMatcher.hasHeader(header);
     }
 
+    public static Matcher<Headers> hasHeaders(Header... headers) {
+        return HeadersMatcher.hasHeaders(headers);
+    }
+
     public static Matcher<Headers> has(Header... headers) {
         return HeadersMatcher.hasHeaders(headers);
     }
