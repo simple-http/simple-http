@@ -43,6 +43,8 @@ public interface CommonHttpClient extends HttpClient {
 
     CommonHttpClient withoutSsl();
 
+    CommonHttpClient withBasicAuth(URL url);
+
     CommonHttpClient withProxy(URL url);
 
 }

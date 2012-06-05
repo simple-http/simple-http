@@ -21,9 +21,7 @@
 
 package bad.robot.http;
 
-import bad.robot.http.apache.ApacheHttpAuthenticationCredentials;
-import bad.robot.http.apache.ApacheHttpClient;
-import bad.robot.http.apache.Ssl;
+import bad.robot.http.apache.*;
 import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -32,6 +30,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import java.net.URL;
 
 import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithShortTimeout;
+import static bad.robot.http.apache.ApacheHttpContextBuilder.anApacheHttpContextBuilder;
 
 public class HttpClients {
 
@@ -41,7 +40,8 @@ public class HttpClients {
 
     private static class ApacheCommonHttpClient implements CommonHttpClient {
 
-        private final bad.robot.http.apache.ApacheHttpClientBuilder apacheBuilder = anApacheClientWithShortTimeout();
+        private final ApacheHttpClientBuilder apacheBuilder = anApacheClientWithShortTimeout();
+        private final ApacheHttpContextBuilder contextBuilder = anApacheHttpContextBuilder();
 
         private ApacheHttpClient httpClient;
 
@@ -60,6 +60,12 @@ public class HttpClients {
         @Override
         public CommonHttpClient withoutSsl() {
             apacheBuilder.with(Ssl.disabled);
+            return this;
+        }
+
+        @Override
+        public CommonHttpClient withBasicAuth(URL url) {
+            contextBuilder.withBasicAuth(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
             return this;
         }
 
@@ -107,7 +113,7 @@ public class HttpClients {
 
         private void initialiseHttpClient() {
             if (httpClient == null)
-                httpClient = new ApacheHttpClient(apacheBuilder);
+                httpClient = new ApacheHttpClient(apacheBuilder, contextBuilder);
         }
     }
 }

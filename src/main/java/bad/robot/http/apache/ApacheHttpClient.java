@@ -27,6 +27,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.*;
+import org.apache.http.protocol.HttpContext;
 
 import java.net.URL;
 import java.util.concurrent.Callable;
@@ -39,9 +40,11 @@ import static com.google.code.tempusfugit.WithException.with;
 public class ApacheHttpClient implements HttpClient {
 
     private final org.apache.http.client.HttpClient client;
+    private final HttpContext localContext;
 
-    public ApacheHttpClient(Builder<org.apache.http.client.HttpClient> builder) {
-        client = builder.build();
+    public ApacheHttpClient(Builder<org.apache.http.client.HttpClient> clientBuilder, Builder<HttpContext> localContextBuilder) {
+        client = clientBuilder.build();
+        localContext = localContextBuilder.build();
     }
 
     @Override
@@ -83,7 +86,7 @@ public class ApacheHttpClient implements HttpClient {
         return wrapAnyException(new Callable<HttpResponse>() {
             @Override
             public HttpResponse call() throws Exception {
-                return client.execute(request, new HttpResponseHandler(new ToStringConsumer()));
+                return client.execute(request, new HttpResponseHandler(new ToStringConsumer()), localContext);
             }
         }, with(HttpException.class));
     }

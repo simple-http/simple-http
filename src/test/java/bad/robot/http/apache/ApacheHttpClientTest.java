@@ -29,6 +29,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.protocol.HttpContext;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -54,17 +55,19 @@ import static org.junit.Assert.assertThat;
 public class ApacheHttpClientTest {
 
     private final Mockery context = new Mockery();
-    private final Builder<HttpClient> builder = context.mock(Builder.class);
+    private final Builder<HttpClient> httpClientBuilder = context.mock(Builder.class, "http client");
+    private final Builder<HttpContext> contextBuilder = context.mock(Builder.class, "local context");
     private final HttpClient client = context.mock(HttpClient.class, "apache http");
     private final HttpResponse response = new DefaultHttpResponse(200, "OK", "", noHeaders());
 
     @Test
     public void executesGet() throws IOException {
         context.checking(new Expectations() {{
-            one(builder).build(); will(returnValue(client));
-            one(client).execute((HttpUriRequest) with(instanceOf(HttpGet.class)), with(any(ResponseHandler.class))); will(returnValue(response));
+            one(httpClientBuilder).build(); will(returnValue(client));
+            one(contextBuilder).build(); will(returnValue(null));
+            one(client).execute((HttpUriRequest) with(instanceOf(HttpGet.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         assertThat(http.get(anyUrl()), is(response));
     }
 
@@ -72,16 +75,17 @@ public class ApacheHttpClientTest {
     public void executesGetWithHeaders() throws IOException {
         Headers headers = headers(header("header", "value"));
         expectingHttpClientExecuteWith(requestContaining(headers));
-        new ApacheHttpClient(builder).get(anyUrl(), headers);        
+        new ApacheHttpClient(httpClientBuilder, contextBuilder).get(anyUrl(), headers);        
     }
 
     @Test (expected = HttpException.class)
     public void wrapExceptionsForGet() throws MalformedURLException {
         context.checking(new Expectations() {{
-            one(builder).build(); will(returnValue(client));
+            one(httpClientBuilder).build(); will(returnValue(client));
+            one(contextBuilder).build(); will(returnValue(null));
             one(client); will(throwException(new IOException()));
         }});
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.get(anyUrl());
     }
 
@@ -89,7 +93,7 @@ public class ApacheHttpClientTest {
     public void shouldGotoUrl() throws IOException {
         URL url = anyUrl();
         expectingHttpClientExecuteWith(requestWith(url));
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.get(url);
     }
 
@@ -97,21 +101,23 @@ public class ApacheHttpClientTest {
     public void shouldUseHttpResponseHandlerToProcessTheResponse_WhichCleansUpAfterConsumption() throws IOException {
         URL url = anyUrl();
         context.checking(new Expectations(){{
-            one(builder).build(); will(returnValue(client));
-            one(client).execute(with(any(HttpUriRequest.class)), (ResponseHandler) with(instanceOf(HttpResponseHandler.class))); will(returnValue(response));
+            one(httpClientBuilder).build(); will(returnValue(client));
+            one(contextBuilder).build(); will(returnValue(null));
+            one(client).execute(with(any(HttpUriRequest.class)), (ResponseHandler) with(instanceOf(HttpResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.get(url);
     }
 
     @Test
     public void executesPost() throws IOException {
         context.checking(new Expectations() {{
-            one(builder).build(); will(returnValue(client));
-            one(client).execute((HttpUriRequest) with(instanceOf(org.apache.http.client.methods.HttpPost.class)), with(any(ResponseHandler.class))); will(returnValue(response));
+            one(httpClientBuilder).build(); will(returnValue(client));
+            one(contextBuilder).build(); will(returnValue(null));
+            one(client).execute((HttpUriRequest) with(instanceOf(org.apache.http.client.methods.HttpPost.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         HttpPost message = new FormUrlEncodedMessage(params("naughts", "crosses"));
         assertThat(http.post(anyUrl(), message), is(response));
     }
@@ -120,32 +126,33 @@ public class ApacheHttpClientTest {
     public void executesPostWithHeaders() throws IOException {
         Headers headers = headers(header("header", "value"));
         expectingHttpClientExecuteWith(requestContaining(headers));
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.post(anyUrl(), new FormUrlEncodedMessage(params("chalk", "cheese"), headers));
     }
 
     @Test
     public void executesPostWithStringMessage() throws IOException {
         expectingHttpClientExecuteWith(messageContaining("these aren't the droids you're looking for..."));
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.post(anyUrl(), new UnencodedStringMessage("these aren't the droids you're looking for..."));
     }
 
     @Test
     public void executesPostWithUrlFormEncodedMessage() throws IOException {
         expectingHttpClientExecuteWith(messageContaining("name=value"));
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.post(anyUrl(), new FormUrlEncodedMessage(params("name", "value")));
     }
 
     @Test
     public void executesPut() throws IOException {
         context.checking(new Expectations() {{
-            one(builder).build(); will(returnValue(client));
-            one(client).execute((HttpUriRequest) with(instanceOf(HttpPut.class)), with(any(ResponseHandler.class))); will(returnValue(response));
+            one(httpClientBuilder).build(); will(returnValue(client));
+            one(contextBuilder).build(); will(returnValue(null));
+            one(client).execute((HttpUriRequest) with(instanceOf(HttpPut.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         HttpResponse actualResponse = http.put(anyUrl(), new UnencodedStringMessage(""));
         assertThat(actualResponse, is(response));
     }
@@ -154,25 +161,26 @@ public class ApacheHttpClientTest {
     public void executesPutWithHeaders() throws IOException {
         Headers headers = headers(header("header", "value"));
         expectingHttpClientExecuteWith(requestContaining(headers));
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.put(anyUrl(), new UnencodedStringMessage("", headers));
     }
 
     @Test
     public void executesPutWithStringMessage() throws IOException {
         expectingHttpClientExecuteWith(messageContaining("that's no moon!"));
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.put(anyUrl(), new UnencodedStringMessage("that's no moon!"));
     }
 
     @Test
     public void executesDelete() throws IOException {
         context.checking(new Expectations() {{
-            one(builder).build(); will(returnValue(client));
-            one(client).execute((HttpUriRequest) with(instanceOf(HttpDelete.class)), with(any(ResponseHandler.class))); will(returnValue(response));
+            one(httpClientBuilder).build(); will(returnValue(client));
+            one(contextBuilder).build(); will(returnValue(null));
+            one(client).execute((HttpUriRequest) with(instanceOf(HttpDelete.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
-        ApacheHttpClient http = new ApacheHttpClient(builder);
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         assertThat(http.delete(anyUrl()), is(response));
     }
 
@@ -180,13 +188,13 @@ public class ApacheHttpClientTest {
     public void shouldCloseConnectionManager() throws IOException {
         final ClientConnectionManager connectionManager = context.mock(ClientConnectionManager.class);
         context.checking(new Expectations(){{
-            allowing(builder).build(); will(returnValue(client));
+            allowing(httpClientBuilder).build(); will(returnValue(client));
+            allowing(contextBuilder).build(); will(returnValue(null));
             allowing(client).getConnectionManager(); will(returnValue(connectionManager));
             one(connectionManager).shutdown();
         }});
-        new ApacheHttpClient(builder).shutdown();
+        new ApacheHttpClient(httpClientBuilder, contextBuilder).shutdown();
     }
-
 
     private void expectingHttpClientExecuteWith(Matcher<? extends HttpUriRequest> request) throws IOException {
         expectingHttpClientExecuteWith(request, any(ResponseHandler.class));
@@ -194,8 +202,9 @@ public class ApacheHttpClientTest {
 
     private void expectingHttpClientExecuteWith(final Matcher<? extends HttpUriRequest> request, final Matcher<ResponseHandler> responseHandler) throws IOException {
         context.checking(new Expectations() {{
-            one(builder).build(); will(returnValue(client));
-            one(client).execute(with(request), with(responseHandler)); will(returnValue(response));
+            one(httpClientBuilder).build(); will(returnValue(client));
+            one(contextBuilder).build(); will(returnValue(null));
+            one(client).execute(with(request), with(responseHandler), with(any(HttpContext.class))); will(returnValue(response));
         }});
     }
 

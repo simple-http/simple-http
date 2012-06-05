@@ -73,7 +73,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         this.ssl = ssl;
         return this;
     }
-    
+
     public org.apache.http.client.HttpClient build() {
         HttpParams httpParameters = createAndConfigureHttpParameters();
         ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager(httpParameters, createSchemeRegistry());
