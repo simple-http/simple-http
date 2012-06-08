@@ -21,6 +21,7 @@
 
 package bad.robot.http.apache;
 
+import bad.robot.http.java.PlatformSslProtocolConfiguration;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.SchemeSocketFactory;
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -30,6 +31,19 @@ public enum Ssl {
         @Override
         public SchemeSocketFactory getSocketFactory() {
             return SSLSocketFactory.getSocketFactory();
+        }
+    },
+    naive {
+        @Override
+        public SchemeSocketFactory getSocketFactory() {
+            setPlatformSslToAlwaysTrustCertificatesAndHosts();
+            return SSLSocketFactory.getSocketFactory();
+        }
+
+        private void setPlatformSslToAlwaysTrustCertificatesAndHosts() {
+            PlatformSslProtocolConfiguration configuration = new PlatformSslProtocolConfiguration();
+            configuration.configurePlatformHostnameVerifier();
+            configuration.configurePlatformTrustManager();
         }
     },
     disabled {

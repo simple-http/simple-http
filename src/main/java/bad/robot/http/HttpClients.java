@@ -64,6 +64,12 @@ public class HttpClients {
         }
 
         @Override
+        public CommonHttpClient withTrustingSsl() {
+            apacheBuilder.with(Ssl.naive);
+            return this;
+        }
+
+        @Override
         public CommonHttpClient withBasicAuth(URL url) {
             contextBuilder.withBasicAuth(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
             return this;
