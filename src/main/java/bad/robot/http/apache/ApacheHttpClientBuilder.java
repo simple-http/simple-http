@@ -24,7 +24,6 @@ package bad.robot.http.apache;
 import bad.robot.http.Builder;
 import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.HttpHost;
-import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -49,6 +48,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     private List<ApacheHttpAuthenticationCredentials> credentials = new ArrayList<ApacheHttpAuthenticationCredentials>();
     private HttpHost proxy;
     private Ssl ssl = Ssl.enabled;
+    private boolean handleRedirects = true;
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
         return new ApacheHttpClientBuilder().with(seconds(5));
@@ -74,6 +74,11 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return this;
     }
 
+    public ApacheHttpClientBuilder withAutomaticRedirectHandling(boolean handleRedirects) {
+        this.handleRedirects = handleRedirects;
+        return this;
+    }
+
     public org.apache.http.client.HttpClient build() {
         HttpParams httpParameters = createAndConfigureHttpParameters();
         ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager(httpParameters, createSchemeRegistry());
@@ -93,12 +98,11 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         HttpParams parameters = createHttpParametersViaNastyHackButBetterThanCopyAndPaste();
         parameters.setParameter(CONNECTION_TIMEOUT, (int) timeout.inMillis());
         parameters.setParameter(SO_TIMEOUT, (int) timeout.inMillis());
-        parameters.setParameter(HANDLE_REDIRECTS, true);
+        parameters.setParameter(HANDLE_REDIRECTS, handleRedirects);
         parameters.setParameter(ALLOW_CIRCULAR_REDIRECTS, true);
         parameters.setParameter(HANDLE_AUTHENTICATION, true);
         parameters.setParameter(USE_EXPECT_CONTINUE, true);
         parameters.setParameter(DEFAULT_PROXY, proxy);
-        HttpClientParams.setRedirecting(parameters, true);
         return parameters;
     }
 

@@ -76,6 +76,12 @@ public class HttpClients {
         }
 
         @Override
+        public CommonHttpClient withAutomaticRedirectHandling(boolean handleRedirects) {
+            apacheBuilder.withAutomaticRedirectHandling(handleRedirects);
+            return this;
+        }
+
+        @Override
         public CommonHttpClient withProxy(URL url) {
             apacheBuilder.withProxy(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
             return this;
