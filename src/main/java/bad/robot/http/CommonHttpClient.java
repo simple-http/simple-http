@@ -47,7 +47,7 @@ public interface CommonHttpClient extends HttpClient {
 
     CommonHttpClient withBasicAuth(URL url);
 
-    CommonHttpClient withAutomaticRedirectHandling(boolean handleRedirects);
+    CommonHttpClient with(AutomaticRedirectHandling handleRedirects);
 
     CommonHttpClient withProxy(URL url);
 }

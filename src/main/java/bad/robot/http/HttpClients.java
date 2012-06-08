@@ -76,8 +76,8 @@ public class HttpClients {
         }
 
         @Override
-        public CommonHttpClient withAutomaticRedirectHandling(boolean handleRedirects) {
-            apacheBuilder.withAutomaticRedirectHandling(handleRedirects);
+        public CommonHttpClient with(AutomaticRedirectHandling handleRedirects) {
+            apacheBuilder.with(handleRedirects);
             return this;
         }
 
