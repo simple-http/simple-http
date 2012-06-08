@@ -21,6 +21,18 @@
 
 package bad.robot.http.java;
 
-public interface ConfigureTrustManager {
-    void configurePlatformTrustManager();
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
+public class AlwaysTrustingDefaultHostnameVerifier implements ConfigurePlatformDefaultHostnameVerifier {
+
+    @Override
+    public void configureDefaultHostnameVerifier() {
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return (true);
+            }
+        });
+    }
 }

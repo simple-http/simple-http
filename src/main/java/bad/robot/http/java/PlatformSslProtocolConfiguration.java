@@ -21,25 +21,25 @@
 
 package bad.robot.http.java;
 
-public class PlatformSslProtocolConfiguration implements ConfigureTrustManager, ConfigureHostnameVerifier {
+public class PlatformSslProtocolConfiguration implements ConfigurePlatformDefaultSslSocketFactory, ConfigurePlatformDefaultHostnameVerifier {
 
     @Override
-    public void configurePlatformTrustManager() {
-        if (isDeprecatedSSLProtocol())
-            new NaiveDeprecatedDefaultSslSocketFactoryTrustManager().configurePlatformTrustManager();
+    public void configureDefaultSslSocketFactory() {
+        if (platformIsUsingDeprecatedSslProtocol())
+            new AlwaysTrustingDeprecatedDefaultSslSocketFactory().configureDefaultSslSocketFactory();
         else
-            new NaivePlatformDefaultSslSocketFactoryTrustManager().configurePlatformTrustManager();
+            new AlwaysTrustingDefaultSslSocketFactory().configureDefaultSslSocketFactory();
     }
 
     @Override
-    public void configurePlatformHostnameVerifier() {
-        if (isDeprecatedSSLProtocol())
-            new NaiveDeprecatedPlatformDefaultHostnameVerifier().configurePlatformHostnameVerifier();
+    public void configureDefaultHostnameVerifier() {
+        if (platformIsUsingDeprecatedSslProtocol())
+            new AlwaysTrustingDeprecatedDefaultHostnameVerifier().configureDefaultHostnameVerifier();
         else
-            new NaivePlatformDefaultHostnameVerifier().configurePlatformHostnameVerifier();
+            new AlwaysTrustingDefaultHostnameVerifier().configureDefaultHostnameVerifier();
     }
 
-    private static boolean isDeprecatedSSLProtocol() {
+    private static boolean platformIsUsingDeprecatedSslProtocol() {
         return ("com.sun.net.ssl.internal.www.protocol".equals(System.getProperty("java.protocol.handler.pkgs")));
     }
 }

@@ -29,20 +29,20 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
-public class NaivePlatformDefaultSslSocketFactoryTrustManager implements ConfigureTrustManager {
+public class AlwaysTrustingDefaultSslSocketFactory implements ConfigurePlatformDefaultSslSocketFactory {
 
     @Override
-    public void configurePlatformTrustManager() {
+    public void configureDefaultSslSocketFactory() {
         try {
             SSLContext context = SSLContext.getInstance("SSL");
-            context.init(null, new TrustManager[]{new FakeX509TrustManager()}, new SecureRandom());
+            context.init(null, new TrustManager[]{new AlwaysTrustingX509TrustManager()}, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
         } catch (GeneralSecurityException e) {
             throw new IllegalStateException(e.getMessage());
         }
     }
 
-    private static class FakeX509TrustManager implements X509TrustManager {
+    private static class AlwaysTrustingX509TrustManager implements X509TrustManager {
 
         private static final X509Certificate[] AcceptedIssuers = new X509Certificate[]{};
 

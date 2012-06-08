@@ -21,24 +21,29 @@
 
 package bad.robot.http.java;
 
+import com.sun.net.ssl.HttpsURLConnection;
+import com.sun.net.ssl.SSLContext;
+import com.sun.net.ssl.TrustManager;
+import com.sun.net.ssl.X509TrustManager;
+
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
-public class NaiveDeprecatedDefaultSslSocketFactoryTrustManager implements ConfigureTrustManager {
+public class AlwaysTrustingDeprecatedDefaultSslSocketFactory implements ConfigurePlatformDefaultSslSocketFactory {
 
     @Override
-    public void configurePlatformTrustManager() {
+    public void configureDefaultSslSocketFactory() {
         try {
-            com.sun.net.ssl.SSLContext context = com.sun.net.ssl.SSLContext.getInstance("SSL");
-            context.init(null, new com.sun.net.ssl.TrustManager[]{new FakeX509TrustManager()}, new SecureRandom());
-            com.sun.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+            SSLContext context = SSLContext.getInstance("SSL");
+            context.init(null, new TrustManager[]{new AlwaysTrustingX509TrustManager()}, new SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException(gse.getMessage());
         }
     }
 
-    private static class FakeX509TrustManager implements com.sun.net.ssl.X509TrustManager {
+    private static class AlwaysTrustingX509TrustManager implements X509TrustManager {
         private static final X509Certificate[] AcceptedIssuers = new X509Certificate[]{};
 
         public boolean isClientTrusted(X509Certificate[] chain) {

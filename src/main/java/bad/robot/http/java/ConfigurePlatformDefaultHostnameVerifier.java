@@ -21,13 +21,6 @@
 
 package bad.robot.http.java;
 
-public class NaiveDeprecatedPlatformDefaultHostnameVerifier implements ConfigureHostnameVerifier {
-    @Override
-    public void configurePlatformHostnameVerifier() {
-        com.sun.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(new com.sun.net.ssl.HostnameVerifier() {
-            public boolean verify(String hostname, String session) {
-                return (true);
-            }
-        });
-    }
+public interface ConfigurePlatformDefaultHostnameVerifier {
+    void configureDefaultHostnameVerifier();
 }

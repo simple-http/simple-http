@@ -41,9 +41,9 @@ public enum Ssl {
         }
 
         private void setPlatformSslToAlwaysTrustCertificatesAndHosts() {
-            PlatformSslProtocolConfiguration configuration = new PlatformSslProtocolConfiguration();
-            configuration.configurePlatformHostnameVerifier();
-            configuration.configurePlatformTrustManager();
+            PlatformSslProtocolConfiguration platform = new PlatformSslProtocolConfiguration();
+            platform.configureDefaultHostnameVerifier();
+            platform.configureDefaultSslSocketFactory();
         }
     },
     disabled {
