@@ -47,6 +47,13 @@ public class ApacheHttpClientBuilderTest {
     }
 
     @Test
+    public void shouldDefaultConfigurationValueForPredefinedBuilder() {
+        HttpClient client = ApacheHttpClientBuilder.anApacheClientWithShortTimeout().build();
+        assertThat(client, parameter(CONNECTION_TIMEOUT, is(5000l)));
+        assertThat(client, parameter(SO_TIMEOUT, is(5000l)));
+    }
+
+    @Test
     public void shouldConfigureAutomaticRedirectHandling() {
         assertThat(builder.with(AutomaticRedirectHandling.off()).build(), parameter(HANDLE_REDIRECTS, is(false)));
         assertThat(builder.with(AutomaticRedirectHandling.on()).build(), parameter(HANDLE_REDIRECTS, is(true)));
