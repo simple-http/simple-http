@@ -23,6 +23,8 @@ package bad.robot.http.apache;
 
 import bad.robot.http.AutomaticRedirectHandling;
 import bad.robot.http.Builder;
+import bad.robot.http.Configuration;
+import bad.robot.http.HttpTimeout;
 import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.HttpHost;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -37,8 +39,7 @@ import java.util.List;
 
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
 import static com.google.code.tempusfugit.temporal.Duration.seconds;
-import static org.apache.http.client.params.ClientPNames.ALLOW_CIRCULAR_REDIRECTS;
-import static org.apache.http.client.params.ClientPNames.HANDLE_AUTHENTICATION;
+import static org.apache.http.client.params.ClientPNames.*;
 import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
 import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
 import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
@@ -46,18 +47,18 @@ import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient> {
 
-    private Duration timeout = minutes(10);
     private List<ApacheHttpAuthenticationCredentials> credentials = new ArrayList<ApacheHttpAuthenticationCredentials>();
     private HttpHost proxy;
     private Ssl ssl = Ssl.enabled;
-    private AutomaticRedirectHandling handleRedirects = AutomaticRedirectHandling.on();
+    private Configuration timeout = new HttpTimeout(minutes(10));
+    private Configuration handleRedirects = AutomaticRedirectHandling.on();
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
         return new ApacheHttpClientBuilder().with(seconds(5));
     }
 
     public ApacheHttpClientBuilder with(Duration timeout) {
-        this.timeout = timeout;
+        this.timeout = new HttpTimeout(timeout);
         return this;
     }
 
@@ -98,13 +99,16 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
 
     private HttpParams createAndConfigureHttpParameters() {
         HttpParams parameters = createHttpParametersViaNastyHackButBetterThanCopyAndPaste();
-        parameters.setParameter(CONNECTION_TIMEOUT, (int) timeout.inMillis());
-        parameters.setParameter(SO_TIMEOUT, (int) timeout.inMillis());
         parameters.setParameter(ALLOW_CIRCULAR_REDIRECTS, true);
         parameters.setParameter(HANDLE_AUTHENTICATION, true);
         parameters.setParameter(USE_EXPECT_CONTINUE, true);
         parameters.setParameter(DEFAULT_PROXY, proxy);
-        handleRedirects.configure(parameters);
+
+        ApacheHttpParameters apache = new ApacheHttpParameters(parameters);
+        handleRedirects.applyTo(apache.configuration(HANDLE_REDIRECTS));
+        timeout.applyTo(apache.configuration(CONNECTION_TIMEOUT));
+        timeout.applyTo(apache.configuration(SO_TIMEOUT));
+
         return parameters;
     }
 

@@ -21,24 +21,6 @@
 
 package bad.robot.http;
 
-import bad.robot.AbstractValueType;
-
-public class AutomaticRedirectHandling extends AbstractValueType<Boolean> implements Configuration {
-
-    public static AutomaticRedirectHandling on() {
-        return new AutomaticRedirectHandling(true);
-    }
-
-    public static AutomaticRedirectHandling off() {
-        return new AutomaticRedirectHandling(false);
-    }
-
-    private AutomaticRedirectHandling(Boolean automaticallyHandleRedirects) {
-        super(automaticallyHandleRedirects);
-    }
-
-    @Override
-    public void applyTo(Configurable configurable) {
-        configurable.setTo(value);
-    }
+public interface Configurable {
+    <T> void setTo(T value);
 }

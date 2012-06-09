@@ -22,23 +22,16 @@
 package bad.robot.http;
 
 import bad.robot.AbstractValueType;
+import com.google.code.tempusfugit.temporal.Duration;
 
-public class AutomaticRedirectHandling extends AbstractValueType<Boolean> implements Configuration {
+public class HttpTimeout extends AbstractValueType<Duration> implements Configuration {
 
-    public static AutomaticRedirectHandling on() {
-        return new AutomaticRedirectHandling(true);
-    }
-
-    public static AutomaticRedirectHandling off() {
-        return new AutomaticRedirectHandling(false);
-    }
-
-    private AutomaticRedirectHandling(Boolean automaticallyHandleRedirects) {
-        super(automaticallyHandleRedirects);
+    public HttpTimeout(Duration value) {
+        super(value);
     }
 
     @Override
     public void applyTo(Configurable configurable) {
-        configurable.setTo(value);
+        configurable.setTo(value.inMillis());
     }
 }

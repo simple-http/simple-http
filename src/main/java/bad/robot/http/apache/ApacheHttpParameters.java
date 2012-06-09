@@ -19,26 +19,24 @@
  * under the License.
  */
 
-package bad.robot.http;
+package bad.robot.http.apache;
 
-import bad.robot.AbstractValueType;
+import bad.robot.http.Configurable;
+import org.apache.http.params.HttpParams;
 
-public class AutomaticRedirectHandling extends AbstractValueType<Boolean> implements Configuration {
+class ApacheHttpParameters {
+    private final HttpParams parameters;
 
-    public static AutomaticRedirectHandling on() {
-        return new AutomaticRedirectHandling(true);
+    public ApacheHttpParameters(HttpParams parameters) {
+        this.parameters = parameters;
     }
 
-    public static AutomaticRedirectHandling off() {
-        return new AutomaticRedirectHandling(false);
-    }
-
-    private AutomaticRedirectHandling(Boolean automaticallyHandleRedirects) {
-        super(automaticallyHandleRedirects);
-    }
-
-    @Override
-    public void applyTo(Configurable configurable) {
-        configurable.setTo(value);
+    public Configurable configuration(final String parameter) {
+        return new Configurable() {
+            @Override
+            public <T> void setTo(T value) {
+                parameters.setParameter(parameter, value);
+            }
+        };
     }
 }

@@ -24,6 +24,7 @@ package bad.robot.http.apache;
 import bad.robot.http.Headers;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import static bad.robot.http.SimpleHeader.header;
@@ -31,8 +32,8 @@ import static bad.robot.http.SimpleHeaders.headers;
 import static bad.robot.http.matchers.Matchers.apacheHeader;
 import static bad.robot.http.matchers.Matchers.has;
 import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
-import static org.junit.Assert.assertThat;
 
 public class CoercionsTest {
 
@@ -41,7 +42,8 @@ public class CoercionsTest {
 
     @Test
     public void covertToApacheHeaders() {
-        assertThat(asList(Coercions.asApacheBasicHeader(simpleHttpHeaders)), hasItems(apacheHeader("Accept", "text/html"), apacheHeader("Location", "http://baddotrobot.com")));
+        Matcher<Iterable<Header>> matcher = hasItems(apacheHeader("Accept", "text/html"), apacheHeader("Location", "http://baddotrobot.com"));
+        assertThat(asList(Coercions.asApacheBasicHeader(simpleHttpHeaders)), matcher);
     }
 
     @Test
