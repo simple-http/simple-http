@@ -35,5 +35,7 @@ public interface HttpClient {
 
     HttpResponse delete(URL url) throws HttpException;
 
+    HttpResponse options(URL url) throws HttpException;
+
     void shutdown();
 }

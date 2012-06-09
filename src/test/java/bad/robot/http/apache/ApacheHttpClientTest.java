@@ -22,12 +22,13 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.*;
+import bad.robot.http.HttpPost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.protocol.HttpContext;
 import org.hamcrest.Matcher;
@@ -181,6 +182,18 @@ public class ApacheHttpClientTest {
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         assertThat(http.delete(anyUrl()), is(response));
+    }
+
+    @Test
+    public void executesOptions() throws IOException {
+        context.checking(new Expectations() {{
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpOptions.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+        }});
+
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
+        assertThat(http.options(anyUrl()), is(response));
     }
 
     @Test

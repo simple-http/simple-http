@@ -99,6 +99,11 @@ public class LoggingHttpClient implements HttpClient {
     }
 
     @Override
+    public HttpResponse options(URL url) throws HttpException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void shutdown() {
         delegate.shutdown();
     }

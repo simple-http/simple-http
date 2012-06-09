@@ -120,6 +120,12 @@ public class HttpClients {
         }
 
         @Override
+        public HttpResponse options(URL url) throws HttpException {
+            initialiseHttpClient();
+            return httpClient.options(url);
+        }
+
+        @Override
         public void shutdown() {
             initialiseHttpClient();
             httpClient.shutdown();

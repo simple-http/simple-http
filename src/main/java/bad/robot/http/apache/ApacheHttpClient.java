@@ -24,9 +24,9 @@ package bad.robot.http.apache;
 import bad.robot.http.*;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.*;
 import org.apache.http.protocol.HttpContext;
 
 import java.net.URL;
@@ -80,6 +80,11 @@ public class ApacheHttpClient implements HttpClient {
     @Override
     public HttpResponse delete(URL url) throws HttpException {
         return execute(new HttpDelete(url.toExternalForm()));
+    }
+
+    @Override
+    public HttpResponse options(URL url) throws HttpException {
+        return execute(new HttpOptions(url.toExternalForm()));
     }
 
     private HttpResponse execute(final HttpUriRequest request) {
