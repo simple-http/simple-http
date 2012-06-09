@@ -19,7 +19,7 @@
     <dependencies>
 
         <!-- test -->
-
+        <!-- junit is excluded as it'll be included with hamcrest -->
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock</artifactId>
@@ -38,12 +38,6 @@
             <version>2.6.0-RC2</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>jmock</groupId>-->
-            <!--<artifactId>jmock-cglib</artifactId>-->
-            <!--<version>1.1.0</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
