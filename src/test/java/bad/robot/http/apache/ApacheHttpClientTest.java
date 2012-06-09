@@ -57,13 +57,14 @@ public class ApacheHttpClientTest {
     private final Builder<HttpContext> contextBuilder = context.mock(Builder.class, "local context");
     private final HttpClient client = context.mock(HttpClient.class, "apache http");
     private final HttpResponse response = new DefaultHttpResponse(200, "OK", "", noHeaders());
+    private final HttpContext localContext = new StubHttpContext();
 
     @Test
     public void executesGet() throws IOException {
         context.checking(new Expectations() {{
-            one(httpClientBuilder).build(); will(returnValue(client));
-            one(contextBuilder).build(); will(returnValue(null));
-            one(client).execute((HttpUriRequest) with(instanceOf(HttpGet.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpGet.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         assertThat(http.get(anyUrl()), is(response));
@@ -79,9 +80,9 @@ public class ApacheHttpClientTest {
     @Test (expected = HttpException.class)
     public void wrapExceptionsForGet() throws MalformedURLException {
         context.checking(new Expectations() {{
-            one(httpClientBuilder).build(); will(returnValue(client));
-            one(contextBuilder).build(); will(returnValue(null));
-            one(client); will(throwException(new IOException()));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(null));
+            oneOf(client); will(throwException(new IOException()));
         }});
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.get(anyUrl());
@@ -99,9 +100,9 @@ public class ApacheHttpClientTest {
     public void shouldUseHttpResponseHandlerToProcessTheResponse_WhichCleansUpAfterConsumption() throws IOException {
         URL url = anyUrl();
         context.checking(new Expectations(){{
-            one(httpClientBuilder).build(); will(returnValue(client));
-            one(contextBuilder).build(); will(returnValue(null));
-            one(client).execute(with(any(HttpUriRequest.class)), (ResponseHandler) with(instanceOf(HttpResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute(with(any(HttpUriRequest.class)), (ResponseHandler) with(instanceOf(HttpResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.get(url);
@@ -110,9 +111,9 @@ public class ApacheHttpClientTest {
     @Test
     public void executesPost() throws IOException {
         context.checking(new Expectations() {{
-            one(httpClientBuilder).build(); will(returnValue(client));
-            one(contextBuilder).build(); will(returnValue(null));
-            one(client).execute((HttpUriRequest) with(instanceOf(org.apache.http.client.methods.HttpPost.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute((HttpUriRequest) with(instanceOf(org.apache.http.client.methods.HttpPost.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -145,9 +146,9 @@ public class ApacheHttpClientTest {
     @Test
     public void executesPut() throws IOException {
         context.checking(new Expectations() {{
-            one(httpClientBuilder).build(); will(returnValue(client));
-            one(contextBuilder).build(); will(returnValue(null));
-            one(client).execute((HttpUriRequest) with(instanceOf(HttpPut.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpPut.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -173,9 +174,9 @@ public class ApacheHttpClientTest {
     @Test
     public void executesDelete() throws IOException {
         context.checking(new Expectations() {{
-            one(httpClientBuilder).build(); will(returnValue(client));
-            one(contextBuilder).build(); will(returnValue(null));
-            one(client).execute((HttpUriRequest) with(instanceOf(HttpDelete.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpDelete.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -189,7 +190,7 @@ public class ApacheHttpClientTest {
             allowing(httpClientBuilder).build(); will(returnValue(client));
             allowing(contextBuilder).build(); will(returnValue(null));
             allowing(client).getConnectionManager(); will(returnValue(connectionManager));
-            one(connectionManager).shutdown();
+            oneOf(connectionManager).shutdown();
         }});
         new ApacheHttpClient(httpClientBuilder, contextBuilder).shutdown();
     }
@@ -200,9 +201,9 @@ public class ApacheHttpClientTest {
 
     private void expectingHttpClientExecuteWith(final Matcher<? extends HttpUriRequest> request, final Matcher<ResponseHandler> responseHandler) throws IOException {
         context.checking(new Expectations() {{
-            one(httpClientBuilder).build(); will(returnValue(client));
-            one(contextBuilder).build(); will(returnValue(null));
-            one(client).execute(with(request), with(responseHandler), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute(with(request), with(responseHandler), with(any(HttpContext.class))); will(returnValue(response));
         }});
     }
 
@@ -210,4 +211,20 @@ public class ApacheHttpClientTest {
         return new URL("http://not.real.url");
     }
 
+    private static class StubHttpContext implements HttpContext {
+        @Override
+        public Object getAttribute(String id) {
+            return null;
+        }
+
+        @Override
+        public void setAttribute(String id, Object obj) {
+
+        }
+
+        @Override
+        public Object removeAttribute(String id) {
+            return null;
+        }
+    }
 }

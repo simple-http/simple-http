@@ -19,7 +19,13 @@
     <dependencies>
 
         <!-- test -->
-        <!-- junit is excluded as it'll be included with hamcrest -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock</artifactId>
