@@ -23,7 +23,6 @@ package bad.robot.http.apache;
 
 import bad.robot.http.Builder;
 import bad.robot.http.configuration.*;
-import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -34,6 +33,7 @@ import org.apache.http.params.HttpParams;
 import java.util.ArrayList;
 import java.util.List;
 
+import static bad.robot.http.configuration.HttpTimeout.httpTimeout;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
 import static com.google.code.tempusfugit.temporal.Duration.seconds;
 import static org.apache.http.client.params.ClientPNames.*;
@@ -47,15 +47,15 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     private List<ApacheHttpAuthenticationCredentials> credentials = new ArrayList<ApacheHttpAuthenticationCredentials>();
     private Ssl ssl = Ssl.enabled;
     private Configuration proxy = new DoNothing();
-    private Configuration timeout = new HttpTimeout(minutes(10));
+    private Configuration timeout = httpTimeout(minutes(10));
     private Configuration handleRedirects = AutomaticRedirectHandling.on();
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
-        return new ApacheHttpClientBuilder().with(seconds(5));
+        return new ApacheHttpClientBuilder().with(httpTimeout(seconds(5)));
     }
 
-    public ApacheHttpClientBuilder with(Duration timeout) {
-        this.timeout = new HttpTimeout(timeout);
+    public ApacheHttpClientBuilder with(HttpTimeout timeout) {
+        this.timeout = timeout;
         return this;
     }
 

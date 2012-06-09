@@ -30,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static bad.robot.http.apache.matchers.HttpParameterMatcher.parameter;
+import static bad.robot.http.configuration.HttpTimeout.httpTimeout;
 import static bad.robot.http.configuration.Proxy.proxy;
 import static com.google.code.tempusfugit.temporal.Duration.millis;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
@@ -69,7 +70,7 @@ public class ApacheHttpClientBuilderTest {
 
     @Test
     public void shouldConfigureTimeouts() {
-        HttpClient client = builder.with(millis(256)).build();
+        HttpClient client = builder.with(httpTimeout(millis(256))).build();
         assertThat(client, parameter(CONNECTION_TIMEOUT, is(256l)));
         assertThat(client, parameter(SO_TIMEOUT, is(256l)));
     }

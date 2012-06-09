@@ -26,7 +26,11 @@ import com.google.code.tempusfugit.temporal.Duration;
 
 public class HttpTimeout extends AbstractValueType<Duration> implements Configuration {
 
-    public HttpTimeout(Duration value) {
+    public static HttpTimeout httpTimeout(Duration value) {
+        return new HttpTimeout(value);
+    }
+
+    private HttpTimeout(Duration value) {
         super(value);
     }
 

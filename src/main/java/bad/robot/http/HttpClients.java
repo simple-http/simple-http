@@ -23,8 +23,8 @@ package bad.robot.http;
 
 import bad.robot.http.apache.*;
 import bad.robot.http.configuration.AutomaticRedirectHandling;
+import bad.robot.http.configuration.HttpTimeout;
 import bad.robot.http.configuration.Proxy;
-import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -54,7 +54,7 @@ public class HttpClients {
         }
 
         @Override
-        public CommonHttpClient with(Duration timeout) {
+        public CommonHttpClient with(HttpTimeout timeout) {
             apacheBuilder.with(timeout);
             return this;
         }
