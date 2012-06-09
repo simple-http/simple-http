@@ -22,6 +22,8 @@
 package bad.robot.http;
 
 import bad.robot.http.apache.*;
+import bad.robot.http.configuration.AutomaticRedirectHandling;
+import bad.robot.http.configuration.Proxy;
 import com.google.code.tempusfugit.temporal.Duration;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -82,8 +84,8 @@ public class HttpClients {
         }
 
         @Override
-        public CommonHttpClient withProxy(URL url) {
-            apacheBuilder.withProxy(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
+        public CommonHttpClient with(Proxy proxy) {
+            apacheBuilder.with(proxy);
             return this;
         }
 

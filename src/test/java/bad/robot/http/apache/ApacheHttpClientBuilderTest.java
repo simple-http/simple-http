@@ -21,18 +21,25 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.AutomaticRedirectHandling;
+import bad.robot.http.configuration.AutomaticRedirectHandling;
+import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.junit.Test;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static bad.robot.http.apache.matchers.HttpParameterMatcher.parameter;
+import static bad.robot.http.configuration.Proxy.proxy;
 import static com.google.code.tempusfugit.temporal.Duration.millis;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
 import static org.apache.http.client.params.ClientPNames.HANDLE_REDIRECTS;
+import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
 import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
 import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class ApacheHttpClientBuilderTest {
 
@@ -44,6 +51,7 @@ public class ApacheHttpClientBuilderTest {
         assertThat(client, parameter(HANDLE_REDIRECTS, is(true)));
         assertThat(client, parameter(CONNECTION_TIMEOUT, is(minutes(10).inMillis())));
         assertThat(client, parameter(SO_TIMEOUT, is(minutes(10).inMillis())));
+        assertThat(client, parameter(DEFAULT_PROXY, is(nullValue())));
     }
 
     @Test
@@ -64,6 +72,11 @@ public class ApacheHttpClientBuilderTest {
         HttpClient client = builder.with(millis(256)).build();
         assertThat(client, parameter(CONNECTION_TIMEOUT, is(256l)));
         assertThat(client, parameter(SO_TIMEOUT, is(256l)));
+    }
+
+    @Test
+    public void shouldConfigureProxy() throws MalformedURLException {
+        assertThat(builder.with(proxy(new URL("http://localhost:8989"))).build(), parameter(DEFAULT_PROXY, is(new HttpHost("localhost", 8989, "http"))));
     }
 
 }

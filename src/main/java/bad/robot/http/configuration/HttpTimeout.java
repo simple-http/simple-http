@@ -19,24 +19,19 @@
  * under the License.
  */
 
-package bad.robot.http.apache;
+package bad.robot.http.configuration;
 
-import bad.robot.http.configuration.Configurable;
-import org.apache.http.params.HttpParams;
+import bad.robot.AbstractValueType;
+import com.google.code.tempusfugit.temporal.Duration;
 
-public class ApacheHttpParameters {
-    private final HttpParams parameters;
+public class HttpTimeout extends AbstractValueType<Duration> implements Configuration {
 
-    public ApacheHttpParameters(HttpParams parameters) {
-        this.parameters = parameters;
+    public HttpTimeout(Duration value) {
+        super(value);
     }
 
-    public Configurable configuration(final String parameter) {
-        return new Configurable() {
-            @Override
-            public <T> void setTo(T value) {
-                parameters.setParameter(parameter, value);
-            }
-        };
+    @Override
+    public void applyTo(Configurable configurable) {
+        configurable.setTo(value.inMillis());
     }
 }

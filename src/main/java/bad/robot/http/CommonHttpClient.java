@@ -21,6 +21,8 @@
 
 package bad.robot.http;
 
+import bad.robot.http.configuration.AutomaticRedirectHandling;
+import bad.robot.http.configuration.Proxy;
 import com.google.code.tempusfugit.temporal.Duration;
 
 import java.net.URL;
@@ -37,7 +39,7 @@ import java.net.URL;
  */
 public interface CommonHttpClient extends HttpClient {
 
-    CommonHttpClient with(Duration timeout);
+    @Deprecated CommonHttpClient with(Duration timeout);
 
     CommonHttpClient with(String username, String password);
 
@@ -49,5 +51,5 @@ public interface CommonHttpClient extends HttpClient {
 
     CommonHttpClient with(AutomaticRedirectHandling handleRedirects);
 
-    CommonHttpClient withProxy(URL url);
+    CommonHttpClient with(Proxy proxy);
 }

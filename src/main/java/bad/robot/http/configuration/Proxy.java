@@ -19,8 +19,25 @@
  * under the License.
  */
 
-package bad.robot.http;
+package bad.robot.http.configuration;
 
-public interface Configuration {
-    void applyTo(Configurable configurable);
+import bad.robot.AbstractValueType;
+import org.apache.http.HttpHost;
+
+import java.net.URL;
+
+public class Proxy extends AbstractValueType<URL> implements Configuration {
+
+    public static Proxy proxy(URL value) {
+        return new Proxy(value);
+    }
+
+    private Proxy(URL value) {
+        super(value);
+    }
+
+    @Override
+    public void applyTo(Configurable configurable) {
+        configurable.setTo(new HttpHost(value.getHost(), value.getPort(), value.getProtocol()));
+    }
 }

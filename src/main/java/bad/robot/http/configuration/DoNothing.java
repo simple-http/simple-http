@@ -19,24 +19,11 @@
  * under the License.
  */
 
-package bad.robot.http.apache;
+package bad.robot.http.configuration;
 
-import bad.robot.http.configuration.Configurable;
-import org.apache.http.params.HttpParams;
-
-public class ApacheHttpParameters {
-    private final HttpParams parameters;
-
-    public ApacheHttpParameters(HttpParams parameters) {
-        this.parameters = parameters;
-    }
-
-    public Configurable configuration(final String parameter) {
-        return new Configurable() {
-            @Override
-            public <T> void setTo(T value) {
-                parameters.setParameter(parameter, value);
-            }
-        };
+public class DoNothing implements Configuration {
+    @Override
+    public void applyTo(Configurable configurable) {
+        // do nothing eh
     }
 }

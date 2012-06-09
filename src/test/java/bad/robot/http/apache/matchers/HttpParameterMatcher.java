@@ -43,7 +43,7 @@ public class HttpParameterMatcher extends TypeSafeDiagnosingMatcher<HttpClient> 
     @Override
     protected boolean matchesSafely(HttpClient actual, Description mismatchDescription) {
         Object parameter = actual.getParams().getParameter(this.parameter);
-        mismatchDescription.appendText(" actual ").appendValue(parameter.toString());
+        mismatchDescription.appendText(" actual ").appendValue(parameter != null ? parameter.toString() : "<null>");
         return matcher.matches(parameter);
     }
 

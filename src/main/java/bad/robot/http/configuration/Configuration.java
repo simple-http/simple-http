@@ -19,19 +19,8 @@
  * under the License.
  */
 
-package bad.robot.http;
+package bad.robot.http.configuration;
 
-import bad.robot.AbstractValueType;
-import com.google.code.tempusfugit.temporal.Duration;
-
-public class HttpTimeout extends AbstractValueType<Duration> implements Configuration {
-
-    public HttpTimeout(Duration value) {
-        super(value);
-    }
-
-    @Override
-    public void applyTo(Configurable configurable) {
-        configurable.setTo(value.inMillis());
-    }
+public interface Configuration {
+    void applyTo(Configurable configurable);
 }

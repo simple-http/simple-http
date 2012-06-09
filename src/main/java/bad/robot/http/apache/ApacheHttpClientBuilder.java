@@ -21,12 +21,9 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.AutomaticRedirectHandling;
 import bad.robot.http.Builder;
-import bad.robot.http.Configuration;
-import bad.robot.http.HttpTimeout;
+import bad.robot.http.configuration.*;
 import com.google.code.tempusfugit.temporal.Duration;
-import org.apache.http.HttpHost;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -48,8 +45,8 @@ import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient> {
 
     private List<ApacheHttpAuthenticationCredentials> credentials = new ArrayList<ApacheHttpAuthenticationCredentials>();
-    private HttpHost proxy;
     private Ssl ssl = Ssl.enabled;
+    private Configuration proxy = new DoNothing();
     private Configuration timeout = new HttpTimeout(minutes(10));
     private Configuration handleRedirects = AutomaticRedirectHandling.on();
 
@@ -62,7 +59,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return this;
     }
 
-    public ApacheHttpClientBuilder withProxy(HttpHost proxy) {
+    public ApacheHttpClientBuilder with(Proxy proxy) {
         this.proxy = proxy;
         return this;
     }
@@ -102,12 +99,12 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         parameters.setParameter(ALLOW_CIRCULAR_REDIRECTS, true);
         parameters.setParameter(HANDLE_AUTHENTICATION, true);
         parameters.setParameter(USE_EXPECT_CONTINUE, true);
-        parameters.setParameter(DEFAULT_PROXY, proxy);
 
         ApacheHttpParameters apache = new ApacheHttpParameters(parameters);
         handleRedirects.applyTo(apache.configuration(HANDLE_REDIRECTS));
         timeout.applyTo(apache.configuration(CONNECTION_TIMEOUT));
         timeout.applyTo(apache.configuration(SO_TIMEOUT));
+        proxy.applyTo(apache.configuration(DEFAULT_PROXY));
 
         return parameters;
     }
