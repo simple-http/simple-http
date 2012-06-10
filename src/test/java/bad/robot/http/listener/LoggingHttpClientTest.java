@@ -125,7 +125,7 @@ public class LoggingHttpClientTest {
 
     private void expectingHttpClientCall() {
         context.checking(new Expectations() {{
-            one(client);
+            oneOf(client);
         }});
     }
 

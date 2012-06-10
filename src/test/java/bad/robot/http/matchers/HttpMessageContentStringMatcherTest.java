@@ -56,8 +56,8 @@ public class HttpMessageContentStringMatcherTest {
     public void anotherExample() throws MalformedURLException {
         final HttpClient http = context.mock(HttpClient.class);
         context.checking(new Expectations() {{
-            one(http).post(with(any(URL.class)), with(post(content("post body"))));
-            one(http).put(with(any(URL.class)), with(put(content("put body"))));
+            oneOf(http).post(with(any(URL.class)), with(post(content("post body"))));
+            oneOf(http).put(with(any(URL.class)), with(put(content("put body"))));
         }});
 
         URL url = new URL("http://www.google.com");

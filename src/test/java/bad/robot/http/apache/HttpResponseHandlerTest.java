@@ -79,7 +79,7 @@ public class HttpResponseHandlerTest {
     @Test
     public void shouldConvertBody() throws IOException {
         context.checking(new Expectations(){{
-            one(consumer).toString(body); will(returnValue("I'm a http message body"));
+            oneOf(consumer).toString(body); will(returnValue("I'm a http message body"));
         }});
         HttpResponse response = handler.handleResponse(anApacheResponseWithBody);
         assertThat(response, has(content("I'm a http message body")));

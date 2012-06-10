@@ -59,7 +59,7 @@ public class TimedHttpClientTest {
     public void shouldDelegate() throws MalformedURLException {
         final URL url = anyUrl();
         context.checking(new Expectations() {{
-            one(delegate).get(url);
+            oneOf(delegate).get(url);
         }});
         timedHttpClient(delegate, new FixedClock(), logger).get(url);
     }
@@ -68,8 +68,8 @@ public class TimedHttpClientTest {
     public void shouldTimeRequest() throws IOException {
         context.checking(new Expectations() {{
             allowing(delegate).get(with(any(URL.class)));
-            one(clock).create(); will(returnValue(new Date(0)));
-            one(clock).create(); will(returnValue(new Date(millis(100).inMillis())));
+            oneOf(clock).create(); will(returnValue(new Date(0)));
+            oneOf(clock).create(); will(returnValue(new Date(millis(100).inMillis())));
         }});
         timedHttpClient(delegate, clock, logger).get(anyUrl());
         log4J.assertThat(containsString("100 MILLISECONDS"));

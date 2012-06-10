@@ -61,7 +61,7 @@ public class HttpMessageHeaderMatcherTest {
     public void anotherExample() throws MalformedURLException {
         final HttpClient http = context.mock(HttpClient.class);
         context.checking(new Expectations() {{
-            one(http).put(with(any(URL.class)), with(put(has(header("Accept", "text/html")))));
+            oneOf(http).put(with(any(URL.class)), with(put(has(header("Accept", "text/html")))));
         }});
         http.put(new URL("http://www.google.com"), new UnencodedStringMessage("content", headers(header("Accept", "text/html"))));
         context.assertIsSatisfied();
