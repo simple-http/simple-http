@@ -20,4 +20,4 @@ Will create a HTTP client, perform a `GET` with an `Accept` header and populate 
 
 ## more.tools
 
-For more tools, see [robotooling.com](http://www.robotooling.com)
+For more tools and to download, see [robotooling.com](http://www.robotooling.com)
