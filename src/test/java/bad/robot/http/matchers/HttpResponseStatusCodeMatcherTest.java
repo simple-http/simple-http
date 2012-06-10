@@ -37,7 +37,7 @@ import static org.junit.Assert.assertThat;
 
 public class HttpResponseStatusCodeMatcherTest {
 
-    private final HttpResponse response = new DefaultHttpResponse(200, "OK", null, headers(header("Accept", "application/json")));
+    private final HttpResponse response = new DefaultHttpResponse(200, "OK", "{ \"message\", \"not found\" }", headers(header("Content-Type", "application/json")));
 
     @Test
     public void exampleUsage() throws MalformedURLException {
