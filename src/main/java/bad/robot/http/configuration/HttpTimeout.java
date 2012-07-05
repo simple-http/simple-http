@@ -36,6 +36,6 @@ public class HttpTimeout extends AbstractValueType<Duration> implements Configur
 
     @Override
     public void applyTo(Configurable configurable) {
-        configurable.setTo(value.inMillis());
+        configurable.setTo((int) value.inMillis());
     }
 }
