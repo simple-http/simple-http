@@ -21,21 +21,21 @@
 
 package bad.robot.http;
 
-public class HttpException extends RuntimeException {
+public class HttpSocketTimeoutException extends HttpException {
 
-    public HttpException() {
+    public HttpSocketTimeoutException() {
+        super();
     }
 
-    public HttpException(String message) {
+    public HttpSocketTimeoutException(String message) {
         super(message);
     }
 
-    public HttpException(String message, Throwable cause) {
+    public HttpSocketTimeoutException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public HttpException(Throwable cause) {
+    public HttpSocketTimeoutException(Throwable cause) {
         super(cause);
     }
-
 }

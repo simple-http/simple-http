@@ -19,23 +19,29 @@
  * under the License.
  */
 
-package bad.robot.http;
+package bad.robot.http.apache;
 
-public class HttpException extends RuntimeException {
+import bad.robot.http.ExceptionWrapper;
+import bad.robot.http.HttpConnectionTimeoutException;
+import bad.robot.http.HttpException;
+import bad.robot.http.HttpSocketTimeoutException;
+import org.apache.http.conn.ConnectTimeoutException;
 
-    public HttpException() {
+import java.net.SocketTimeoutException;
+import java.util.concurrent.Callable;
+
+public class ApacheExceptionWrapper implements ExceptionWrapper<HttpException> {
+
+    @Override
+    public <V> V execute(Callable<V> callable) throws HttpException {
+        try {
+            return callable.call();
+        } catch (ConnectTimeoutException e) {
+            throw new HttpConnectionTimeoutException(e);
+        } catch (SocketTimeoutException e) {
+            throw new HttpSocketTimeoutException(e);
+        } catch (Exception e) {
+            throw new HttpException(e);
+        }
     }
-
-    public HttpException(String message) {
-        super(message);
-    }
-
-    public HttpException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public HttpException(Throwable cause) {
-        super(cause);
-    }
-
 }
