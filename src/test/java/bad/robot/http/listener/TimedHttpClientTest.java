@@ -39,6 +39,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
+import static bad.robot.http.Any.anyUrl;
 import static bad.robot.http.SimpleHeaders.noHeaders;
 import static bad.robot.http.listener.TimedHttpClient.timedHttpClient;
 import static com.google.code.tempusfugit.temporal.Duration.millis;
@@ -81,16 +82,12 @@ public class TimedHttpClientTest {
             allowing(delegate).get(with(any(URL.class))); will(returnValue(new DefaultHttpResponse(200, "OK", "nothing", noHeaders())));
         }});
         timedHttpClient(delegate, new FixedClock(), logger).get(anyUrl());
-        log4J.assertThat(containsString("GET http://whatever was 200 (OK), took Duration 0 MILLISECONDS"));
+        log4J.assertThat(containsString("GET http://not.real.url 200 (OK), took Duration 0 MILLISECONDS"));
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAllowVagueLoggerClass() throws IOException {
         timedHttpClient(delegate, clock, Object.class).get(anyUrl());
-    }
-
-    private static URL anyUrl() throws MalformedURLException {
-        return new URL("http://whatever");
     }
 
     @After

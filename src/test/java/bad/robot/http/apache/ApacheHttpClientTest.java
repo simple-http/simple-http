@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static bad.robot.http.Any.anyUrl;
 import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
@@ -75,7 +76,7 @@ public class ApacheHttpClientTest {
     public void executesGetWithHeaders() throws IOException {
         Headers headers = headers(header("header", "value"));
         expectingHttpClientExecuteWith(requestContaining(headers));
-        new ApacheHttpClient(httpClientBuilder, contextBuilder).get(anyUrl(), headers);        
+        new ApacheHttpClient(httpClientBuilder, contextBuilder).get(anyUrl(), headers);
     }
 
     @Test (expected = HttpException.class)
@@ -218,10 +219,6 @@ public class ApacheHttpClientTest {
             oneOf(contextBuilder).build(); will(returnValue(localContext));
             oneOf(client).execute(with(request), with(responseHandler), with(any(HttpContext.class))); will(returnValue(response));
         }});
-    }
-
-    private static URL anyUrl() throws MalformedURLException {
-        return new URL("http://not.real.url");
     }
 
     private static class StubHttpContext implements HttpContext {

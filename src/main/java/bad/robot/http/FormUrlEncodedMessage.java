@@ -23,6 +23,8 @@ package bad.robot.http;
 
 import static bad.robot.http.CharacterSet.defaultCharacterSet;
 import static bad.robot.http.SimpleHeaders.noHeaders;
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
 public class FormUrlEncodedMessage implements HttpPost {
 
@@ -66,6 +68,16 @@ public class FormUrlEncodedMessage implements HttpPost {
     @Override
     public void accept(HttpRequestVisitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return reflectionHashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return reflectionEquals(this, that);
     }
 
     @Override

@@ -25,6 +25,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
 
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
+
 public class FormParameters implements MessageContent {
 
     private final Map<String, String> parameters = new HashMap<String, String>();
@@ -70,6 +73,16 @@ public class FormParameters implements MessageContent {
         } catch (UnsupportedEncodingException e) {
             throw new HttpException(e);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return reflectionHashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return reflectionEquals(this, that);
     }
 
     @Override

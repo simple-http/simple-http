@@ -45,21 +45,22 @@ import static org.hamcrest.Matchers.nullValue;
 public class ApacheHttpClientBuilderTest {
 
     private final ApacheHttpClientBuilder builder = new ApacheHttpClientBuilder();
+    private final int TEN_MINUTES = (int) minutes(10).inMillis();
 
     @Test
     public void shouldDefaultConfigurationValues() {
         HttpClient client = builder.build();
         assertThat(client, parameter(HANDLE_REDIRECTS, is(true)));
-        assertThat(client, parameter(CONNECTION_TIMEOUT, is(minutes(10).inMillis())));
-        assertThat(client, parameter(SO_TIMEOUT, is(minutes(10).inMillis())));
+        assertThat(client, parameter(CONNECTION_TIMEOUT, is(TEN_MINUTES)));
+        assertThat(client, parameter(SO_TIMEOUT, is(TEN_MINUTES)));
         assertThat(client, parameter(DEFAULT_PROXY, is(nullValue())));
     }
 
     @Test
     public void shouldDefaultConfigurationValueForPredefinedBuilder() {
         HttpClient client = ApacheHttpClientBuilder.anApacheClientWithShortTimeout().build();
-        assertThat(client, parameter(CONNECTION_TIMEOUT, is(5000l)));
-        assertThat(client, parameter(SO_TIMEOUT, is(5000l)));
+        assertThat(client, parameter(CONNECTION_TIMEOUT, is(5000)));
+        assertThat(client, parameter(SO_TIMEOUT, is(5000)));
     }
 
     @Test
@@ -71,8 +72,8 @@ public class ApacheHttpClientBuilderTest {
     @Test
     public void shouldConfigureTimeouts() {
         HttpClient client = builder.with(httpTimeout(millis(256))).build();
-        assertThat(client, parameter(CONNECTION_TIMEOUT, is(256l)));
-        assertThat(client, parameter(SO_TIMEOUT, is(256l)));
+        assertThat(client, parameter(CONNECTION_TIMEOUT, is(256)));
+        assertThat(client, parameter(SO_TIMEOUT, is(256)));
     }
 
     @Test

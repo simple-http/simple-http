@@ -36,9 +36,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 
+import static bad.robot.http.Any.anyUrl;
 import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.SimpleHeader.header;
 import static bad.robot.http.SimpleHeaders.headers;
@@ -127,10 +127,6 @@ public class LoggingHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(client);
         }});
-    }
-
-    private URL anyUrl() throws MalformedURLException {
-        return new URL("http://baddotrobot.com");
     }
 
     @After
