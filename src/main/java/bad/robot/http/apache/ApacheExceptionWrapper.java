@@ -40,7 +40,7 @@ public class ApacheExceptionWrapper implements ExceptionWrapper<HttpException> {
             throw new HttpConnectionTimeoutException(e);
         } catch (SocketTimeoutException e) {
             throw new HttpSocketTimeoutException(e);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new HttpException(e);
         }
     }
