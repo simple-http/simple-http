@@ -21,13 +21,12 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.ExceptionWrapper;
-import bad.robot.http.HttpConnectionTimeoutException;
-import bad.robot.http.HttpException;
-import bad.robot.http.HttpSocketTimeoutException;
+import bad.robot.http.*;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.concurrent.Callable;
 
 public class ApacheExceptionWrapper implements ExceptionWrapper<HttpException> {
@@ -40,6 +39,10 @@ public class ApacheExceptionWrapper implements ExceptionWrapper<HttpException> {
             throw new HttpConnectionTimeoutException(e);
         } catch (SocketTimeoutException e) {
             throw new HttpSocketTimeoutException(e);
+        } catch (HttpHostConnectException e) {
+            throw new HttpConnectionRefusedException(e);
+        } catch (UnknownHostException e) {
+            throw new HttpUnknownHostException(e.getMessage(), e);
         } catch (Throwable e) {
             throw new HttpException(e);
         }

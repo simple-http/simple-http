@@ -21,17 +21,19 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.HttpConnectionTimeoutException;
-import bad.robot.http.HttpException;
-import bad.robot.http.HttpSocketTimeoutException;
+import bad.robot.http.*;
+import org.apache.http.HttpHost;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.concurrent.Callable;
 
 import static org.hamcrest.Matchers.instanceOf;
@@ -54,6 +56,20 @@ public class ApacheExceptionWrapperTest {
         exception.expect(HttpSocketTimeoutException.class);
         exception.expect(new ThrowableCauseMatcher(SocketTimeoutException.class));
         wrapper.execute(throwsException(new SocketTimeoutException()));
+    }
+
+    @Test
+    public void wrapsConnectException() {
+        exception.expect(HttpConnectionRefusedException.class);
+        exception.expect(new ThrowableCauseMatcher(HttpHostConnectException.class));
+        wrapper.execute(throwsException(new HttpHostConnectException(new HttpHost("localhost"), new ConnectException())));
+    }
+
+    @Test
+    public void wrapsUnknownHostException() {
+        exception.expect(HttpUnknownHostException.class);
+        exception.expect(new ThrowableCauseMatcher(UnknownHostException.class));
+        wrapper.execute(throwsException(new UnknownHostException("cheese")));
     }
 
     @Test
