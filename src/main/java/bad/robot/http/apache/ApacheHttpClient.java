@@ -34,13 +34,12 @@ import java.util.concurrent.Callable;
 
 import static bad.robot.http.SimpleHeaders.noHeaders;
 import static bad.robot.http.apache.Coercions.asApacheBasicHeader;
-import static com.google.code.tempusfugit.ExceptionWrapper.wrapAnyException;
-import static com.google.code.tempusfugit.WithException.with;
 
 public class ApacheHttpClient implements HttpClient {
 
     private final org.apache.http.client.HttpClient client;
     private final HttpContext localContext;
+    private final ExceptionWrapper<HttpException> exceptionWrapper = new WrapAllExceptionAsHttpException();
 
     public ApacheHttpClient(Builder<org.apache.http.client.HttpClient> clientBuilder, Builder<HttpContext> localContextBuilder) {
         client = clientBuilder.build();
@@ -88,12 +87,12 @@ public class ApacheHttpClient implements HttpClient {
     }
 
     private HttpResponse execute(final HttpUriRequest request) {
-        return wrapAnyException(new Callable<HttpResponse>() {
+        return exceptionWrapper.execute(new Callable<HttpResponse>() {
             @Override
             public HttpResponse call() throws Exception {
                 return client.execute(request, new HttpResponseHandler(new ToStringConsumer()), localContext);
             }
-        }, with(HttpException.class));
+        });
     }
 
     @Override
