@@ -82,7 +82,7 @@ public class TimedHttpClientTest {
             allowing(delegate).get(with(any(URL.class))); will(returnValue(new DefaultHttpResponse(200, "OK", "nothing", noHeaders())));
         }});
         timedHttpClient(delegate, new FixedClock(), logger).get(anyUrl());
-        log4J.assertThat(containsString("GET http://not.real.url 200 (OK), took Duration 0 MILLISECONDS"));
+        log4J.assertThat(containsString("GET http://not.real.url was 200 (OK), took Duration 0 MILLISECONDS"));
     }
 
     @Test (expected = IllegalArgumentException.class)

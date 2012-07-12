@@ -25,8 +25,6 @@ import bad.robot.http.FormUrlEncodedMessage;
 import bad.robot.http.HttpClient;
 import bad.robot.http.Log4J;
 import bad.robot.http.UnencodedStringMessage;
-import com.google.code.tempusfugit.FactoryException;
-import com.google.code.tempusfugit.temporal.Clock;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -36,7 +34,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.net.MalformedURLException;
-import java.util.Date;
 
 import static bad.robot.http.Any.anyUrl;
 import static bad.robot.http.FormParameters.params;
@@ -50,12 +47,6 @@ public class LoggingHttpClientTest {
 
     public static final String lineSeparator = System.getProperty("line.separator");
     private final Mockery context = new Mockery();
-    private final Clock mock = new Clock() {
-        @Override
-        public Date create() throws FactoryException {
-            return new Date();
-        }
-    };
     private final Logger logger = Logger.getLogger(this.getClass());
     private final Log4J log4J = Log4J.appendTo(logger, INFO);
     private final HttpClient client = context.mock(HttpClient.class);
@@ -66,14 +57,14 @@ public class LoggingHttpClientTest {
     public void shouldLogGet() throws MalformedURLException {
         expectingHttpClientCall();
         http.get(anyUrl());
-        log4J.assertThat(containsString("GET http://baddotrobot.com HTTP/1.1"));
+        log4J.assertThat(containsString("GET http://not.real.url HTTP/1.1"));
     }
 
     @Test
     public void shouldLogGetWithHeaders() throws MalformedURLException {
         expectingHttpClientCall();
         http.get(anyUrl(), headers(header("Accept", "text/plain"), header("Host", "127.0.0.1")));
-        log4J.assertThat(containsString("GET http://baddotrobot.com HTTP/1.1" + lineSeparator + "Accept: text/plain" + lineSeparator + "Host: 127.0.0.1"));
+        log4J.assertThat(containsString("GET http://not.real.url HTTP/1.1" + lineSeparator + "Accept: text/plain" + lineSeparator + "Host: 127.0.0.1"));
     }
 
     @Test
@@ -88,7 +79,7 @@ public class LoggingHttpClientTest {
                         header("Accept", "text/plain"),
                         header("Host", "127.0.0.1"))
         ));
-        log4J.assertThat(containsString("POST http://baddotrobot.com HTTP/1.1" + lineSeparator));
+        log4J.assertThat(containsString("POST http://not.real.url HTTP/1.1" + lineSeparator));
         log4J.assertThat(containsString("Accept: text/plain"));
         log4J.assertThat(containsString("Host: 127.0.0.1"));
         log4J.assertThat(containsString("Content-Type: application/x-www-form-urlencoded"));
@@ -100,7 +91,7 @@ public class LoggingHttpClientTest {
     public void shouldLogPostUnencoded() throws MalformedURLException {
         expectingHttpClientCall();
         http.post(anyUrl(), new UnencodedStringMessage("cheese sandwich", headers(header("Accept", "text/plain"), header("Host", "127.0.0.1"))));
-        log4J.assertThat(containsString("POST http://baddotrobot.com HTTP/1.1"));
+        log4J.assertThat(containsString("POST http://not.real.url HTTP/1.1"));
         log4J.assertThat(containsString("Accept: text/plain"));
         log4J.assertThat(containsString("Host: 127.0.0.1"));
         log4J.assertThat(containsString("cheese sandwich"));
@@ -110,7 +101,7 @@ public class LoggingHttpClientTest {
     public void shouldLogPut() throws MalformedURLException {
         expectingHttpClientCall();
         http.put(anyUrl(), new UnencodedStringMessage("cheese sandwich", headers(header("Accept", "text/plain"), header("Host", "127.0.0.1"))));
-        log4J.assertThat(containsString("PUT http://baddotrobot.com HTTP/1.1"));
+        log4J.assertThat(containsString("PUT http://not.real.url HTTP/1.1"));
         log4J.assertThat(containsString("Accept: text/plain"));
         log4J.assertThat(containsString("Host: 127.0.0.1"));
         log4J.assertThat(containsString("cheese sandwich"));
@@ -120,7 +111,7 @@ public class LoggingHttpClientTest {
     public void shouldLogDelete() throws MalformedURLException {
         expectingHttpClientCall();
         http.delete(anyUrl());
-        log4J.assertThat(containsString("DELETE http://baddotrobot.com HTTP/1.1"));
+        log4J.assertThat(containsString("DELETE http://not.real.url HTTP/1.1"));
     }
 
     private void expectingHttpClientCall() {
