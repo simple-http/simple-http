@@ -68,6 +68,7 @@ public class LoggingHttpClientTest {
     }
 
     @Test
+    // TODO this fails because Apache itself adds the Content-Type mime type, whereas the test is using a mock (which wont)
     public void shouldLogPostFormUrlEncoded() throws MalformedURLException {
         expectingHttpClientCall();
         http.post(anyUrl(), new FormUrlEncodedMessage(
@@ -98,6 +99,7 @@ public class LoggingHttpClientTest {
     }
 
     @Test
+    // TODO doesn't respect the difference between PUT and POST
     public void shouldLogPut() throws MalformedURLException {
         expectingHttpClientCall();
         http.put(anyUrl(), new UnencodedStringMessage("cheese sandwich", headers(header("Accept", "text/plain"), header("Host", "127.0.0.1"))));
