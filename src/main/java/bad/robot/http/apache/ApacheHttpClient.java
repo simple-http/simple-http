@@ -39,11 +39,12 @@ public class ApacheHttpClient implements HttpClient {
 
     private final org.apache.http.client.HttpClient client;
     private final HttpContext localContext;
-    private final ExceptionWrapper<HttpException> exceptionWrapper = new WrapAllExceptionAsHttpException();
+    private final Executor<HttpException> executor;
 
     public ApacheHttpClient(Builder<org.apache.http.client.HttpClient> clientBuilder, Builder<HttpContext> localContextBuilder) {
-        client = clientBuilder.build();
-        localContext = localContextBuilder.build();
+        this.client = clientBuilder.build();
+        this.localContext = localContextBuilder.build();
+        this.executor = new ApacheExceptionWrappingExecutor();
     }
 
     @Override
@@ -86,13 +87,12 @@ public class ApacheHttpClient implements HttpClient {
         return execute(new HttpOptions(url.toExternalForm()));
     }
 
-    private HttpResponse execute(final HttpUriRequest request) {
-        return exceptionWrapper.execute(new Callable<HttpResponse>() {
-            @Override
-            public HttpResponse call() throws Exception {
-                return client.execute(request, new HttpResponseHandler(new ToStringConsumer()), localContext);
-            }
-        });
+    private HttpResponse execute(HttpUriRequest request) {
+        return executor.submit(http(request));
+    }
+
+    private Callable<HttpResponse> http(HttpUriRequest request) {
+        return new ApacheHttpRequestExecutor(client, localContext, request);
     }
 
     @Override

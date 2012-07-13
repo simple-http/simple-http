@@ -58,8 +58,20 @@ public class ApacheHttpClientTest {
     private final Builder<HttpClient> httpClientBuilder = context.mock(Builder.class, "http client");
     private final Builder<HttpContext> contextBuilder = context.mock(Builder.class, "local context");
     private final HttpClient client = context.mock(HttpClient.class, "apache http");
+    private final Executor<HttpException> executor = context.mock(Executor.class, "exception wrapper");
     private final HttpResponse response = new DefaultHttpResponse(200, "OK", "", noHeaders());
     private final HttpContext localContext = new StubHttpContext();
+
+    @Test (expected = HttpException.class)
+    public void wrapsExceptionsForGet() throws MalformedURLException {
+        context.checking(new Expectations() {{
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(null));
+            oneOf(client); will(throwException(new IOException()));
+        }});
+        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
+        http.get(anyUrl());
+    }
 
     @Test
     public void executesGet() throws IOException {
@@ -77,17 +89,6 @@ public class ApacheHttpClientTest {
         Headers headers = headers(header("header", "value"));
         expectingHttpClientExecuteWith(requestContaining(headers));
         new ApacheHttpClient(httpClientBuilder, contextBuilder).get(anyUrl(), headers);
-    }
-
-    @Test (expected = HttpException.class)
-    public void wrapExceptionsForGet() throws MalformedURLException {
-        context.checking(new Expectations() {{
-            oneOf(httpClientBuilder).build(); will(returnValue(client));
-            oneOf(contextBuilder).build(); will(returnValue(null));
-            oneOf(client); will(throwException(new IOException()));
-        }});
-        ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
-        http.get(anyUrl());
     }
 
     @Test
@@ -215,9 +216,12 @@ public class ApacheHttpClientTest {
 
     private void expectingHttpClientExecuteWith(final Matcher<? extends HttpUriRequest> request, final Matcher<ResponseHandler> responseHandler) throws IOException {
         context.checking(new Expectations() {{
-            oneOf(httpClientBuilder).build(); will(returnValue(client));
-            oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute(with(request), with(responseHandler), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(httpClientBuilder).build();
+            will(returnValue(client));
+            oneOf(contextBuilder).build();
+            will(returnValue(localContext));
+            oneOf(client).execute(with(request), with(responseHandler), with(any(HttpContext.class)));
+            will(returnValue(response));
         }});
     }
 

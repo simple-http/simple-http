@@ -38,45 +38,45 @@ import java.util.concurrent.Callable;
 
 import static org.hamcrest.Matchers.instanceOf;
 
-public class ApacheExceptionWrapperTest {
+public class ApacheExceptionWrappingExecutorTest {
 
     @Rule public final ExpectedException exception = ExpectedException.none();
 
-    private final ApacheExceptionWrapper wrapper = new ApacheExceptionWrapper();
+    private final ApacheExceptionWrappingExecutor wrapper = new ApacheExceptionWrappingExecutor();
 
     @Test
     public void wrapsConnectTimeoutException() {
         exception.expect(HttpConnectionTimeoutException.class);
         exception.expect(new ThrowableCauseMatcher(ConnectTimeoutException.class));
-        wrapper.execute(throwsException(new ConnectTimeoutException()));
+        wrapper.submit(throwsException(new ConnectTimeoutException()));
     }
 
     @Test
     public void wrapsSocketTimeoutException() {
         exception.expect(HttpSocketTimeoutException.class);
         exception.expect(new ThrowableCauseMatcher(SocketTimeoutException.class));
-        wrapper.execute(throwsException(new SocketTimeoutException()));
+        wrapper.submit(throwsException(new SocketTimeoutException()));
     }
 
     @Test
     public void wrapsConnectException() {
         exception.expect(HttpConnectionRefusedException.class);
         exception.expect(new ThrowableCauseMatcher(HttpHostConnectException.class));
-        wrapper.execute(throwsException(new HttpHostConnectException(new HttpHost("localhost"), new ConnectException())));
+        wrapper.submit(throwsException(new HttpHostConnectException(new HttpHost("localhost"), new ConnectException())));
     }
 
     @Test
     public void wrapsUnknownHostException() {
         exception.expect(HttpUnknownHostException.class);
         exception.expect(new ThrowableCauseMatcher(UnknownHostException.class));
-        wrapper.execute(throwsException(new UnknownHostException("cheese")));
+        wrapper.submit(throwsException(new UnknownHostException("cheese")));
     }
 
     @Test
     public void wrapsException() {
         exception.expect(HttpException.class);
         exception.expect(new ThrowableCauseMatcher(Exception.class));
-        wrapper.execute(throwsException(new Exception()));
+        wrapper.submit(throwsException(new Exception()));
     }
 
     private static Callable<Object> throwsException(final Exception e) {

@@ -21,30 +21,26 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.*;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.HttpHostConnectException;
+import bad.robot.http.HttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.protocol.HttpContext;
 
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.concurrent.Callable;
 
-public class ApacheExceptionWrapper implements ExceptionWrapper<HttpException> {
+class ApacheHttpRequestExecutor implements Callable<HttpResponse> {
+
+    private final org.apache.http.client.HttpClient client;
+    private final HttpContext localContext;
+    private final HttpUriRequest request;
+
+    public ApacheHttpRequestExecutor(org.apache.http.client.HttpClient client, HttpContext localContext, HttpUriRequest request) {
+        this.request = request;
+        this.client = client;
+        this.localContext = localContext;
+    }
 
     @Override
-    public <V> V execute(Callable<V> callable) throws HttpException {
-        try {
-            return callable.call();
-        } catch (ConnectTimeoutException e) {
-            throw new HttpConnectionTimeoutException(e);
-        } catch (SocketTimeoutException e) {
-            throw new HttpSocketTimeoutException(e);
-        } catch (HttpHostConnectException e) {
-            throw new HttpConnectionRefusedException(e);
-        } catch (UnknownHostException e) {
-            throw new HttpUnknownHostException(e.getMessage(), e);
-        } catch (Throwable e) {
-            throw new HttpException(e);
-        }
+    public HttpResponse call() throws Exception {
+        return client.execute(request, new HttpResponseHandler(new ToStringConsumer()), localContext);
     }
 }
