@@ -23,6 +23,13 @@ package bad.robot.http;
 
 import java.util.concurrent.Callable;
 
-public interface ExceptionWrapper<E extends Exception> {
-    <V> V execute(Callable<V> callable) throws E;
+import static com.google.code.tempusfugit.ExceptionWrapper.wrapAnyException;
+import static com.google.code.tempusfugit.WithException.with;
+
+public class WrapAnyExceptionAsHttpExceptionExecutor implements Executor<HttpException> {
+
+    @Override
+    public <V> V submit(Callable<V> callable) throws HttpException {
+        return wrapAnyException(callable, with(HttpException.class));
+    }
 }
