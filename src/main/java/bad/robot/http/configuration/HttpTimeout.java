@@ -21,7 +21,7 @@
 
 package bad.robot.http.configuration;
 
-import bad.robot.AbstractValueType;
+import bad.robot.http.AbstractValueType;
 import com.google.code.tempusfugit.temporal.Duration;
 
 public class HttpTimeout extends AbstractValueType<Duration> implements Configuration {

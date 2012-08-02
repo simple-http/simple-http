@@ -19,34 +19,8 @@
  * under the License.
  */
 
-package bad.robot;
+package bad.robot.http;
 
-public class AbstractValueType<T> implements ValueType<T> {
+public interface ValueType<T> {
 
-    protected final T value;
-
-    public AbstractValueType(T value) {
-        this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof AbstractValueType))
-            return false;
-        AbstractValueType that = (AbstractValueType) o;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return value != null ? value.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + "[" + value + "]";
-    }
 }

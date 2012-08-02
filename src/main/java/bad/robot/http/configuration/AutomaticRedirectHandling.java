@@ -21,7 +21,7 @@
 
 package bad.robot.http.configuration;
 
-import bad.robot.AbstractValueType;
+import bad.robot.http.AbstractValueType;
 
 public class AutomaticRedirectHandling extends AbstractValueType<Boolean> implements Configuration {
 
