@@ -21,6 +21,7 @@
 
 package bad.robot.http;
 
+import static java.lang.String.format;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
@@ -49,6 +50,6 @@ public class StringMessageContent implements MessageContent {
 
     @Override
     public String toString() {
-        return "StringMessageBody{content=" + content + '}';
+        return format("StringMessageBody{content=%s}", content);
     }
 }

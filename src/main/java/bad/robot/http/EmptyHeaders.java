@@ -21,47 +21,27 @@
 
 package bad.robot.http;
 
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
+import bad.robot.EmptyIterator;
 
-public class SimpleHeader implements Header {
+import java.util.Iterator;
 
-    private final String name;
-    private final String value;
+public class EmptyHeaders implements Headers {
 
-    private SimpleHeader(String name, String value) {
-        this.name = name;
-        this.value = value;
+    public static EmptyHeaders emptyHeaders() {
+        return new EmptyHeaders();
     }
 
-    public static Header header(String name, String value) {
-        return new SimpleHeader(name, value);
+    private EmptyHeaders() {
     }
 
     @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public String value() {
-        return value;
-    }
-
-    @Override
-    public int hashCode() {
-        return reflectionHashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object that) {
-        return reflectionEquals(this, that);
+    public Iterator<Header> iterator() {
+        return new EmptyIterator<Header>();
     }
 
     @Override
     public String toString() {
-        return "SimpleHeader{name='" + name + '\'' +
-                ", value='" + value + '\'' +
-                '}';
+        return "";
     }
+
 }

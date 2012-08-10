@@ -22,7 +22,8 @@
 package bad.robot.http;
 
 import static bad.robot.http.CharacterSet.defaultCharacterSet;
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
+import static java.lang.String.format;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
@@ -33,7 +34,7 @@ public class UnencodedStringMessage implements HttpPut, HttpPost {
     private final CharacterSet characterSet;
 
     public UnencodedStringMessage(String content) {
-        this(content, noHeaders());
+        this(content, emptyHeaders());
     }
 
     public UnencodedStringMessage(String content, Headers headers) {
@@ -41,7 +42,7 @@ public class UnencodedStringMessage implements HttpPut, HttpPost {
     }
 
     public UnencodedStringMessage(String content, CharacterSet characterSet) {
-        this(content, noHeaders(), characterSet);
+        this(content, emptyHeaders(), characterSet);
     }
 
     public UnencodedStringMessage(String content, Headers headers, CharacterSet characterSet) {
@@ -81,9 +82,6 @@ public class UnencodedStringMessage implements HttpPut, HttpPost {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{" +
-                "content='" + content + "\', " +
-                "headers='" + headers + "\'" +
-                '}';
+        return format("%s{content='%s', headers='%s'}", this.getClass().getSimpleName(), content, headers);
     }
 }

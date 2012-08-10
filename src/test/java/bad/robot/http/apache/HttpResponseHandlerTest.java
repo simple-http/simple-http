@@ -35,7 +35,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static bad.robot.http.SimpleHeader.header;
+import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.matchers.Matchers.*;
 import static org.apache.http.HttpVersion.HTTP_1_1;
 import static org.junit.Assert.assertThat;

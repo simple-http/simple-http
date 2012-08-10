@@ -43,10 +43,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static bad.robot.http.Any.anyUrl;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
 import static bad.robot.http.FormParameters.params;
-import static bad.robot.http.SimpleHeader.header;
-import static bad.robot.http.SimpleHeaders.headers;
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.HeaderList.headers;
+import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.matchers.Matchers.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -59,7 +59,7 @@ public class ApacheHttpClientTest {
     private final Builder<HttpContext> contextBuilder = context.mock(Builder.class, "local context");
     private final HttpClient client = context.mock(HttpClient.class, "apache http");
     private final Executor<HttpException> executor = context.mock(Executor.class, "exception wrapper");
-    private final HttpResponse response = new DefaultHttpResponse(200, "OK", "", noHeaders());
+    private final HttpResponse response = new DefaultHttpResponse(200, "OK", "", emptyHeaders());
     private final HttpContext localContext = new StubHttpContext();
 
     @Test (expected = HttpException.class)

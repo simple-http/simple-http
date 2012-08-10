@@ -37,8 +37,8 @@ import java.net.MalformedURLException;
 
 import static bad.robot.http.Any.anyUrl;
 import static bad.robot.http.FormParameters.params;
-import static bad.robot.http.SimpleHeader.header;
-import static bad.robot.http.SimpleHeaders.headers;
+import static bad.robot.http.HeaderList.headers;
+import static bad.robot.http.HeaderPair.header;
 import static org.apache.log4j.Level.INFO;
 import static org.hamcrest.Matchers.containsString;
 

@@ -22,26 +22,25 @@
 package bad.robot.http;
 
 
-import bad.robot.EmptyIterator;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
-public class SimpleHeaders implements Headers {
+public class HeaderList implements Headers {
 
     private final List<Header> headers;
 
-    private SimpleHeaders(List<Header> headers) {
+    private HeaderList(List<Header> headers) {
         this.headers = new ArrayList<Header>(headers);
     }
 
     public static Headers headers(Header... headers) {
-        return new SimpleHeaders(Arrays.asList(headers));
+        return new HeaderList(Arrays.asList(headers));
     }
 
     @Override
@@ -61,21 +60,7 @@ public class SimpleHeaders implements Headers {
 
     @Override
     public String toString() {
-        return "SimpleHeaders{headers=" + headers + '}';
-    }
-
-    public static Headers noHeaders() {
-        return new Headers() {
-            @Override
-            public Iterator<Header> iterator() {
-                return new EmptyIterator<Header>();
-            }
-
-            @Override
-            public String toString() {
-                return "";
-            }
-        };
+        return format("%s{headers=%s}", this.getClass().getSimpleName(), headers);
     }
 
 }

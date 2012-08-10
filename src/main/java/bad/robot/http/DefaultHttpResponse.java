@@ -21,6 +21,8 @@
 
 package bad.robot.http;
 
+import static java.lang.String.format;
+
 public class DefaultHttpResponse implements HttpResponse {
 
     private final int statusCode;
@@ -62,10 +64,6 @@ public class DefaultHttpResponse implements HttpResponse {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{statusCode=" + statusCode +
-                ", statusMessage='" + statusMessage + "\'" +
-                ", content='" + content + "\'" +
-                ", headers='" + headers + "\'" +
-                '}';
+        return format("%s{statusCode=%d, statusMessage='%s', content='%s', headers='%s'}", this.getClass().getSimpleName(), statusCode, statusMessage, content, headers);
     }
 }

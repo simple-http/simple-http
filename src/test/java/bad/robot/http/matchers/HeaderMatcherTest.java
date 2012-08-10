@@ -25,7 +25,7 @@ import bad.robot.http.Header;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
-import static bad.robot.http.SimpleHeader.header;
+import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.matchers.HeaderMatcher.isHeader;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;

@@ -28,8 +28,8 @@ import org.apache.http.message.BasicHeader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static bad.robot.http.SimpleHeader.header;
-import static bad.robot.http.SimpleHeaders.headers;
+import static bad.robot.http.HeaderList.headers;
+import static bad.robot.http.HeaderPair.header;
 
 public class Coercions {
 

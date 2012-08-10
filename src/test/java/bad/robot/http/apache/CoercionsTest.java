@@ -27,8 +27,8 @@ import org.apache.http.message.BasicHeader;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
-import static bad.robot.http.SimpleHeader.header;
-import static bad.robot.http.SimpleHeaders.headers;
+import static bad.robot.http.HeaderList.headers;
+import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.matchers.Matchers.apacheHeader;
 import static bad.robot.http.matchers.Matchers.has;
 import static java.util.Arrays.asList;

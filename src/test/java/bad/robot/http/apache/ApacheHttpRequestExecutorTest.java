@@ -36,7 +36,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -48,7 +48,7 @@ public class ApacheHttpRequestExecutorTest {
     private final HttpClient client = context.mock(HttpClient.class);
 
     private final HttpGet anyRequest = new HttpGet("http://whatever.trevor");
-    private final HttpResponse anyResponse = new DefaultHttpResponse(200, "OK", "", noHeaders());
+    private final HttpResponse anyResponse = new DefaultHttpResponse(200, "OK", "", emptyHeaders());
 
     @Test
     public void delegates() throws Exception {

@@ -21,7 +21,7 @@
 
 package bad.robot.http;
 
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
 
 public class HttpDeleteMessage implements HttpDelete {
 
@@ -37,7 +37,7 @@ public class HttpDeleteMessage implements HttpDelete {
 
     @Override
     public Headers getHeaders() {
-        return noHeaders();
+        return emptyHeaders();
     }
 
     @Override

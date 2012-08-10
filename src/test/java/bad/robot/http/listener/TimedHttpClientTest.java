@@ -40,7 +40,7 @@ import java.net.URL;
 import java.util.Date;
 
 import static bad.robot.http.Any.anyUrl;
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
 import static bad.robot.http.listener.TimedHttpClient.timedHttpClient;
 import static com.google.code.tempusfugit.temporal.Duration.millis;
 import static org.apache.log4j.Level.INFO;
@@ -79,7 +79,8 @@ public class TimedHttpClientTest {
     @Test
     public void shouldLogDetails() throws MalformedURLException {
         context.checking(new Expectations() {{
-            allowing(delegate).get(with(any(URL.class))); will(returnValue(new DefaultHttpResponse(200, "OK", "nothing", noHeaders())));
+            allowing(delegate).get(with(any(URL.class)));
+            will(returnValue(new DefaultHttpResponse(200, "OK", "nothing", emptyHeaders())));
         }});
         timedHttpClient(delegate, new FixedClock(), logger).get(anyUrl());
         log4J.assertThat(containsString("GET http://not.real.url was 200 (OK), took Duration 0 MILLISECONDS"));

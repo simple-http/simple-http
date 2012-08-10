@@ -22,7 +22,8 @@
 package bad.robot.http;
 
 import static bad.robot.http.CharacterSet.defaultCharacterSet;
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
+import static java.lang.String.format;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
@@ -33,7 +34,7 @@ public class FormUrlEncodedMessage implements HttpPost {
     private final CharacterSet characterSet;
 
     public FormUrlEncodedMessage(FormParameters content) {
-        this(content, noHeaders());
+        this(content, emptyHeaders());
     }
 
     public FormUrlEncodedMessage(FormParameters content, Headers headers) {
@@ -41,7 +42,7 @@ public class FormUrlEncodedMessage implements HttpPost {
     }
 
     public FormUrlEncodedMessage(FormParameters content, CharacterSet characterSet) {
-        this(content, noHeaders(), characterSet);
+        this(content, emptyHeaders(), characterSet);
     }
 
     public FormUrlEncodedMessage(FormParameters content, Headers headers, CharacterSet characterSet) {
@@ -82,10 +83,6 @@ public class FormUrlEncodedMessage implements HttpPost {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{" +
-                "content='" + content + "\', " +
-                "headers='" + headers + "\'" +
-                "characterSet='" + characterSet() + "\'" +
-                '}';
+        return format("%s{content='%s', headers='%s'characterSet='%s'}", this.getClass().getSimpleName(), content, headers, characterSet());
     }
 }

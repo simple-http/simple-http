@@ -22,33 +22,45 @@
 package bad.robot.http;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
-public class AbstractValueType<T> implements ValueType<T> {
+public class HeaderPair implements Header {
 
-    protected final T value;
+    private final String name;
+    private final String value;
 
-    public AbstractValueType(T value) {
+    private HeaderPair(String name, String value) {
+        this.name = name;
         this.value = value;
     }
 
+    public static Header header(String name, String value) {
+        return new HeaderPair(name, value);
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof AbstractValueType))
-            return false;
-        AbstractValueType that = (AbstractValueType) o;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-        return true;
+    public String name() {
+        return name;
+    }
+
+    @Override
+    public String value() {
+        return value;
     }
 
     @Override
     public int hashCode() {
-        return value != null ? value.hashCode() : 0;
+        return reflectionHashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return reflectionEquals(this, that);
     }
 
     @Override
     public String toString() {
-        return format("%s[%s]", this.getClass().getSimpleName(), value);
+        return format("%s{name='%s', value='%s'}", this.getClass().getSimpleName(), name, value);
     }
 }

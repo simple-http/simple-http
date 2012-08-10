@@ -21,14 +21,14 @@
 
 package bad.robot.http;
 
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
 
 public class HttpGetMessage implements HttpGet {
 
     private final Headers headers;
 
     public HttpGetMessage() {
-        this.headers = noHeaders();
+        this.headers = emptyHeaders();
     }
 
     public HttpGetMessage(Headers headers) {

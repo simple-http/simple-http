@@ -32,7 +32,7 @@ import org.apache.http.protocol.HttpContext;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
-import static bad.robot.http.SimpleHeaders.noHeaders;
+import static bad.robot.http.EmptyHeaders.emptyHeaders;
 import static bad.robot.http.apache.Coercions.asApacheBasicHeader;
 
 public class ApacheHttpClient implements HttpClient {
@@ -56,7 +56,7 @@ public class ApacheHttpClient implements HttpClient {
 
     @Override
     public HttpResponse get(URL url) throws HttpException {
-        return get(url, noHeaders());
+        return get(url, emptyHeaders());
     }
 
     @Override

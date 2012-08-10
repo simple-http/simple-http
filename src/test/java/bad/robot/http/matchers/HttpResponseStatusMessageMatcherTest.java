@@ -28,8 +28,8 @@ import org.junit.Test;
 
 import java.net.MalformedURLException;
 
-import static bad.robot.http.SimpleHeader.header;
-import static bad.robot.http.SimpleHeaders.headers;
+import static bad.robot.http.HeaderList.headers;
+import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.matchers.HttpResponseStatusMessageMatcher.statusMessage;
 import static bad.robot.http.matchers.Matchers.has;
 import static org.hamcrest.Matchers.*;
