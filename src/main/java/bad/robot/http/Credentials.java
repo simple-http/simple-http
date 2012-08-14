@@ -21,18 +21,13 @@
 
 package bad.robot.http;
 
-import org.apache.http.auth.UsernamePasswordCredentials;
+import bad.robot.http.configuration.Configurable;
+import bad.robot.http.configuration.Configuration;
 
-import java.net.URL;
-
-public class Credentials {
+public class Credentials implements Configuration<Credentials> {
 
     private final Username username;
     private final Password password;
-
-    public Credentials(Username username, Password password, URL applies) {
-        this(username, password);
-    }
 
     private Credentials(Username username, Password password) {
         this.username = username;
@@ -49,5 +44,10 @@ public class Credentials {
 
     public String getPassword() {
         return password.value;
+    }
+
+    @Override
+    public void applyTo(Configurable<Credentials> configurable) {
+        configurable.setTo(this);
     }
 }

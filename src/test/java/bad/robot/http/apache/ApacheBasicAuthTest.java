@@ -78,8 +78,8 @@ public class ApacheBasicAuthTest {
 
     @Test
     public void basicAuthorisationHeaderIsNotSetForDifferingScheme() throws MalformedURLException {
-        http.withBasicAuth(new URL("http://localhost:8080"));
-        http.get(new URL("https://localhost:8080/test"));
+        http.withBasicAuth(new URL("https://localhost:8080"));
+        http.get(new URL("http://localhost:8080/test"));
         verifyNoHeadersFor(urlEqualTo("/test"));
     }
 

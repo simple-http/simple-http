@@ -22,10 +22,11 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.Builder;
+import bad.robot.http.Credentials;
 import bad.robot.http.configuration.*;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -48,8 +49,8 @@ import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient> {
 
-    private List<Configuration<Credentials>> credentials = new ArrayList<Configuration<Credentials>>();
     private Ssl ssl = Ssl.enabled;
+    private List<Configuration<Credentials>> credentials = new ArrayList<Configuration<Credentials>>();
     private Configuration<HttpHost> proxy = new NoProxy();
     private Configuration<Integer> timeout = httpTimeout(minutes(10));
     private Configuration<Boolean> handleRedirects = AutomaticRedirectHandling.on();
@@ -68,7 +69,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return this;
     }
 
-    public ApacheHttpClientBuilder with(ApacheHttpAuthenticationCredentials credentials) {
+    public ApacheHttpClientBuilder with(Credentials credentials) {
         this.credentials.add(credentials);
         return this;
     }
@@ -137,8 +138,10 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         }
 
         @Override
-        public void setTo(Credentials value) {
-            credentialsProvider.setCredentials(AuthScope.ANY, value);
+        public void setTo(Credentials credentials) {
+            UsernamePasswordCredentials apacheCredentials = new UsernamePasswordCredentials(credentials.getUsername(), credentials.getPassword());
+            credentialsProvider.setCredentials(AuthScope.ANY, apacheCredentials);
         }
+
     }
 }

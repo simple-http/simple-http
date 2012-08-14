@@ -21,12 +21,14 @@
 
 package bad.robot.http;
 
-import bad.robot.http.apache.*;
+import bad.robot.http.apache.ApacheHttpClient;
+import bad.robot.http.apache.ApacheHttpClientBuilder;
+import bad.robot.http.apache.ApacheHttpContextBuilder;
+import bad.robot.http.apache.Ssl;
 import bad.robot.http.configuration.AutomaticRedirectHandling;
 import bad.robot.http.configuration.HttpTimeout;
 import bad.robot.http.configuration.Proxy;
 import org.apache.http.HttpHost;
-import org.apache.http.auth.UsernamePasswordCredentials;
 
 import java.net.URL;
 
@@ -47,9 +49,8 @@ public class HttpClients {
         private ApacheHttpClient httpClient;
 
         @Override
-        public CommonHttpClient with(Credentials user) {
-            org.apache.http.auth.Credentials credentials = new UsernamePasswordCredentials(user.getUsername(), user.getPassword());
-            apacheBuilder.with(new ApacheHttpAuthenticationCredentials(credentials));
+        public CommonHttpClient with(Credentials credentials) {
+            apacheBuilder.with(credentials);
             return this;
         }
 
