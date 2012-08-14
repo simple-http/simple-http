@@ -22,12 +22,12 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.CommonHttpClient;
-import bad.robot.http.Credentials;
-import bad.robot.http.Credentials;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.UrlMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.mapping.RequestPattern;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -36,15 +36,16 @@ import sun.misc.BASE64Encoder;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import static bad.robot.http.Credentials.credentials;
 import static bad.robot.http.HttpClients.anApacheClient;
-import static bad.robot.http.Password.*;
-import static bad.robot.http.Username.*;
+import static bad.robot.http.Password.password;
+import static bad.robot.http.Username.username;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.not;
 
 public class ApacheBasicAuthTest {
 
@@ -76,22 +77,40 @@ public class ApacheBasicAuthTest {
     }
 
     @Test
-    public void basicAuthorisationHeaderIsNotSetForHost() throws MalformedURLException {
-        http.withBasicAuth(new URL("https://localhost:8080"));
-        http.get(new URL("http://localhost:8080/test"));
+    public void basicAuthorisationHeaderIsNotSetForDifferingScheme() throws MalformedURLException {
+        http.withBasicAuth(new URL("http://localhost:8080"));
+        http.get(new URL("https://localhost:8080/test"));
         verifyNoHeadersFor(urlEqualTo("/test"));
-        verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", containing("Basic " + encode("username", "password"))));
     }
 
-    // see Issue 6 of wiremock
     private void verifyNoHeadersFor(UrlMatchingStrategy url) {
-        RequestPattern request = getRequestedFor(url).build();
-        verify(getRequestedFor(url));
-        assertThat(request.getHeaders(), is(nullValue()));
+        List<LoggedRequest> requests = findAll(getRequestedFor(url));
+        assertThat(requests, not(contains(HeaderMatcher.header("Authorization"))));
     }
 
     private String encode(String username, String password) {
         return new BASE64Encoder().encode((username + ":" + password).getBytes());
     }
 
+    private static class HeaderMatcher extends TypeSafeMatcher<LoggedRequest> {
+        private final String header;
+
+        private HeaderMatcher(String header) {
+            this.header = header;
+        }
+
+        public static HeaderMatcher header(String header) {
+            return new HeaderMatcher(header);
+        }
+
+        @Override
+        protected boolean matchesSafely(LoggedRequest actual) {
+            return actual.containsHeader(header);
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendValue(header);
+        }
+    }
 }
