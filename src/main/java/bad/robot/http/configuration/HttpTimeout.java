@@ -24,7 +24,7 @@ package bad.robot.http.configuration;
 import bad.robot.http.AbstractValueType;
 import com.google.code.tempusfugit.temporal.Duration;
 
-public class HttpTimeout extends AbstractValueType<Duration> implements Configuration {
+public class HttpTimeout extends AbstractValueType<Duration> implements Configuration<Integer> {
 
     public static HttpTimeout httpTimeout(Duration value) {
         return new HttpTimeout(value);
@@ -35,7 +35,7 @@ public class HttpTimeout extends AbstractValueType<Duration> implements Configur
     }
 
     @Override
-    public void applyTo(Configurable configurable) {
+    public void applyTo(Configurable<Integer> configurable) {
         configurable.setTo((int) value.inMillis());
     }
 }

@@ -23,6 +23,10 @@ package bad.robot.http.apache;
 
 import bad.robot.http.Builder;
 import bad.robot.http.configuration.*;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -44,11 +48,11 @@ import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient> {
 
-    private List<ApacheHttpAuthenticationCredentials> credentials = new ArrayList<ApacheHttpAuthenticationCredentials>();
+    private List<Configuration<Credentials>> credentials = new ArrayList<Configuration<Credentials>>();
     private Ssl ssl = Ssl.enabled;
-    private Configuration proxy = new DoNothing();
-    private Configuration timeout = httpTimeout(minutes(10));
-    private Configuration handleRedirects = AutomaticRedirectHandling.on();
+    private Configuration<HttpHost> proxy = new NoProxy();
+    private Configuration<Integer> timeout = httpTimeout(minutes(10));
+    private Configuration<Boolean> handleRedirects = AutomaticRedirectHandling.on();
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
         return new ApacheHttpClientBuilder().with(httpTimeout(seconds(5)));
@@ -64,8 +68,8 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return this;
     }
 
-    public ApacheHttpClientBuilder with(ApacheHttpAuthenticationCredentials login) {
-        credentials.add(login);
+    public ApacheHttpClientBuilder with(ApacheHttpAuthenticationCredentials credentials) {
+        this.credentials.add(credentials);
         return this;
     }
 
@@ -119,8 +123,22 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     }
 
     private void setupAuthorisation(DefaultHttpClient client) {
-        for (ApacheHttpAuthenticationCredentials credentials : this.credentials)
-            client.getCredentialsProvider().setCredentials(credentials.getScope(), credentials.getUser());
+        ApacheCredentialProvider credentialProvider = new ApacheCredentialProvider(client.getCredentialsProvider());
+        for (Configuration<Credentials> credentials : this.credentials)
+            credentials.applyTo(credentialProvider);
     }
 
+    private static class ApacheCredentialProvider implements Configurable<Credentials> {
+
+        private final CredentialsProvider credentialsProvider;
+
+        public ApacheCredentialProvider(CredentialsProvider credentialsProvider) {
+            this.credentialsProvider = credentialsProvider;
+        }
+
+        @Override
+        public void setTo(Credentials value) {
+            credentialsProvider.setCredentials(AuthScope.ANY, value);
+        }
+    }
 }

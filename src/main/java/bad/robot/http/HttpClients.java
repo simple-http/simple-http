@@ -26,7 +26,6 @@ import bad.robot.http.configuration.AutomaticRedirectHandling;
 import bad.robot.http.configuration.HttpTimeout;
 import bad.robot.http.configuration.Proxy;
 import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
 import java.net.URL;
@@ -48,8 +47,9 @@ public class HttpClients {
         private ApacheHttpClient httpClient;
 
         @Override
-        public CommonHttpClient with(String username, String password) {
-            apacheBuilder.with(new ApacheHttpAuthenticationCredentials(new AuthScope(AuthScope.ANY), new UsernamePasswordCredentials(username, password)));
+        public CommonHttpClient with(Credentials user) {
+            org.apache.http.auth.Credentials credentials = new UsernamePasswordCredentials(user.getUsername(), user.getPassword());
+            apacheBuilder.with(new ApacheHttpAuthenticationCredentials(credentials));
             return this;
         }
 

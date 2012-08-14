@@ -39,13 +39,13 @@ import java.net.URL;
  */
 public interface CommonHttpClient extends HttpClient {
 
-    CommonHttpClient with(String username, String password);
+    CommonHttpClient with(Credentials user);
+
+    CommonHttpClient withBasicAuth(URL url);
 
     CommonHttpClient withoutSsl();
 
     CommonHttpClient withTrustingSsl();
-
-    CommonHttpClient withBasicAuth(URL url);
 
     CommonHttpClient with(AutomaticRedirectHandling handleRedirects);
 

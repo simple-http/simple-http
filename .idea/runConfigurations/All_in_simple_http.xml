@@ -19,7 +19,9 @@
     <envs />
     <dir value="$PROJECT_DIR$/src/test/java" />
     <patterns />
+    <RunnerSettings RunnerId="Cover" />
     <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Cover" />
     <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>

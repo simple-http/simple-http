@@ -22,6 +22,8 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.CommonHttpClient;
+import bad.robot.http.Credentials;
+import bad.robot.http.Credentials;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.UrlMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -35,7 +37,10 @@ import sun.misc.BASE64Encoder;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static bad.robot.http.Credentials.credentials;
 import static bad.robot.http.HttpClients.anApacheClient;
+import static bad.robot.http.Password.*;
+import static bad.robot.http.Username.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -45,7 +50,7 @@ public class ApacheBasicAuthTest {
 
     private final static WireMockServer server = new WireMockServer();
 
-    private final CommonHttpClient http = anApacheClient().with("username", "password");
+    private final CommonHttpClient http = anApacheClient().with(credentials(username("username"), password("password")));
 
     @BeforeClass
     public static void startHttpServer() {
@@ -72,12 +77,13 @@ public class ApacheBasicAuthTest {
 
     @Test
     public void basicAuthorisationHeaderIsNotSetForHost() throws MalformedURLException {
-        http.withBasicAuth(new URL("http://anotherHost"));
+        http.withBasicAuth(new URL("https://localhost:8080"));
         http.get(new URL("http://localhost:8080/test"));
         verifyNoHeadersFor(urlEqualTo("/test"));
+        verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", containing("Basic " + encode("username", "password"))));
     }
 
-    // see Issue 3 of wiremock
+    // see Issue 6 of wiremock
     private void verifyNoHeadersFor(UrlMatchingStrategy url) {
         RequestPattern request = getRequestedFor(url).build();
         verify(getRequestedFor(url));

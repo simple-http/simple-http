@@ -25,6 +25,7 @@ import bad.robot.http.configuration.Configurable;
 import org.apache.http.params.HttpParams;
 
 public class ApacheHttpParameters {
+
     private final HttpParams parameters;
 
     public ApacheHttpParameters(HttpParams parameters) {
@@ -32,9 +33,9 @@ public class ApacheHttpParameters {
     }
 
     public Configurable configuration(final String parameter) {
-        return new Configurable() {
+        return new Configurable<Object>() {
             @Override
-            public <T> void setTo(T value) {
+            public void setTo(Object value) {
                 parameters.setParameter(parameter, value);
             }
         };

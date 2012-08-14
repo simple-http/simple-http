@@ -19,25 +19,24 @@
  * under the License.
  */
 
-package bad.robot.http.apache;
+package bad.robot.http.configuration;
 
-import bad.robot.http.configuration.Configurable;
-import bad.robot.http.configuration.Configuration;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Test;
 
-public class ApacheHttpAuthenticationCredentials implements Configuration<Credentials> {
+public class NoProxyTest {
 
-    private final Credentials user;
+    private final Mockery context = new JUnit4Mockery();
+    private final Configurable configurable = context.mock(Configurable.class);
 
-    public ApacheHttpAuthenticationCredentials(Credentials user) {
-        this.user = user;
-    }
+    @Test
+    public void doesNothingWhenAskedToConfigureSomething() throws Exception {
+        context.checking(new Expectations() {{
+            never(configurable);
+        }});
 
-
-    @Override
-    public void applyTo(Configurable<Credentials> configurable) {
-        configurable.setTo(user);
+        new NoProxy().applyTo(configurable);
     }
 }

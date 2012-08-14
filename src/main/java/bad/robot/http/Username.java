@@ -19,24 +19,15 @@
  * under the License.
  */
 
-package bad.robot.http.configuration;
+package bad.robot.http;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Test;
+public class Username extends AbstractValueType<String> {
 
-public class DoNothingTest {
+    public static Username username(String value) {
+        return new Username(value);
+    }
 
-    private final Mockery context = new JUnit4Mockery();
-    private final Configurable configurable = context.mock(Configurable.class);
-
-    @Test
-    public void doesNothingWhenAskedToConfigureSomething() throws Exception {
-        context.checking(new Expectations() {{
-            never(configurable);
-        }});
-
-        new DoNothing().applyTo(configurable);
+    private Username(String value) {
+        super(value);
     }
 }

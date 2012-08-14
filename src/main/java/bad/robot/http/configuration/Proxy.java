@@ -26,7 +26,7 @@ import org.apache.http.HttpHost;
 
 import java.net.URL;
 
-public class Proxy extends AbstractValueType<URL> implements Configuration {
+public class Proxy extends AbstractValueType<URL> implements Configuration<HttpHost> {
 
     public static Proxy proxy(URL value) {
         return new Proxy(value);
@@ -37,7 +37,7 @@ public class Proxy extends AbstractValueType<URL> implements Configuration {
     }
 
     @Override
-    public void applyTo(Configurable configurable) {
+    public void applyTo(Configurable<HttpHost> configurable) {
         configurable.setTo(new HttpHost(value.getHost(), value.getPort(), value.getProtocol()));
     }
 }

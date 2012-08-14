@@ -21,9 +21,11 @@
 
 package bad.robot.http.configuration;
 
-public class DoNothing implements Configuration {
+import org.apache.http.HttpHost;
+
+public class NoProxy implements Configuration<HttpHost> {
     @Override
-    public void applyTo(Configurable configurable) {
+    public void applyTo(Configurable<HttpHost> configurable) {
         // do nothing eh
     }
 }

@@ -23,7 +23,7 @@ package bad.robot.http.configuration;
 
 import bad.robot.http.AbstractValueType;
 
-public class AutomaticRedirectHandling extends AbstractValueType<Boolean> implements Configuration {
+public class AutomaticRedirectHandling extends AbstractValueType<Boolean> implements Configuration<Boolean> {
 
     public static AutomaticRedirectHandling on() {
         return new AutomaticRedirectHandling(true);
@@ -38,7 +38,7 @@ public class AutomaticRedirectHandling extends AbstractValueType<Boolean> implem
     }
 
     @Override
-    public void applyTo(Configurable configurable) {
+    public void applyTo(Configurable<Boolean> configurable) {
         configurable.setTo(value);
     }
 }

@@ -19,25 +19,15 @@
  * under the License.
  */
 
-package bad.robot.http.apache;
+package bad.robot.http;
 
-import bad.robot.http.configuration.Configurable;
-import bad.robot.http.configuration.Configuration;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
+public class Password extends AbstractValueType<String> {
 
-public class ApacheHttpAuthenticationCredentials implements Configuration<Credentials> {
-
-    private final Credentials user;
-
-    public ApacheHttpAuthenticationCredentials(Credentials user) {
-        this.user = user;
+    public static Password password(String value) {
+        return new Password(value);
     }
 
-
-    @Override
-    public void applyTo(Configurable<Credentials> configurable) {
-        configurable.setTo(user);
+    private Password(String value) {
+        super(value);
     }
 }
