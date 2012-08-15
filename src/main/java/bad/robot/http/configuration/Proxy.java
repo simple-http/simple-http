@@ -25,7 +25,7 @@ import bad.robot.http.AbstractValueType;
 
 import java.net.URL;
 
-public class Proxy extends AbstractValueType<URL> implements Configuration<URL> {
+public class Proxy extends AbstractValueType<URL> implements Setting<URL> {
 
     public static Proxy proxy(URL value) {
         return new Proxy(value);

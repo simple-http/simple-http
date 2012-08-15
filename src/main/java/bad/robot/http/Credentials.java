@@ -22,9 +22,9 @@
 package bad.robot.http;
 
 import bad.robot.http.configuration.Configurable;
-import bad.robot.http.configuration.Configuration;
+import bad.robot.http.configuration.Setting;
 
-public class Credentials implements Configuration<Credentials> {
+public class Credentials implements Setting<Credentials> {
 
     private final Username username;
     private final Password password;

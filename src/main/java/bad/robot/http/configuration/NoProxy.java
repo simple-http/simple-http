@@ -23,7 +23,7 @@ package bad.robot.http.configuration;
 
 import java.net.URL;
 
-public class NoProxy implements Configuration<URL> {
+public class NoProxy implements Setting<URL> {
     @Override
     public void applyTo(Configurable<URL> configurable) {
         // do nothing eh

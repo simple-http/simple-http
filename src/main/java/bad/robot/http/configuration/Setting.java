@@ -21,6 +21,6 @@
 
 package bad.robot.http.configuration;
 
-public interface Configuration<T> {
+public interface Setting<T> {
     void applyTo(Configurable<T> configurable);
 }

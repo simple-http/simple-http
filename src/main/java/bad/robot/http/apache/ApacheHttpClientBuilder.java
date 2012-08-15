@@ -49,10 +49,10 @@ import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient> {
 
     private Ssl ssl = Ssl.enabled;
-    private List<Configuration<Credentials>> credentials = new ArrayList<Configuration<Credentials>>();
-    private Configuration<URL> proxy = new NoProxy();
-    private Configuration<Integer> timeout = httpTimeout(minutes(10));
-    private Configuration<Boolean> handleRedirects = AutomaticRedirectHandling.on();
+    private List<Setting<Credentials>> credentials = new ArrayList<Setting<Credentials>>();
+    private Setting<URL> proxy = new NoProxy();
+    private Setting<Integer> timeout = httpTimeout(minutes(10));
+    private Setting<Boolean> handleRedirects = AutomaticRedirectHandling.on();
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
         return new ApacheHttpClientBuilder().with(httpTimeout(seconds(5)));
@@ -124,7 +124,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
 
     private void setupAuthorisation(DefaultHttpClient client) {
         ApacheCredentialProvider credentialProvider = new ApacheCredentialProvider(client.getCredentialsProvider());
-        for (Configuration<Credentials> credentials : this.credentials)
+        for (Setting<Credentials> credentials : this.credentials)
             credentials.applyTo(credentialProvider);
     }
 
