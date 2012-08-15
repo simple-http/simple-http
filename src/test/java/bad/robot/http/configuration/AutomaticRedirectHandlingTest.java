@@ -29,7 +29,7 @@ import org.junit.Test;
 public class AutomaticRedirectHandlingTest {
 
     private final Mockery context = new JUnit4Mockery();
-    private final Configurable configurable = context.mock(Configurable.class);
+    private final Configurable<Boolean> configurable = context.mock(Configurable.class);
 
     @Test
     public void configuresRedirectHandling() {

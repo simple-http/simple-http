@@ -26,10 +26,12 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 
+import java.net.URL;
+
 public class NoProxyTest {
 
     private final Mockery context = new JUnit4Mockery();
-    private final Configurable configurable = context.mock(Configurable.class);
+    private final Configurable<URL> configurable = context.mock(Configurable.class);
 
     @Test
     public void doesNothingWhenAskedToConfigureSomething() throws Exception {

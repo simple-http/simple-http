@@ -21,11 +21,11 @@
 
 package bad.robot.http.configuration;
 
-import org.apache.http.HttpHost;
+import java.net.URL;
 
-public class NoProxy implements Configuration<HttpHost> {
+public class NoProxy implements Configuration<URL> {
     @Override
-    public void applyTo(Configurable<HttpHost> configurable) {
+    public void applyTo(Configurable<URL> configurable) {
         // do nothing eh
     }
 }

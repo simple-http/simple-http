@@ -22,11 +22,10 @@
 package bad.robot.http.configuration;
 
 import bad.robot.http.AbstractValueType;
-import org.apache.http.HttpHost;
 
 import java.net.URL;
 
-public class Proxy extends AbstractValueType<URL> implements Configuration<HttpHost> {
+public class Proxy extends AbstractValueType<URL> implements Configuration<URL> {
 
     public static Proxy proxy(URL value) {
         return new Proxy(value);
@@ -37,7 +36,7 @@ public class Proxy extends AbstractValueType<URL> implements Configuration<HttpH
     }
 
     @Override
-    public void applyTo(Configurable<HttpHost> configurable) {
-        configurable.setTo(new HttpHost(value.getHost(), value.getPort(), value.getProtocol()));
+    public void applyTo(Configurable<URL> configurable) {
+        configurable.setTo(value);
     }
 }

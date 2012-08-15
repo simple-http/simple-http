@@ -24,7 +24,6 @@ package bad.robot.http.apache;
 import bad.robot.http.Builder;
 import bad.robot.http.Credentials;
 import bad.robot.http.configuration.*;
-import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
@@ -35,6 +34,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +42,6 @@ import static bad.robot.http.configuration.HttpTimeout.httpTimeout;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
 import static com.google.code.tempusfugit.temporal.Duration.seconds;
 import static org.apache.http.client.params.ClientPNames.*;
-import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
 import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
 import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
 import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
@@ -51,7 +50,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
 
     private Ssl ssl = Ssl.enabled;
     private List<Configuration<Credentials>> credentials = new ArrayList<Configuration<Credentials>>();
-    private Configuration<HttpHost> proxy = new NoProxy();
+    private Configuration<URL> proxy = new NoProxy();
     private Configuration<Integer> timeout = httpTimeout(minutes(10));
     private Configuration<Boolean> handleRedirects = AutomaticRedirectHandling.on();
 
@@ -109,7 +108,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         handleRedirects.applyTo(apache.configuration(HANDLE_REDIRECTS));
         timeout.applyTo(apache.configuration(CONNECTION_TIMEOUT));
         timeout.applyTo(apache.configuration(SO_TIMEOUT));
-        proxy.applyTo(apache.configuration(DEFAULT_PROXY));
+        proxy.applyTo(apache.defaultProxy());
 
         return parameters;
     }

@@ -32,7 +32,7 @@ import static com.google.code.tempusfugit.temporal.Duration.millis;
 public class HttpTimeoutTest {
 
     private final Mockery context = new JUnit4Mockery();
-    private final Configurable configurable = context.mock(Configurable.class);
+    private final Configurable<Integer> configurable = context.mock(Configurable.class);
 
     @Test
     public void configures() {

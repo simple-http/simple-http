@@ -22,7 +22,12 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.configuration.Configurable;
+import org.apache.http.HttpHost;
 import org.apache.http.params.HttpParams;
+
+import java.net.URL;
+
+import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
 
 public class ApacheHttpParameters {
 
@@ -37,6 +42,15 @@ public class ApacheHttpParameters {
             @Override
             public void setTo(Object value) {
                 parameters.setParameter(parameter, value);
+            }
+        };
+    }
+
+    public Configurable<URL> defaultProxy() {
+        return new Configurable<URL>() {
+            @Override
+            public void setTo(URL url) {
+                parameters.setParameter(DEFAULT_PROXY, new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
             }
         };
     }
