@@ -22,6 +22,8 @@
 package bad.robot.http;
 
 import bad.robot.http.configuration.ConfigurableHttpClient;
+import bad.robot.http.configuration.Password;
+import bad.robot.http.configuration.Username;
 
 import java.net.URL;
 

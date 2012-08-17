@@ -38,8 +38,8 @@ import java.util.List;
 
 import static bad.robot.http.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.HttpClients.anApacheClient;
-import static bad.robot.http.Password.password;
-import static bad.robot.http.Username.username;
+import static bad.robot.http.configuration.Password.password;
+import static bad.robot.http.configuration.Username.username;
 import static bad.robot.http.wiremock.WireMockHeaderMatcher.header;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;

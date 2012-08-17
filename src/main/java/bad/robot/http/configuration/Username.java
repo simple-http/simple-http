@@ -19,7 +19,9 @@
  * under the License.
  */
 
-package bad.robot.http;
+package bad.robot.http.configuration;
+
+import bad.robot.http.AbstractValueType;
 
 public class Username extends AbstractValueType<String> {
 
