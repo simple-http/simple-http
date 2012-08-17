@@ -19,11 +19,30 @@
  * under the License.
  */
 
-package bad.robot.http.configuration;
+package bad.robot.http.wiremock;
 
-import java.net.URL;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 
-public interface ConfigurableHttpClient {
+public class WireMockHeaderMatcher extends TypeSafeMatcher<LoggedRequest> {
+    private final String header;
 
-    void withCredentials(String username, String password, URL scope);
+    private WireMockHeaderMatcher(String header) {
+        this.header = header;
+    }
+
+    public static WireMockHeaderMatcher header(String header) {
+        return new WireMockHeaderMatcher(header);
+    }
+
+    @Override
+    protected boolean matchesSafely(LoggedRequest actual) {
+        return actual.containsHeader(header);
+    }
+
+    @Override
+    public void describeTo(Description description) {
+        description.appendValue(header);
+    }
 }

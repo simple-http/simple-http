@@ -25,8 +25,6 @@ import bad.robot.http.configuration.AutomaticRedirectHandling;
 import bad.robot.http.configuration.HttpTimeout;
 import bad.robot.http.configuration.Proxy;
 
-import java.net.URL;
-
 /**
  * The common configuration interface for all {@link HttpClient} implementations.
  *
@@ -39,9 +37,7 @@ import java.net.URL;
  */
 public interface CommonHttpClient extends HttpClient {
 
-    CommonHttpClient with(Credentials user);
-
-    CommonHttpClient withBasicAuth(URL url);
+    CommonHttpClient with(AuthorisationCredentials credentials);
 
     CommonHttpClient withoutSsl();
 

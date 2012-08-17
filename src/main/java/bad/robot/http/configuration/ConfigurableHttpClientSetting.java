@@ -22,5 +22,5 @@
 package bad.robot.http.configuration;
 
 public interface ConfigurableHttpClientSetting {
-    void applyTo(ConfigurableHttpClient configurable);
+    void applyTo(ConfigurableHttpClient client);
 }

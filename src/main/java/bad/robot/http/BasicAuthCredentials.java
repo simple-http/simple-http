@@ -19,11 +19,30 @@
  * under the License.
  */
 
-package bad.robot.http.configuration;
+package bad.robot.http;
+
+import bad.robot.http.configuration.ConfigurableHttpClient;
 
 import java.net.URL;
 
-public interface ConfigurableHttpClient {
+public class BasicAuthCredentials implements AuthorisationCredentials {
 
-    void withCredentials(String username, String password, URL scope);
+    private final Username username;
+    private final Password password;
+    private final URL url;
+
+    public static BasicAuthCredentials basicAuth(Username username, Password password, URL url) {
+        return new BasicAuthCredentials(username, password, url);
+    }
+
+    private BasicAuthCredentials(Username username, Password password, URL url) {
+        this.username = username;
+        this.password = password;
+        this.url = url;
+    }
+
+    @Override
+    public void applyTo(ConfigurableHttpClient client) {
+        client.withCredentials(username.value, password.value, url);
+    }
 }

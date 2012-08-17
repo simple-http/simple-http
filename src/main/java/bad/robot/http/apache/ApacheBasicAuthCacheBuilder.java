@@ -22,6 +22,7 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.Builder;
+import bad.robot.http.configuration.ConfigurableHttpClient;
 import org.apache.http.HttpHost;
 import org.apache.http.client.AuthCache;
 import org.apache.http.impl.auth.BasicScheme;
@@ -29,23 +30,25 @@ import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import java.net.URL;
+
 import static org.apache.http.client.protocol.ClientContext.AUTH_CACHE;
 
-public class ApacheHttpContextBuilder implements Builder<HttpContext> {
+public class ApacheBasicAuthCacheBuilder implements Builder<HttpContext>, ConfigurableHttpClient {
 
     private final BasicHttpContext localContext = new BasicHttpContext();
     private final AuthCache authenticationCache = new BasicAuthCache();
 
-    private ApacheHttpContextBuilder() {
+    private ApacheBasicAuthCacheBuilder() {
     }
 
-    public static ApacheHttpContextBuilder anApacheHttpContextBuilder() {
-        return new ApacheHttpContextBuilder();
+    public static ApacheBasicAuthCacheBuilder anApacheBasicAuthCacheBuilder() {
+        return new ApacheBasicAuthCacheBuilder();
     }
 
-    public ApacheHttpContextBuilder withBasicAuth(HttpHost host) {
-        authenticationCache.put(new HttpHost(host.getHostName(), host.getPort(), host.getSchemeName()), new BasicScheme());
-        return this;
+    @Override
+    public void withCredentials(String username, String password, URL url) {
+        authenticationCache.put(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()), new BasicScheme());
     }
 
     @Override

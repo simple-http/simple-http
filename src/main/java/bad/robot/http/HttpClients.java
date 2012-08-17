@@ -21,19 +21,18 @@
 
 package bad.robot.http;
 
+import bad.robot.http.apache.ApacheBasicAuthCacheBuilder;
 import bad.robot.http.apache.ApacheHttpClient;
 import bad.robot.http.apache.ApacheHttpClientBuilder;
-import bad.robot.http.apache.ApacheHttpContextBuilder;
 import bad.robot.http.apache.Ssl;
 import bad.robot.http.configuration.AutomaticRedirectHandling;
 import bad.robot.http.configuration.HttpTimeout;
 import bad.robot.http.configuration.Proxy;
-import org.apache.http.HttpHost;
 
 import java.net.URL;
 
+import static bad.robot.http.apache.ApacheBasicAuthCacheBuilder.anApacheBasicAuthCacheBuilder;
 import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithShortTimeout;
-import static bad.robot.http.apache.ApacheHttpContextBuilder.anApacheHttpContextBuilder;
 
 public class HttpClients {
 
@@ -43,50 +42,45 @@ public class HttpClients {
 
     private static class ApacheCommonHttpClient implements CommonHttpClient {
 
-        private final ApacheHttpClientBuilder apacheBuilder = anApacheClientWithShortTimeout();
-        private final ApacheHttpContextBuilder contextBuilder = anApacheHttpContextBuilder();
+        private final ApacheHttpClientBuilder apache = anApacheClientWithShortTimeout();
+        private final ApacheBasicAuthCacheBuilder basicAuthentication = anApacheBasicAuthCacheBuilder();
 
         private ApacheHttpClient httpClient;
 
         @Override
-        public CommonHttpClient with(Credentials credentials) {
-            credentials.applyTo(apacheBuilder);
+        public CommonHttpClient with(AuthorisationCredentials credentials) {
+            credentials.applyTo(apache);
+            credentials.applyTo(basicAuthentication);
             return this;
         }
 
         @Override
         public CommonHttpClient with(HttpTimeout timeout) {
-            apacheBuilder.with(timeout);
+            apache.with(timeout);
             return this;
         }
 
         @Override
         public CommonHttpClient withoutSsl() {
-            apacheBuilder.with(Ssl.disabled);
+            apache.with(Ssl.disabled);
             return this;
         }
 
         @Override
         public CommonHttpClient withTrustingSsl() {
-            apacheBuilder.with(Ssl.naive);
-            return this;
-        }
-
-        @Override
-        public CommonHttpClient withBasicAuth(URL url) {
-            contextBuilder.withBasicAuth(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()));
+            apache.with(Ssl.naive);
             return this;
         }
 
         @Override
         public CommonHttpClient with(AutomaticRedirectHandling handleRedirects) {
-            apacheBuilder.with(handleRedirects);
+            apache.with(handleRedirects);
             return this;
         }
 
         @Override
         public CommonHttpClient with(Proxy proxy) {
-            apacheBuilder.with(proxy);
+            apache.with(proxy);
             return this;
         }
 
@@ -134,7 +128,8 @@ public class HttpClients {
 
         private void initialiseHttpClient() {
             if (httpClient == null)
-                httpClient = new ApacheHttpClient(apacheBuilder, contextBuilder);
+                httpClient = new ApacheHttpClient(apache, basicAuthentication);
         }
     }
+
 }

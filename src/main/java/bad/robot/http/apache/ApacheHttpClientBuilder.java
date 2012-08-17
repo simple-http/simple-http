@@ -35,12 +35,14 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static bad.robot.http.configuration.HttpTimeout.httpTimeout;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
 import static com.google.code.tempusfugit.temporal.Duration.seconds;
+import static org.apache.http.auth.AuthScope.ANY_REALM;
+import static org.apache.http.auth.AuthScope.ANY_SCHEME;
 import static org.apache.http.client.params.ClientPNames.*;
 import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
 import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
@@ -49,7 +51,7 @@ import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient>, ConfigurableHttpClient {
 
     private Ssl ssl = Ssl.enabled;
-    private List<Credentials> credentials = new ArrayList<Credentials>();
+    private Map<URL, Credentials> credentials = new HashMap<URL, Credentials>();
     private Setting<URL> proxy = new NoProxy();
     private Setting<Integer> timeout = httpTimeout(minutes(10));
     private Setting<Boolean> handleRedirects = AutomaticRedirectHandling.on();
@@ -59,8 +61,8 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     }
 
     @Override
-    public void withCredentials(String username, String password) {
-        this.credentials.add(new UsernamePasswordCredentials(username, password));
+    public void withCredentials(String username, String password, URL url) {
+        this.credentials.put(url, new UsernamePasswordCredentials(username, password));
     }
 
     public ApacheHttpClientBuilder with(HttpTimeout timeout) {
@@ -113,7 +115,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return parameters;
     }
 
-    protected HttpParams createHttpParametersViaNastyHackButBetterThanCopyAndPastingTheApacheSource() {
+    private HttpParams createHttpParametersViaNastyHackButBetterThanCopyAndPastingTheApacheSource() {
         return new DefaultHttpClient() {
             @Override
             protected HttpParams createHttpParams() {
@@ -124,8 +126,10 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
 
     private void setupAuthorisation(DefaultHttpClient client) {
         CredentialsProvider credentialsProvider = client.getCredentialsProvider();
-        for (Credentials credentials : this.credentials)
-            credentialsProvider.setCredentials(AuthScope.ANY, credentials);
+        for (Map.Entry<URL, Credentials> credential : this.credentials.entrySet()) {
+            URL url = credential.getKey();
+            credentialsProvider.setCredentials(new AuthScope(url.getHost(), url.getPort(), ANY_REALM, ANY_SCHEME), credential.getValue());
+        }
     }
 
 }

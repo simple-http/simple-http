@@ -19,11 +19,10 @@
  * under the License.
  */
 
-package bad.robot.http.configuration;
+package bad.robot.http;
 
-import java.net.URL;
+import bad.robot.http.configuration.ConfigurableHttpClientSetting;
 
-public interface ConfigurableHttpClient {
+public interface AuthorisationCredentials extends ConfigurableHttpClientSetting {
 
-    void withCredentials(String username, String password, URL scope);
 }
