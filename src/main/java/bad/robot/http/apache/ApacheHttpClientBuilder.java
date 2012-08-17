@@ -93,7 +93,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         HttpParams httpParameters = createAndConfigureHttpParameters();
         ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager(httpParameters, createSchemeRegistry());
         DefaultHttpClient client = new DefaultHttpClient(connectionManager, httpParameters);
-        setupAuthorisation(client);
+        setupAuthentication(client);
         return client;
     }
 
@@ -128,7 +128,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         }.createHttpParams();
     }
 
-    private void setupAuthorisation(DefaultHttpClient client) {
+    private void setupAuthentication(DefaultHttpClient client) {
         CredentialsProvider credentialsProvider = client.getCredentialsProvider();
         for (AuthenticatedHost authentication : authentications)
             credentialsProvider.setCredentials(authentication.scope, authentication.credentials);
