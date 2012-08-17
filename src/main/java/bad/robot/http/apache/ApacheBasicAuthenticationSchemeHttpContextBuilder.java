@@ -23,7 +23,6 @@ package bad.robot.http.apache;
 
 import bad.robot.http.Builder;
 import bad.robot.http.configuration.ConfigurableHttpClient;
-import org.apache.http.HttpHost;
 import org.apache.http.client.AuthCache;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
@@ -32,28 +31,37 @@ import org.apache.http.protocol.HttpContext;
 
 import java.net.URL;
 
+import static bad.robot.http.apache.Coercions.asHttpHost;
 import static org.apache.http.client.protocol.ClientContext.AUTH_CACHE;
 
-public class ApacheBasicAuthCacheBuilder implements Builder<HttpContext>, ConfigurableHttpClient {
+/**
+ * Build a "local context" to use with individual HTTP verbs. The {@link HttpContext} is used to share information, in
+ * this case, which authentication scheme the client should be using (based on the target URL).
+ */
+public class ApacheBasicAuthenticationSchemeHttpContextBuilder implements Builder<HttpContext>, ConfigurableHttpClient {
 
     private final BasicHttpContext localContext = new BasicHttpContext();
-    private final AuthCache authenticationCache = new BasicAuthCache();
+    private final AuthCache authenticationSchemes = new BasicAuthCache();
 
-    private ApacheBasicAuthCacheBuilder() {
+    private ApacheBasicAuthenticationSchemeHttpContextBuilder() {
     }
 
-    public static ApacheBasicAuthCacheBuilder anApacheBasicAuthCacheBuilder() {
-        return new ApacheBasicAuthCacheBuilder();
+    public static ApacheBasicAuthenticationSchemeHttpContextBuilder anApacheBasicAuthScheme() {
+        return new ApacheBasicAuthenticationSchemeHttpContextBuilder();
     }
 
+    /**
+     * This tells the "local context" to use Basic Authentication for a given URL
+     */
     @Override
-    public void withCredentials(String username, String password, URL url) {
-        authenticationCache.put(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()), new BasicScheme());
+    public ApacheBasicAuthenticationSchemeHttpContextBuilder withCredentials(String username, String password, URL url) {
+        authenticationSchemes.put(asHttpHost(url), new BasicScheme());
+        return this;
     }
 
     @Override
     public HttpContext build() {
-        localContext.setAttribute(AUTH_CACHE, authenticationCache);
+        localContext.setAttribute(AUTH_CACHE, authenticationSchemes);
         return localContext;
     }
 }

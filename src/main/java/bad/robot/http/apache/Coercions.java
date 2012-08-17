@@ -23,8 +23,10 @@ package bad.robot.http.apache;
 
 import bad.robot.http.Header;
 import bad.robot.http.Headers;
+import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +47,9 @@ public class Coercions {
         for (org.apache.http.Header header : headers)
             list.add(header(header.getName(), header.getValue()));
         return headers(list.toArray(new Header[list.size()]));
+    }
+
+    public static HttpHost asHttpHost(URL url) {
+        return new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
     }
 }

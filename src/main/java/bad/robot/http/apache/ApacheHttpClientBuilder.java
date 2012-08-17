@@ -61,8 +61,9 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     }
 
     @Override
-    public void withCredentials(String username, String password, URL url) {
+    public ApacheHttpClientBuilder withCredentials(String username, String password, URL url) {
         this.credentials.put(url, new UsernamePasswordCredentials(username, password));
+        return this;
     }
 
     public ApacheHttpClientBuilder with(HttpTimeout timeout) {
@@ -124,6 +125,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         }.createHttpParams();
     }
 
+    /* not currently supporting realms and schemes (example schemes are "basic" or "digest") */
     private void setupAuthorisation(DefaultHttpClient client) {
         CredentialsProvider credentialsProvider = client.getCredentialsProvider();
         for (Map.Entry<URL, Credentials> credential : this.credentials.entrySet()) {

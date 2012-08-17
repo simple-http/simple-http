@@ -25,5 +25,5 @@ import java.net.URL;
 
 public interface ConfigurableHttpClient {
 
-    void withCredentials(String username, String password, URL scope);
+    ConfigurableHttpClient withCredentials(String username, String password, URL url);
 }

@@ -21,7 +21,7 @@
 
 package bad.robot.http;
 
-import bad.robot.http.apache.ApacheBasicAuthCacheBuilder;
+import bad.robot.http.apache.ApacheBasicAuthenticationSchemeHttpContextBuilder;
 import bad.robot.http.apache.ApacheHttpClient;
 import bad.robot.http.apache.ApacheHttpClientBuilder;
 import bad.robot.http.apache.Ssl;
@@ -32,7 +32,7 @@ import bad.robot.http.configuration.Proxy;
 
 import java.net.URL;
 
-import static bad.robot.http.apache.ApacheBasicAuthCacheBuilder.anApacheBasicAuthCacheBuilder;
+import static bad.robot.http.apache.ApacheBasicAuthenticationSchemeHttpContextBuilder.anApacheBasicAuthScheme;
 import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithShortTimeout;
 
 public class HttpClients {
@@ -44,14 +44,14 @@ public class HttpClients {
     private static class ApacheCommonHttpClient implements CommonHttpClient {
 
         private final ApacheHttpClientBuilder apache = anApacheClientWithShortTimeout();
-        private final ApacheBasicAuthCacheBuilder basicAuthentication = anApacheBasicAuthCacheBuilder();
+        private final ApacheBasicAuthenticationSchemeHttpContextBuilder authenticationSchemes = anApacheBasicAuthScheme();
 
         private ApacheHttpClient httpClient;
 
         @Override
         public CommonHttpClient with(AuthorisationCredentials credentials) {
             credentials.applyTo(apache);
-            credentials.applyTo(basicAuthentication);
+            credentials.applyTo(authenticationSchemes);
             return this;
         }
 
@@ -129,7 +129,7 @@ public class HttpClients {
 
         private void initialiseHttpClient() {
             if (httpClient == null)
-                httpClient = new ApacheHttpClient(apache, basicAuthentication);
+                httpClient = new ApacheHttpClient(apache, authenticationSchemes);
         }
     }
 

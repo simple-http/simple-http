@@ -26,10 +26,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.UrlMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import sun.misc.BASE64Encoder;
 
 import java.net.MalformedURLException;
@@ -39,7 +36,10 @@ import java.util.List;
 import static bad.robot.http.HttpClients.anApacheClient;
 import static bad.robot.http.configuration.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.configuration.Password.password;
+import static bad.robot.http.configuration.Proxy.proxy;
 import static bad.robot.http.configuration.Username.username;
+import static bad.robot.http.matchers.Matchers.has;
+import static bad.robot.http.matchers.Matchers.status;
 import static bad.robot.http.wiremock.WireMockHeaderMatcher.header;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -74,10 +74,31 @@ public class ApacheBasicAuthTest {
     }
 
     @Test
-    public void basicAuthorisationHeaderIsNotSetForDifferingScheme() throws MalformedURLException {
+    public void basicAuthorisationHeaderIsNotSetForDifferingUrl() throws MalformedURLException {
         HttpClient http = anApacheClient().with(basicAuth(username("username"), password("password"), new URL("https://localhost:8080")));
         http.get(new URL("http://localhost:8080/test"));
         verifyNoHeadersFor(urlEqualTo("/test"));
+    }
+
+    @Test
+    public void basicAuthorisationForMultipleCredentials() throws MalformedURLException {
+        HttpClient http = anApacheClient()
+            .with(basicAuth(username("username"), password("password"), new URL("http://localhost:8080")))
+            .with(basicAuth(username("anotherUsername"), password("anotherPassword"), new URL("https://localhost:8080")));
+        http.get(new URL("http://localhost:8080/test"));
+        verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", containing("Basic " + encode("username", "password"))));
+    }
+
+
+    @Test
+    @Ignore("requires manually setting up a proxy like Charles on port 8888 before running")
+    public void manuallyRunThisTestWithAProxyRunningToVerifyTheHeaders() throws MalformedURLException {
+        HttpClient http = anApacheClient()
+            .with(proxy(new URL("http://localhost:8888")))
+            .with(basicAuth(username("username"), password("password"), new URL("http://baddotrobot.com")))
+            .with(basicAuth(username("anotherUsername"), password("anotherPassword"), new URL("http://robotooling.com")));
+        assertThat(http.get(new URL("http://baddotrobot.com")), has(status(200)));
+        assertThat(http.get(new URL("http://robotooling.com")), has(status(200)));
     }
 
     private void verifyNoHeadersFor(UrlMatchingStrategy url) {
