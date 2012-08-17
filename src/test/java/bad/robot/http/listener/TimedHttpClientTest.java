@@ -21,9 +21,9 @@
 
 package bad.robot.http.listener;
 
-import bad.robot.http.DefaultHttpResponse;
 import bad.robot.http.HttpClient;
 import bad.robot.http.Log4J;
+import bad.robot.http.StringHttpResponse;
 import com.google.code.tempusfugit.FactoryException;
 import com.google.code.tempusfugit.temporal.Clock;
 import org.apache.log4j.Logger;
@@ -80,7 +80,7 @@ public class TimedHttpClientTest {
     public void shouldLogDetails() throws MalformedURLException {
         context.checking(new Expectations() {{
             allowing(delegate).get(with(any(URL.class)));
-            will(returnValue(new DefaultHttpResponse(200, "OK", "nothing", emptyHeaders())));
+            will(returnValue(new StringHttpResponse(200, "OK", "nothing", emptyHeaders())));
         }});
         timedHttpClient(delegate, new FixedClock(), logger).get(anyUrl());
         log4J.assertThat(containsString("GET http://not.real.url was 200 (OK), took Duration 0 MILLISECONDS"));

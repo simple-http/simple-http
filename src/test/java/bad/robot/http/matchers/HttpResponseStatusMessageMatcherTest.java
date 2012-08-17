@@ -21,8 +21,8 @@
 
 package bad.robot.http.matchers;
 
-import bad.robot.http.DefaultHttpResponse;
 import bad.robot.http.HttpResponse;
+import bad.robot.http.StringHttpResponse;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ import static org.junit.Assert.assertThat;
 
 public class HttpResponseStatusMessageMatcherTest {
 
-    private final HttpResponse response = new DefaultHttpResponse(200, "OK", null, headers(header("Accept", "application/json")));
+    private final HttpResponse response = new StringHttpResponse(200, "OK", null, headers(header("Accept", "application/json")));
 
     @Test
     public void exampleUsage() throws MalformedURLException {

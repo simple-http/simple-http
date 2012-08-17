@@ -21,8 +21,8 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.DefaultHttpResponse;
 import bad.robot.http.HttpResponse;
+import bad.robot.http.StringHttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -48,7 +48,7 @@ public class ApacheHttpRequestExecutorTest {
     private final HttpClient client = context.mock(HttpClient.class);
 
     private final HttpGet anyRequest = new HttpGet("http://whatever.trevor");
-    private final HttpResponse anyResponse = new DefaultHttpResponse(200, "OK", "", emptyHeaders());
+    private final HttpResponse anyResponse = new StringHttpResponse(200, "OK", "", emptyHeaders());
 
     @Test
     public void delegates() throws Exception {

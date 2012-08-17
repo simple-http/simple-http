@@ -21,9 +21,9 @@
 
 package bad.robot.http.apache;
 
-import bad.robot.http.DefaultHttpResponse;
 import bad.robot.http.Headers;
 import bad.robot.http.HttpResponse;
+import bad.robot.http.StringHttpResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ResponseHandler;
 
@@ -41,7 +41,7 @@ class HttpResponseHandler implements ResponseHandler<HttpResponse> {
 
     @Override
     public HttpResponse handleResponse(org.apache.http.HttpResponse response) throws IOException {
-        return new DefaultHttpResponse(
+        return new StringHttpResponse(
                 getStatusCodeFrom(response), 
                 getStatusMessageFrom(response), 
                 getContentFrom(response), 

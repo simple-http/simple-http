@@ -23,14 +23,14 @@ package bad.robot.http;
 
 import static java.lang.String.format;
 
-public class DefaultHttpResponse implements HttpResponse {
+public class StringHttpResponse implements HttpResponse {
 
     private final int statusCode;
     private final String statusMessage;
     private final String content;
     private final Headers headers;
 
-    public DefaultHttpResponse(int statusCode, String statusMessage, String content, Headers headers) {
+    public StringHttpResponse(int statusCode, String statusMessage, String content, Headers headers) {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.content = content;
