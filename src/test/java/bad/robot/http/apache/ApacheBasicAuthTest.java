@@ -86,17 +86,19 @@ public class ApacheBasicAuthTest {
             .with(basicAuth(username("username"), password("password"), new URL("http://localhost:8080")))
             .with(basicAuth(username("anotherUsername"), password("anotherPassword"), new URL("https://localhost:8080")));
         http.get(new URL("http://localhost:8080/test"));
-        verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", containing("Basic " + encode("username", "password"))));
+        verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", containing("Basic " + encode("anotherUsername", "anotherPassword"))));
     }
-
 
     @Test
     @Ignore("requires manually setting up a proxy like Charles on port 8888 before running")
     public void manuallyRunThisTestWithAProxyRunningToVerifyTheHeaders() throws MalformedURLException {
+        URL badrobot    = new URL("http://baddotrobot.com");
+        URL robotooling = new URL("http://robotooling.com");
+
         HttpClient http = anApacheClient()
             .with(proxy(new URL("http://localhost:8888")))
-            .with(basicAuth(username("username"), password("password"), new URL("http://baddotrobot.com")))
-            .with(basicAuth(username("anotherUsername"), password("anotherPassword"), new URL("http://robotooling.com")));
+            .with(basicAuth(username("username"), password("password"), badrobot))
+            .with(basicAuth(username("anotherUsername"), password("anotherPassword"), robotooling));
         assertThat(http.get(new URL("http://baddotrobot.com")), has(status(200)));
         assertThat(http.get(new URL("http://robotooling.com")), has(status(200)));
     }

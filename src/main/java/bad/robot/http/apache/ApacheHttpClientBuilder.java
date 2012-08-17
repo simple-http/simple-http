@@ -35,12 +35,15 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import static bad.robot.http.configuration.HttpTimeout.httpTimeout;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
 import static com.google.code.tempusfugit.temporal.Duration.seconds;
+import static java.lang.String.format;
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.http.auth.AuthScope.ANY_REALM;
 import static org.apache.http.auth.AuthScope.ANY_SCHEME;
 import static org.apache.http.client.params.ClientPNames.*;
@@ -51,7 +54,7 @@ import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient>, ConfigurableHttpClient {
 
     private Ssl ssl = Ssl.enabled;
-    private Map<URL, Credentials> credentials = new HashMap<URL, Credentials>();
+    private List<AuthenticatedHost> authentications = new ArrayList<AuthenticatedHost>();
     private Setting<URL> proxy = new NoProxy();
     private Setting<Integer> timeout = httpTimeout(minutes(10));
     private Setting<Boolean> handleRedirects = AutomaticRedirectHandling.on();
@@ -62,7 +65,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
 
     @Override
     public ApacheHttpClientBuilder withCredentials(String username, String password, URL url) {
-        this.credentials.put(url, new UsernamePasswordCredentials(username, password));
+        this.authentications.add(new AuthenticatedHost(url, new UsernamePasswordCredentials(username, password)));
         return this;
     }
 
@@ -125,13 +128,35 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         }.createHttpParams();
     }
 
-    /* not currently supporting realms and schemes (example schemes are "basic" or "digest") */
     private void setupAuthorisation(DefaultHttpClient client) {
         CredentialsProvider credentialsProvider = client.getCredentialsProvider();
-        for (Map.Entry<URL, Credentials> credential : this.credentials.entrySet()) {
-            URL url = credential.getKey();
-            credentialsProvider.setCredentials(new AuthScope(url.getHost(), url.getPort(), ANY_REALM, ANY_SCHEME), credential.getValue());
-        }
+        for (AuthenticatedHost authentication : authentications)
+            credentialsProvider.setCredentials(authentication.scope, authentication.credentials);
     }
 
+    public class AuthenticatedHost {
+
+        private final Credentials credentials;
+        private final AuthScope scope;
+
+        public AuthenticatedHost(URL url, Credentials credentials) {
+            this.credentials = credentials;
+            this.scope = new AuthScope(url.getHost(), url.getPort(), ANY_REALM, ANY_SCHEME);
+        }
+
+        @Override
+        public boolean equals(Object that) {
+            return reflectionEquals(this, that);
+        }
+
+        @Override
+        public int hashCode() {
+            return reflectionHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return format("%s{credentials='%s', scope='%s'}", this.getClass().getSimpleName(), credentials, scope);
+        }
+    }
 }

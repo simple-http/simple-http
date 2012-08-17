@@ -107,4 +107,14 @@ public class ApacheHttpClientBuilderTest {
         assertThat(client, credentialsProviderContains(new URL("http://localhost:8081"), "replacedUsername", "replacedPassword"));
     }
 
+    @Test
+    public void credentialsProviderWithDifferingAuthenticationScopesUsingRealUrls() throws MalformedURLException {
+        HttpClient client = builder
+            .withCredentials("username", "password", new URL("http://baddotrobot.com"))
+            .withCredentials("replacedUsername", "replacedPassword", new URL("http://robotooling.com"))
+            .build();
+        assertThat(client, credentialsProviderContains(new URL("http://baddotrobot.com"), "username", "password"));
+        assertThat(client, credentialsProviderContains(new URL("http://robotooling.com"), "replacedUsername", "replacedPassword"));
+    }
+
 }
