@@ -50,7 +50,7 @@ public class HttpClients {
 
         @Override
         public CommonHttpClient with(Credentials credentials) {
-            apacheBuilder.with(credentials);
+            credentials.applyTo(apacheBuilder);
             return this;
         }
 

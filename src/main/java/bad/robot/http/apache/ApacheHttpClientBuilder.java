@@ -22,9 +22,9 @@
 package bad.robot.http.apache;
 
 import bad.robot.http.Builder;
-import bad.robot.http.Credentials;
 import bad.robot.http.configuration.*;
 import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.conn.scheme.PlainSocketFactory;
@@ -46,16 +46,21 @@ import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
 import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
 import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 
-public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient> {
+public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient>, ConfigurableHttpClient {
 
     private Ssl ssl = Ssl.enabled;
-    private List<Setting<Credentials>> credentials = new ArrayList<Setting<Credentials>>();
+    private List<Credentials> credentials = new ArrayList<Credentials>();
     private Setting<URL> proxy = new NoProxy();
     private Setting<Integer> timeout = httpTimeout(minutes(10));
     private Setting<Boolean> handleRedirects = AutomaticRedirectHandling.on();
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
         return new ApacheHttpClientBuilder().with(httpTimeout(seconds(5)));
+    }
+
+    @Override
+    public void withCredentials(String username, String password) {
+        this.credentials.add(new UsernamePasswordCredentials(username, password));
     }
 
     public ApacheHttpClientBuilder with(HttpTimeout timeout) {
@@ -65,11 +70,6 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
 
     public ApacheHttpClientBuilder with(Proxy proxy) {
         this.proxy = proxy;
-        return this;
-    }
-
-    public ApacheHttpClientBuilder with(Credentials credentials) {
-        this.credentials.add(credentials);
         return this;
     }
 
@@ -123,24 +123,9 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     }
 
     private void setupAuthorisation(DefaultHttpClient client) {
-        ApacheCredentialProvider credentialProvider = new ApacheCredentialProvider(client.getCredentialsProvider());
-        for (Setting<Credentials> credentials : this.credentials)
-            credentials.applyTo(credentialProvider);
+        CredentialsProvider credentialsProvider = client.getCredentialsProvider();
+        for (Credentials credentials : this.credentials)
+            credentialsProvider.setCredentials(AuthScope.ANY, credentials);
     }
 
-    private static class ApacheCredentialProvider implements Configurable<Credentials> {
-
-        private final CredentialsProvider credentialsProvider;
-
-        public ApacheCredentialProvider(CredentialsProvider credentialsProvider) {
-            this.credentialsProvider = credentialsProvider;
-        }
-
-        @Override
-        public void setTo(Credentials credentials) {
-            UsernamePasswordCredentials apacheCredentials = new UsernamePasswordCredentials(credentials.getUsername(), credentials.getPassword());
-            credentialsProvider.setCredentials(AuthScope.ANY, apacheCredentials);
-        }
-
-    }
 }

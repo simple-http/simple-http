@@ -21,10 +21,10 @@
 
 package bad.robot.http;
 
-import bad.robot.http.configuration.Configurable;
-import bad.robot.http.configuration.Setting;
+import bad.robot.http.configuration.ConfigurableHttpClient;
+import bad.robot.http.configuration.ConfigurableHttpClientSetting;
 
-public class Credentials implements Setting<Credentials> {
+public class Credentials implements ConfigurableHttpClientSetting {
 
     private final Username username;
     private final Password password;
@@ -38,16 +38,8 @@ public class Credentials implements Setting<Credentials> {
         return new Credentials(username, password);
     }
 
-    public String getUsername() {
-        return username.value;
-    }
-
-    public String getPassword() {
-        return password.value;
-    }
-
     @Override
-    public void applyTo(Configurable<Credentials> configurable) {
-        configurable.setTo(this);
+    public void applyTo(ConfigurableHttpClient client) {
+        client.withCredentials(username.value, password.value);
     }
 }
