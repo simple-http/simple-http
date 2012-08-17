@@ -21,6 +21,7 @@
 
 package bad.robot.http;
 
+import bad.robot.http.configuration.AuthorisationCredentials;
 import bad.robot.http.configuration.AutomaticRedirectHandling;
 import bad.robot.http.configuration.HttpTimeout;
 import bad.robot.http.configuration.Proxy;

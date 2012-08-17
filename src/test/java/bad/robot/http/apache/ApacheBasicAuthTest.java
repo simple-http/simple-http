@@ -36,8 +36,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import static bad.robot.http.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.HttpClients.anApacheClient;
+import static bad.robot.http.configuration.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.configuration.Password.password;
 import static bad.robot.http.configuration.Username.username;
 import static bad.robot.http.wiremock.WireMockHeaderMatcher.header;

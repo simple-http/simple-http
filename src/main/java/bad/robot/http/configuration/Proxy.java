@@ -21,8 +21,6 @@
 
 package bad.robot.http.configuration;
 
-import bad.robot.http.AbstractValueType;
-
 import java.net.URL;
 
 public class Proxy extends AbstractValueType<URL> implements Setting<URL> {

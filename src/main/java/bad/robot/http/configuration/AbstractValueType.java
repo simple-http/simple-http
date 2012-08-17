@@ -19,32 +19,38 @@
  * under the License.
  */
 
-package bad.robot.http;
+package bad.robot.http.configuration;
 
-import bad.robot.http.configuration.ConfigurableHttpClient;
-import bad.robot.http.configuration.Password;
-import bad.robot.http.configuration.Username;
+import bad.robot.http.ValueType;
 
-import java.net.URL;
+import static java.lang.String.format;
 
-public class BasicAuthCredentials implements AuthorisationCredentials {
+public class AbstractValueType<T> implements ValueType<T> {
 
-    private final Username username;
-    private final Password password;
-    private final URL url;
+    protected final T value;
 
-    public static BasicAuthCredentials basicAuth(Username username, Password password, URL url) {
-        return new BasicAuthCredentials(username, password, url);
-    }
-
-    private BasicAuthCredentials(Username username, Password password, URL url) {
-        this.username = username;
-        this.password = password;
-        this.url = url;
+    public AbstractValueType(T value) {
+        this.value = value;
     }
 
     @Override
-    public void applyTo(ConfigurableHttpClient client) {
-        client.withCredentials(username.value, password.value, url);
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof AbstractValueType))
+            return false;
+        AbstractValueType that = (AbstractValueType) o;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return format("%s[%s]", this.getClass().getSimpleName(), value);
     }
 }

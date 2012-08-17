@@ -19,10 +19,8 @@
  * under the License.
  */
 
-package bad.robot.http;
+package bad.robot.http.configuration;
 
-import bad.robot.http.configuration.ConfigurableHttpClientSetting;
-
-public interface AuthorisationCredentials extends ConfigurableHttpClientSetting {
+public interface AuthorisationCredentials extends HttpClientSetting {
 
 }

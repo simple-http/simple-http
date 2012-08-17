@@ -21,8 +21,6 @@
 
 package bad.robot.http.configuration;
 
-import bad.robot.http.AbstractValueType;
-
 public class Username extends AbstractValueType<String> {
 
     public static Username username(String value) {

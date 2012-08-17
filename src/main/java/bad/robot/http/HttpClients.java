@@ -25,6 +25,7 @@ import bad.robot.http.apache.ApacheBasicAuthCacheBuilder;
 import bad.robot.http.apache.ApacheHttpClient;
 import bad.robot.http.apache.ApacheHttpClientBuilder;
 import bad.robot.http.apache.Ssl;
+import bad.robot.http.configuration.AuthorisationCredentials;
 import bad.robot.http.configuration.AutomaticRedirectHandling;
 import bad.robot.http.configuration.HttpTimeout;
 import bad.robot.http.configuration.Proxy;
