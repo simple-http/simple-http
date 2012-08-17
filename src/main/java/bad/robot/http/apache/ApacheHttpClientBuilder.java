@@ -99,7 +99,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     }
 
     private HttpParams createAndConfigureHttpParameters() {
-        HttpParams parameters = createHttpParametersViaNastyHackButBetterThanCopyAndPaste();
+        HttpParams parameters = createHttpParametersViaNastyHackButBetterThanCopyAndPastingTheApacheSource();
         parameters.setParameter(ALLOW_CIRCULAR_REDIRECTS, true);
         parameters.setParameter(HANDLE_AUTHENTICATION, true);
         parameters.setParameter(USE_EXPECT_CONTINUE, true);
@@ -113,7 +113,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return parameters;
     }
 
-    protected HttpParams createHttpParametersViaNastyHackButBetterThanCopyAndPaste() {
+    protected HttpParams createHttpParametersViaNastyHackButBetterThanCopyAndPastingTheApacheSource() {
         return new DefaultHttpClient() {
             @Override
             protected HttpParams createHttpParams() {
