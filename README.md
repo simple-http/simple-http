@@ -1,5 +1,5 @@
 # Simple-HTTP
-### Quickly get up and running with HTTP
+## Quickly get up and running with HTTP
 
 A simple way to build and configure a HTTP client and work with the HTTP verbs;
 
@@ -54,7 +54,8 @@ http.get(new URL("http://baddotrobot.com"),
 You could add the `Authorization` header to your requests manually or just do the following,
 
 ``` java
-anApacheClient().with(basicAuth(username, password, new URL("http://example.com")))).get(new URL("http://example.com/something"));
+AuthorisationCredentials credentials = basicAuth(username, password, new URL("http://example.com")));
+anApacheClient().with(credentials).get(new URL("http://example.com/something"));
 ```
 
 This will add the basic auth headers to requests made to `http://example.com` but not to other URLs.
