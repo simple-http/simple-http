@@ -11,7 +11,7 @@ HttpResponse response = anApacheClient().get(url,
 );
 ```
 
-Will create a HTTP client, perform a `GET` with an `Accept` header and populate a simple `HttpResponse` object. Simple-HTTP currently wraps the [Apache HTTP client](http://hc.apache.org/) but does so in a API agnostic way. Think of it as a smaller, simpler API to using Apache with less boiler plate.
+Will create a HTTP client, perform a `GET` with an `Accept` header and populate a simple `HttpResponse` object. Simple-HTTP currently wraps the [Apache HTTP client](http://hc.apache.org/) but does so in a API agnostic way. Think of it as a smaller, simpler way to use Apache without all the boiler plate code.
 
 See this [blog post](http://baddotrobot.com/blog/2012/06/10/http-simple/) for an overview.
 
@@ -21,7 +21,7 @@ See this [blog post](http://baddotrobot.com/blog/2012/06/10/http-simple/) for an
 1. Supports the basic HTTP verbs (`GET`, `POST`, `PUT`, `DELETE`).
 1. Easy to configure. Comes out of the box with sensible defaults but is easy to customise.
 1. Supplied with [Hamcrest](http://code.google.com/p/hamcrest/) `Matcher`s making testing your clients straight forward.
-1. Supports SSL and basic auth.
+1. Supports typical HTTP settings; SSL, follow redirects, timeouts, proxies etc.
 
 # Getting Started
 
