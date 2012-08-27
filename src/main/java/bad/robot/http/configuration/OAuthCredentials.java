@@ -26,14 +26,14 @@ import java.net.URL;
 public class OAuthCredentials implements AuthorisationCredentials {
 
 
-    private final AuthorisationToken token;
+    private final AccessToken token;
     private final URL url;
 
-    public static OAuthCredentials oAuth(AuthorisationToken token, URL url) {
+    public static OAuthCredentials oAuth(AccessToken token, URL url) {
         return new OAuthCredentials(token, url);
     }
 
-    private OAuthCredentials(AuthorisationToken token, URL url) {
+    private OAuthCredentials(AccessToken token, URL url) {
         this.token = token;
         this.url = url;
     }

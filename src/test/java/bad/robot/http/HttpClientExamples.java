@@ -31,7 +31,7 @@ import java.net.URL;
 import static bad.robot.http.HeaderList.headers;
 import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.HttpClients.anApacheClient;
-import static bad.robot.http.configuration.AuthorisationToken.authorisationToken;
+import static bad.robot.http.configuration.AccessToken.accessToken;
 import static bad.robot.http.configuration.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.configuration.OAuthCredentials.oAuth;
 import static bad.robot.http.configuration.Password.password;
@@ -68,7 +68,7 @@ public class HttpClientExamples {
 
     @Test
     public void exampleOAuthToken() throws MalformedURLException {
-        AuthorisationCredentials credentials = oAuth(authorisationToken("XystZ5ee"), new URL("http://www.baddotrobot.com"));
+        AuthorisationCredentials credentials = oAuth(accessToken("XystZ5ee"), new URL("http://www.baddotrobot.com"));
         HttpResponse response = anApacheClient().with(credentials).get(new URL("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
@@ -76,7 +76,7 @@ public class HttpClientExamples {
     @Test
     public void exampleMixedAuthorisationSchemes() throws MalformedURLException {
         AuthorisationCredentials basicAuthCredentials = basicAuth(username("username"), password("secret"), new URL("http://robotooling.com"));
-        AuthorisationCredentials oAuthCredentials = oAuth(authorisationToken("XystZ5ee"), new URL("http://baddotrobot.com"));
+        AuthorisationCredentials oAuthCredentials = oAuth(accessToken("XystZ5ee"), new URL("http://baddotrobot.com"));
         HttpClient http = anApacheClient().with(basicAuthCredentials).with(oAuthCredentials);
         http.get(new URL("http://baddotrobot.com"));
         http.get(new URL("http://robotooling.com"));

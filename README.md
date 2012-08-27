@@ -77,7 +77,7 @@ to every request made to `http://example.com` (but not to other URLs).
 In a similar way to the basic auth headers above, you can add `Bearer` authorisation,
 
 ``` java
-AuthorisationCredentials credentials = oAuth(authorisationToken("XystZ5ee"), new URL("http://example.com"));
+AuthorisationCredentials credentials = oAuth(accessToken("XystZ5ee"), new URL("http://example.com"));
 HttpResponse response = anApacheClient().with(credentials).get(new URL("http://example.com/foo"));
 ```
 
@@ -94,7 +94,7 @@ You can even mix the schemes
 
 ``` java
 AuthorisationCredentials basicAuthCredentials = basicAuth(username("username"), password("secret"), new URL("http://robotooling.com"));
-AuthorisationCredentials oAuthCredentials = oAuth(authorisationToken("XystZ5ee"), new URL("http://baddotrobot.com"));
+AuthorisationCredentials oAuthCredentials = oAuth(accessToken("XystZ5ee"), new URL("http://baddotrobot.com"));
 HttpClient http = anApacheClient().with(basicAuthCredentials).with(oAuthCredentials);
 http.get(new URL("http://baddotrobot.com"));
 http.get(new URL("http://robotooling.com"));

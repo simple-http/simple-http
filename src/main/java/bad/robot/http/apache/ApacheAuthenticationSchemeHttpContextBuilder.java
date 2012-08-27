@@ -57,7 +57,7 @@ public class ApacheAuthenticationSchemeHttpContextBuilder implements Builder<Htt
     }
 
     @Override
-    public ApacheAuthenticationSchemeHttpContextBuilder withOAuthCredentials(String authorisationToken, URL url) {
+    public ApacheAuthenticationSchemeHttpContextBuilder withOAuthCredentials(String accessToken, URL url) {
         authenticationSchemes.put(asHttpHost(url), new BearerScheme());
         return this;
     }

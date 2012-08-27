@@ -70,8 +70,8 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     }
 
     @Override
-    public ConfigurableHttpClient withOAuthCredentials(String authorisationToken, URL url) {
-        this.authentications.add(new AuthenticatedHost(url, new OAuthAccessToken(authorisationToken)));
+    public ConfigurableHttpClient withOAuthCredentials(String accessToken, URL url) {
+        this.authentications.add(new AuthenticatedHost(url, new OAuthAccessToken(accessToken)));
         return this;
     }
 

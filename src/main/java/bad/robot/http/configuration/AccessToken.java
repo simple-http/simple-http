@@ -21,13 +21,13 @@
 
 package bad.robot.http.configuration;
 
-public class AuthorisationToken extends AbstractValueType<String> {
+public class AccessToken extends AbstractValueType<String> {
 
-    public static AuthorisationToken authorisationToken(String value) {
-        return new AuthorisationToken(value);
+    public static AccessToken accessToken(String value) {
+        return new AccessToken(value);
     }
 
-    private AuthorisationToken(String value) {
+    private AccessToken(String value) {
         super(value);
     }
 }

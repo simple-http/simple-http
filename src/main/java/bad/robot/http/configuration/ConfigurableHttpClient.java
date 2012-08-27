@@ -27,6 +27,6 @@ public interface ConfigurableHttpClient {
 
     ConfigurableHttpClient withBasicAuthCredentials(String username, String password, URL url);
 
-    ConfigurableHttpClient withOAuthCredentials(String authorisationToken, URL url);
+    ConfigurableHttpClient withOAuthCredentials(String accessToken, URL url);
 
 }
