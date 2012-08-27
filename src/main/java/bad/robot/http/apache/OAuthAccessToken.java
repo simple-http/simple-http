@@ -19,28 +19,32 @@
  * under the License.
  */
 
-package bad.robot.http.configuration;
+package bad.robot.http.apache;
 
-import java.net.URL;
+import org.apache.http.auth.Credentials;
 
-public class BasicAuthCredentials implements AuthorisationCredentials {
+import java.security.Principal;
 
-    private final Username username;
-    private final Password password;
-    private final URL url;
+public class OAuthAccessToken implements Credentials {
 
-    public static BasicAuthCredentials basicAuth(Username username, Password password, URL url) {
-        return new BasicAuthCredentials(username, password, url);
-    }
+    private final String token;
 
-    private BasicAuthCredentials(Username username, Password password, URL url) {
-        this.username = username;
-        this.password = password;
-        this.url = url;
+    public OAuthAccessToken(String token) {
+        this.token = token;
     }
 
     @Override
-    public void applyTo(ConfigurableHttpClient client) {
-        client.withBasicAuthCredentials(username.value, password.value, url);
+    public Principal getUserPrincipal() {
+        return new Principal() {
+            @Override
+            public String getName() {
+                return token;
+            }
+        };
+    }
+
+    @Override
+    public String getPassword() {
+        throw new UnsupportedOperationException("OAuth access tokens use the principle to represent the token and so have no password");
     }
 }

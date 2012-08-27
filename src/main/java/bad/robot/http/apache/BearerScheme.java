@@ -19,28 +19,34 @@
  * under the License.
  */
 
-package bad.robot.http.configuration;
+package bad.robot.http.apache;
 
-import java.net.URL;
+import org.apache.http.Header;
+import org.apache.http.HttpRequest;
+import org.apache.http.auth.AuthenticationException;
+import org.apache.http.auth.Credentials;
+import org.apache.http.impl.auth.RFC2617Scheme;
+import org.apache.http.message.BasicHeader;
 
-public class BasicAuthCredentials implements AuthorisationCredentials {
+public class BearerScheme extends RFC2617Scheme {
 
-    private final Username username;
-    private final Password password;
-    private final URL url;
-
-    public static BasicAuthCredentials basicAuth(Username username, Password password, URL url) {
-        return new BasicAuthCredentials(username, password, url);
-    }
-
-    private BasicAuthCredentials(Username username, Password password, URL url) {
-        this.username = username;
-        this.password = password;
-        this.url = url;
+    @Override
+    public String getSchemeName() {
+        return "bearer";
     }
 
     @Override
-    public void applyTo(ConfigurableHttpClient client) {
-        client.withBasicAuthCredentials(username.value, password.value, url);
+    public boolean isConnectionBased() {
+        return false;
+    }
+
+    @Override
+    public boolean isComplete() {
+        return true;
+    }
+
+    @Override
+    public Header authenticate(Credentials credentials, HttpRequest request) throws AuthenticationException {
+        return new BasicHeader("Authorization", "Bearer " + credentials.getUserPrincipal().getName());
     }
 }

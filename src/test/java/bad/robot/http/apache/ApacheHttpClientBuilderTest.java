@@ -84,15 +84,15 @@ public class ApacheHttpClientBuilderTest {
 
     @Test
     public void shouldConfigureCredentialsProvider() throws MalformedURLException {
-        HttpClient client = builder.withCredentials("username", "password", new URL("http://localhost:80")).build();
+        HttpClient client = builder.withBasicAuthCredentials("username", "password", new URL("http://localhost:80")).build();
         assertThat(client, credentialsProviderContains(new URL("http://localhost:80"), "username", "password"));
     }
 
     @Test
     public void credentialsProviderCanOnlyHaveOneCredentialPerAuthenticationScope() throws MalformedURLException {
         HttpClient client = builder
-            .withCredentials("username", "password", new URL("http://localhost:80"))
-            .withCredentials("replacedUsername", "replacedPassword", new URL("http://localhost:80"))
+            .withBasicAuthCredentials("username", "password", new URL("http://localhost:80"))
+            .withBasicAuthCredentials("replacedUsername", "replacedPassword", new URL("http://localhost:80"))
             .build();
         assertThat(client, credentialsProviderContains(new URL("http://localhost:80"), "replacedUsername", "replacedPassword"));
     }
@@ -100,8 +100,8 @@ public class ApacheHttpClientBuilderTest {
     @Test
     public void credentialsProviderWithDifferingAuthenticationScopes() throws MalformedURLException {
         HttpClient client = builder
-            .withCredentials("username", "password", new URL("http://localhost:80"))
-            .withCredentials("replacedUsername", "replacedPassword", new URL("http://localhost:8081"))
+            .withBasicAuthCredentials("username", "password", new URL("http://localhost:80"))
+            .withBasicAuthCredentials("replacedUsername", "replacedPassword", new URL("http://localhost:8081"))
             .build();
         assertThat(client, credentialsProviderContains(new URL("http://localhost:80"), "username", "password"));
         assertThat(client, credentialsProviderContains(new URL("http://localhost:8081"), "replacedUsername", "replacedPassword"));
@@ -110,8 +110,8 @@ public class ApacheHttpClientBuilderTest {
     @Test
     public void credentialsProviderWithDifferingAuthenticationScopesUsingRealUrls() throws MalformedURLException {
         HttpClient client = builder
-            .withCredentials("username", "password", new URL("http://baddotrobot.com"))
-            .withCredentials("replacedUsername", "replacedPassword", new URL("http://robotooling.com"))
+            .withBasicAuthCredentials("username", "password", new URL("http://baddotrobot.com"))
+            .withBasicAuthCredentials("replacedUsername", "replacedPassword", new URL("http://robotooling.com"))
             .build();
         assertThat(client, credentialsProviderContains(new URL("http://baddotrobot.com"), "username", "password"));
         assertThat(client, credentialsProviderContains(new URL("http://robotooling.com"), "replacedUsername", "replacedPassword"));

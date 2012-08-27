@@ -23,24 +23,23 @@ package bad.robot.http.configuration;
 
 import java.net.URL;
 
-public class BasicAuthCredentials implements AuthorisationCredentials {
+public class OAuthCredentials implements AuthorisationCredentials {
 
-    private final Username username;
-    private final Password password;
+
+    private final AuthorisationToken token;
     private final URL url;
 
-    public static BasicAuthCredentials basicAuth(Username username, Password password, URL url) {
-        return new BasicAuthCredentials(username, password, url);
+    public static OAuthCredentials oAuth(AuthorisationToken token, URL url) {
+        return new OAuthCredentials(token, url);
     }
 
-    private BasicAuthCredentials(Username username, Password password, URL url) {
-        this.username = username;
-        this.password = password;
+    private OAuthCredentials(AuthorisationToken token, URL url) {
+        this.token = token;
         this.url = url;
     }
 
     @Override
     public void applyTo(ConfigurableHttpClient client) {
-        client.withBasicAuthCredentials(username.value, password.value, url);
+        client.withOAuthCredentials(token.value, url);
     }
 }

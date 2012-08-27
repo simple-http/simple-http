@@ -21,7 +21,7 @@
 
 package bad.robot.http;
 
-import bad.robot.http.apache.ApacheBasicAuthenticationSchemeHttpContextBuilder;
+import bad.robot.http.apache.ApacheAuthenticationSchemeHttpContextBuilder;
 import bad.robot.http.apache.ApacheHttpClient;
 import bad.robot.http.apache.ApacheHttpClientBuilder;
 import bad.robot.http.apache.Ssl;
@@ -32,7 +32,7 @@ import bad.robot.http.configuration.Proxy;
 
 import java.net.URL;
 
-import static bad.robot.http.apache.ApacheBasicAuthenticationSchemeHttpContextBuilder.anApacheBasicAuthScheme;
+import static bad.robot.http.apache.ApacheAuthenticationSchemeHttpContextBuilder.anApacheBasicAuthScheme;
 import static bad.robot.http.apache.ApacheHttpClientBuilder.anApacheClientWithShortTimeout;
 
 public class HttpClients {
@@ -44,7 +44,7 @@ public class HttpClients {
     private static class ApacheCommonHttpClient implements CommonHttpClient {
 
         private final ApacheHttpClientBuilder apache = anApacheClientWithShortTimeout();
-        private final ApacheBasicAuthenticationSchemeHttpContextBuilder authenticationSchemes = anApacheBasicAuthScheme();
+        private final ApacheAuthenticationSchemeHttpContextBuilder authenticationSchemes = anApacheBasicAuthScheme();
 
         private ApacheHttpClient httpClient;
 

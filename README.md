@@ -6,7 +6,7 @@ A simple way to build and configure a HTTP client and work with the HTTP verbs;
 ``` java
 HttpResponse response = anApacheClient().get(url,
     headers(
-        header("Accept", "application/json"),
+        header("Accept", "application/json")
     )
 );
 ```
@@ -48,6 +48,14 @@ http.get(new URL("http://baddotrobot.com"),
     ));
 ```
 
+## Proxy support
+
+You can set things up to go throw a proxy (e.g. `localhost:8888`) like this.
+
+``` java
+anApacheClient().with(proxy(new URL("http://localhost:8888"))).get(new URL("http://baddotrobot.com"));
+```
+
 
 ## Adding Basic Auth
 
@@ -58,7 +66,41 @@ AuthorisationCredentials credentials = basicAuth(username, password, new URL("ht
 anApacheClient().with(credentials).get(new URL("http://example.com/something"));
 ```
 
-This will add the basic auth headers to requests made to `http://example.com` but not to other URLs.
+This will add basic auth headers, similar to below
+
+`Authorization: Basic aGVsbG86d29ybGQNCg==`
+
+to every request made to `http://example.com` (but not to other URLs).
+
+## Adding OAuth Bearer Token
+
+In a similar way to the basic auth headers above, you can add `Bearer` authorisation,
+
+``` java
+AuthorisationCredentials credentials = oAuth(authorisationToken("XystZ5ee"), new URL("http://example.com"));
+HttpResponse response = anApacheClient().with(credentials).get(new URL("http://example.com/foo"));
+```
+
+This will add the
+
+`Authorization: Bearer XystZ5ee`
+
+header to every request to `http:\\example.com`.
+
+
+## Adding Different Authorisation Headers
+
+You can even mix the schemes
+
+``` java
+AuthorisationCredentials basicAuthCredentials = basicAuth(username("username"), password("secret"), new URL("http://robotooling.com"));
+AuthorisationCredentials oAuthCredentials = oAuth(authorisationToken("XystZ5ee"), new URL("http://baddotrobot.com"));
+HttpClient http = anApacheClient().with(basicAuthCredentials).with(oAuthCredentials);
+http.get(new URL("http://baddotrobot.com"));
+http.get(new URL("http://robotooling.com"));
+```
+
+which will use basic auth for requests to `http://robotooling.com` and bearer token auth for requests to `http:``baddotrobot.com`.
 
 
 # Download

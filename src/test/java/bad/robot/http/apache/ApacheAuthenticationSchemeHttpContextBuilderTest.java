@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static bad.robot.http.apache.ApacheBasicAuthenticationSchemeHttpContextBuilder.anApacheBasicAuthScheme;
+import static bad.robot.http.apache.ApacheAuthenticationSchemeHttpContextBuilder.anApacheBasicAuthScheme;
 import static bad.robot.http.apache.Coercions.asHttpHost;
 import static org.apache.http.client.protocol.ClientContext.AUTH_CACHE;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,17 +41,18 @@ import static org.hamcrest.Matchers.*;
  * representing "basic auth" for URL http://localhost. The actual credentials are setup in the {@link org.apache.http.client.CredentialsProvider}
  * elsewhere.
  */
-public class ApacheBasicAuthenticationSchemeHttpContextBuilderTest {
+public class ApacheAuthenticationSchemeHttpContextBuilderTest {
 
     private final String username = "username";
     private final String password = "password";
+    private final String token = "t0KeN";
 
     @Test
     public void addsAnAuthenticationSchemeForCredentials() throws MalformedURLException {
         URL google = new URL("http://www.google.com");
         URL github = new URL("http://www.github.com");
         HttpContext context = anApacheBasicAuthScheme()
-            .withCredentials(username, password, google)
+            .withBasicAuthCredentials(username, password, google)
             .build();
         assertThat(schemeFromCacheByUrl(google, context), is(instanceOf(BasicScheme.class)));
         assertThat(schemeFromCacheByUrl(github, context), is(nullValue()));
@@ -62,8 +63,8 @@ public class ApacheBasicAuthenticationSchemeHttpContextBuilderTest {
         URL google1 = new URL("http://www.google.com:80");
         URL google2 = new URL("http://www.google.com:8081");
         HttpContext context = anApacheBasicAuthScheme()
-            .withCredentials(username, password, google1)
-            .withCredentials(username, password, google2)
+            .withBasicAuthCredentials(username, password, google1)
+            .withBasicAuthCredentials(username, password, google2)
             .build();
         assertThat(schemeFromCacheByUrl(google1, context), is(instanceOf(BasicScheme.class)));
         assertThat(schemeFromCacheByUrl(google2, context), is(instanceOf(BasicScheme.class)));
@@ -74,11 +75,23 @@ public class ApacheBasicAuthenticationSchemeHttpContextBuilderTest {
         URL google1 = new URL("http://www.google.com");
         URL google2 = new URL("https://www.google.com");
         HttpContext context = anApacheBasicAuthScheme()
-            .withCredentials(username, password, google1)
-            .withCredentials(username, password, google2)
+            .withBasicAuthCredentials(username, password, google1)
+            .withBasicAuthCredentials(username, password, google2)
             .build();
         assertThat(schemeFromCacheByUrl(google1, context), is(instanceOf(BasicScheme.class)));
         assertThat(schemeFromCacheByUrl(google2, context), is(instanceOf(BasicScheme.class)));
+    }
+
+    @Test
+    public void addsAuthenticationSchemesForDifferingUnderlyingSchemes() throws MalformedURLException {
+        URL google = new URL("http://www.google.com");
+        URL github = new URL("http://www.github.com");
+        HttpContext context = anApacheBasicAuthScheme()
+            .withBasicAuthCredentials(username, password, google)
+            .withOAuthCredentials(token, github)
+            .build();
+        assertThat(schemeFromCacheByUrl(google, context), is(instanceOf(BasicScheme.class)));
+        assertThat(schemeFromCacheByUrl(github, context), is(instanceOf(BearerScheme.class)));
     }
 
     private static AuthScheme schemeFromCacheByUrl(URL url, HttpContext context) {
