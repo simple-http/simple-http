@@ -68,7 +68,7 @@ anApacheClient().with(credentials).get(new URL("http://example.com/something"));
 
 This will add basic auth headers, similar to below
 
-`Authorization: Basic aGVsbG86d29ybGQNCg==`
+    Authorization: Basic aGVsbG86d29ybGQNCg==
 
 to every request made to `http://example.com` (but not to other URLs).
 
@@ -83,7 +83,7 @@ HttpResponse response = anApacheClient().with(credentials).get(new URL("http://e
 
 This will add the
 
-`Authorization: Bearer XystZ5ee`
+    Authorization: Bearer XystZ5ee
 
 header to every request to `http:\\example.com`.
 
@@ -100,7 +100,7 @@ http.get(new URL("http://baddotrobot.com"));
 http.get(new URL("http://robotooling.com"));
 ```
 
-which will use basic auth for requests to `http://robotooling.com` and bearer token auth for requests to `http:``baddotrobot.com`.
+which will use basic auth for requests to `http://robotooling.com` and bearer token auth for requests to `http://baddotrobot.com`.
 
 
 # Download
