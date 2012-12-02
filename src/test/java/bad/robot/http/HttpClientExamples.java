@@ -86,4 +86,10 @@ public class HttpClientExamples {
     public void exampleProxy() throws MalformedURLException {
         anApacheClient().with(Proxy.proxy(new URL("http://localhost:8888"))).get(new URL("http://www.baddotrobot.com"));
     }
+
+    @Test
+    public void exampleOfDisguisingTheUserAgent() throws MalformedURLException {
+        anApacheClient().get(new URL("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
+    }
+
 }
