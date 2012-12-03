@@ -73,20 +73,36 @@ public class Matchers {
         return HttpMessageHeaderMatcher.<T>has(header);
     }
 
+    public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> value) {
+        return HttpMessageHeaderValueMatcher.<T>headerWithValue(name, value);
+    }
+
+    public static Matcher<Header> equalTo(Header header) {
+        return HeaderEqualityMatcher.equalTo(header);
+    }
+
+    public static Matcher<Header> header(String name, Matcher<String> value) {
+        return HeaderMatcher.header(name, value);
+    }
+
     public static Matcher<Headers> hasHeader(Header header) {
-        return HeadersMatcher.hasHeader(header);
+        return HeadersEqualityMatcher.hasHeader(header);
     }
 
     public static Matcher<Headers> hasHeaders(Header... headers) {
-        return HeadersMatcher.hasHeaders(headers);
+        return HeadersEqualityMatcher.hasHeaders(headers);
     }
 
     public static Matcher<Headers> has(Header... headers) {
+        return HeadersEqualityMatcher.hasHeaders(headers);
+    }
+
+    public static Matcher<Headers> hasHeaders(Matcher<Header>... headers) {
         return HeadersMatcher.hasHeaders(headers);
     }
 
-    public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> value) {
-        return HttpMessageHeaderValueMatcher.<T>headerWithValue(name, value);
+    public static Matcher<Headers> has(Matcher<Header>... headers) {
+        return HeadersMatcher.hasHeaders(headers);
     }
 
     public static Matcher<HttpResponse> status(int status) {

@@ -22,25 +22,32 @@
 package bad.robot.http.matchers;
 
 import bad.robot.http.Header;
-import bad.robot.http.Headers;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HeadersMatcher extends TypeSafeMatcher<Headers> {
+class HeaderEqualityMatcher extends TypeSafeMatcher<Header> {
+
+    private final Header header;
 
     @Factory
-    public static Matcher<Headers> hasHeaders(Matcher<Header>... headers) {
-        return null;
+    static Matcher<Header> equalTo(Header expected) {
+        return new HeaderEqualityMatcher(expected);
+    }
+
+    private HeaderEqualityMatcher(Header header) {
+        this.header = header;
     }
 
     @Override
-    public boolean matchesSafely(Headers actual) {
-        return false;
+    public boolean matchesSafely(Header actual) {
+        return header.name().equals(actual.name()) && header.value().equals(actual.value());
     }
 
     @Override
     public void describeTo(Description description) {
+        description.appendValue(header);
     }
+
 }

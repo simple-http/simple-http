@@ -23,6 +23,7 @@ package bad.robot.http.apache.matchers;
 
 import org.apache.http.client.HttpClient;
 import org.hamcrest.Description;
+import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
@@ -31,13 +32,14 @@ public class HttpParameterMatcher extends TypeSafeDiagnosingMatcher<HttpClient> 
     private final String parameter;
     private final Matcher<?> matcher;
 
+    @Factory
+    public static HttpParameterMatcher parameter(String parameter, Matcher<?> matcher) {
+        return new HttpParameterMatcher(parameter, matcher);
+    }
+
     public HttpParameterMatcher(String parameter, Matcher<?> matcher) {
         this.parameter = parameter;
         this.matcher = matcher;
-    }
-
-    public static HttpParameterMatcher parameter(String parameter, Matcher<?> matcher) {
-        return new HttpParameterMatcher(parameter, matcher);
     }
 
     @Override

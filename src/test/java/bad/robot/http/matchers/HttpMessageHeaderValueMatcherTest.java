@@ -35,8 +35,8 @@ import java.net.URL;
 import static bad.robot.http.HeaderList.headers;
 import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.HttpClients.anApacheClient;
-import static bad.robot.http.matchers.HttpMessageHeaderValueMatcher.headerWithValue;
 import static bad.robot.http.matchers.Matchers.has;
+import static bad.robot.http.matchers.Matchers.headerWithValue;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 

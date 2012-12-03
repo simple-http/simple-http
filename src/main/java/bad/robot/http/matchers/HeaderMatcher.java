@@ -24,29 +24,34 @@ package bad.robot.http.matchers;
 import bad.robot.http.Header;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 class HeaderMatcher extends TypeSafeMatcher<Header> {
 
-    private final Header header;
+    private final String name;
+    private final Matcher<String> value;
 
     @Factory
-    public static HeaderMatcher isHeader(Header expected) {
-        return new HeaderMatcher(expected);
+    public static Matcher<Header> header(String name, Matcher<String> matcher) {
+        return new HeaderMatcher(name, matcher);
     }
 
-    public HeaderMatcher(Header header) {
-        this.header = header;
+    private HeaderMatcher(String name, Matcher<String> value) {
+        this.name = name;
+        this.value = value;
     }
 
     @Override
     public boolean matchesSafely(Header actual) {
-        return header.name().equals(actual.name()) && header.value().equals(actual.value());
+        if (actual.name().equals(name) && value.matches(actual.value()))
+            return true;
+        return false;
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendValue(header);
+        description.appendText("header ").appendValue(name).appendText(" with value ");
+        value.describeTo(description);
     }
-
 }
