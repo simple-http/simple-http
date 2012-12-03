@@ -73,6 +73,10 @@ public class Matchers {
         return HttpMessageHeaderMatcher.<T>has(header);
     }
 
+    public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> value) {
+        return HttpMessageHeaderValueMatcher.<T>headerWithValue(name, value);
+    }
+
     public static Matcher<Headers> hasHeader(Header header) {
         return HeadersMatcher.hasHeader(header);
     }
@@ -83,10 +87,6 @@ public class Matchers {
 
     public static Matcher<Headers> has(Header... headers) {
         return HeadersMatcher.hasHeaders(headers);
-    }
-
-    public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> value) {
-        return HttpMessageHeaderValueMatcher.<T>headerWithValue(name, value);
     }
 
     public static Matcher<HttpResponse> status(int status) {
