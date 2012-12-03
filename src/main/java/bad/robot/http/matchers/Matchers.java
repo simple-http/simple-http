@@ -77,6 +77,10 @@ public class Matchers {
         return HttpMessageHeaderValueMatcher.<T>headerWithValue(name, value);
     }
 
+    public static Matcher<Header> hasHeaderWithValue(String name, Matcher<String> value) {
+        return HeaderValueMatcher.hasHeaderWithValue(name, value);
+    }
+
     public static Matcher<Headers> hasHeader(Header header) {
         return HeadersMatcher.hasHeader(header);
     }
