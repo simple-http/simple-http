@@ -100,7 +100,7 @@ public class ApacheHttpClientTest {
     }
 
     @Test
-    public void shouldUseHttpResponseHandlerToProcessTheResponse_WhichCleansUpAfterConsumption() throws IOException {
+    public void shouldUseHttpResponseHandlerToProcessTheResponseWhichCleansUpAfterConsumption() throws IOException {
         URL url = anyUrl();
         context.checking(new Expectations(){{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
