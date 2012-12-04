@@ -51,7 +51,7 @@ class HeaderMatcher extends TypeSafeMatcher<Header> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("header ").appendValue(name).appendText(" with value ");
+        description.appendText("header ").appendValue(name).appendText(" with value of ");
         value.describeTo(description);
     }
 }

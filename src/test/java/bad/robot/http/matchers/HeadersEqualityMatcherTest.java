@@ -60,7 +60,7 @@ public class HeadersEqualityMatcherTest {
         StringDescription description = new StringDescription();
         hasHeaders(header("Content-Length", "1024"), header("Content-Type", "text/plain")).describeTo(description);
         assertThat(description.toString(), allOf(
-                containsString("headers to contain"),
+                containsString("headers to contain (all items in any order)"),
                 containsString("name='Content-Length', value='1024'"),
                 containsString("name='Content-Type', value='text/plain'")));
     }

@@ -32,6 +32,8 @@ import org.hamcrest.Matcher;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+import static java.lang.String.format;
+
 /**
  * This is your first port of call if you're looking for helpful HTTP related {@link Matcher}s.
  */
@@ -137,5 +139,9 @@ public class Matchers {
 
     public static Matcher<? extends HttpUriRequest> messageContaining(String content) {
         return ApacheHttpUriRequestContentMatcher.messageContaining(content);
+    }
+
+    public static String expectedLineLeadingSpaces() {
+        return format("%1$10s", "");
     }
 }

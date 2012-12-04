@@ -54,7 +54,7 @@ public class HeaderMatcherTest {
     public void description() {
         StringDescription description = new StringDescription();
         header("Accept", equalTo("json")).describeTo(description);
-        assertThat(description.toString(), containsString("header \"Accept\" with value \"json\""));
+        assertThat(description.toString(), containsString("header \"Accept\" with value of \"json\""));
     }
 
 }

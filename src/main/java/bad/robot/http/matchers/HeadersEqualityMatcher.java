@@ -31,6 +31,9 @@ import org.hamcrest.TypeSafeMatcher;
 import java.util.Arrays;
 import java.util.List;
 
+import static bad.robot.http.matchers.Matchers.expectedLineLeadingSpaces;
+import static java.lang.System.getProperty;
+
 class HeadersEqualityMatcher extends TypeSafeMatcher<Headers> {
 
     private final List<Header> expected;
@@ -60,6 +63,9 @@ class HeadersEqualityMatcher extends TypeSafeMatcher<Headers> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("headers to contain ").appendValue(expected);
+        description.appendText("headers to contain (all items in any order)")
+                .appendText(getProperty("line.separator"))
+                .appendText(expectedLineLeadingSpaces())
+                .appendValue(expected);
     }
 }
