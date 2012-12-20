@@ -22,36 +22,50 @@
 package bad.robot.http.matchers;
 
 import bad.robot.http.Header;
+import bad.robot.http.Headers;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HeaderValueMatcher extends TypeSafeMatcher<Header> {
+import java.util.Arrays;
+import java.util.List;
 
-    private final String name;
-    private final Matcher<String> valueMatcher;
+import static bad.robot.http.matchers.Matchers.expectedLineLeadingSpaces;
+import static java.lang.System.getProperty;
+
+class HeadersEqualityMatcher extends TypeSafeMatcher<Headers> {
+
+    private final List<Header> expected;
 
     @Factory
-    public static Matcher<Header> hasHeaderWithValue(String name, Matcher<String> matcher) {
-        return new HeaderValueMatcher(name, matcher);
+    public static Matcher<Headers> hasHeaders(Header... headers) {
+        return new HeadersEqualityMatcher(headers);
     }
 
-    public HeaderValueMatcher(String name, Matcher<String> valueMatcher) {
-        this.name = name;
-        this.valueMatcher = valueMatcher;
+    @Factory
+    public static Matcher<Headers> hasHeader(Header header) {
+        return new HeadersEqualityMatcher(new Header[] {header});
+    }
+
+    private HeadersEqualityMatcher(Header[] expected) {
+        this.expected = Arrays.asList(expected);
     }
 
     @Override
-    public boolean matchesSafely(Header actual) {
-        if (actual.name().equals(name) && valueMatcher.matches(actual.value()))
-            return true;
-        return false;
+    public boolean matchesSafely(Headers actual) {
+        int matches = 0;
+        for (Header header : actual)
+            if (expected.contains(header))
+                matches++;
+        return matches == expected.size();
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("header ").appendValue(name).appendText(" with value ");
-        valueMatcher.describeTo(description);
+        description.appendText("headers to contain (all items in any order)")
+                .appendText(getProperty("line.separator"))
+                .appendText(expectedLineLeadingSpaces())
+                .appendValue(expected);
     }
 }

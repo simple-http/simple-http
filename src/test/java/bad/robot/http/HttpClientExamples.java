@@ -23,6 +23,9 @@ package bad.robot.http;
 
 import bad.robot.http.configuration.AuthorisationCredentials;
 import bad.robot.http.configuration.Proxy;
+import bad.robot.http.matchers.Matchers;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
@@ -36,9 +39,9 @@ import static bad.robot.http.configuration.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.configuration.OAuthCredentials.oAuth;
 import static bad.robot.http.configuration.Password.password;
 import static bad.robot.http.configuration.Username.username;
-import static bad.robot.http.matchers.Matchers.has;
-import static bad.robot.http.matchers.Matchers.status;
+import static bad.robot.http.matchers.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 public class HttpClientExamples {
 
@@ -90,6 +93,16 @@ public class HttpClientExamples {
     @Test
     public void exampleOfDisguisingTheUserAgent() throws MalformedURLException {
         anApacheClient().get(new URL("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
+    }
+
+    @Test
+    public void exampleOfHeaderMatcher() {
+        final JUnit4Mockery context = new JUnit4Mockery();
+        final HttpClient http = context.mock(HttpClient.class);
+        context.checking(new Expectations() {{
+            oneOf(http).get(with(any(URL.class)), with(hasHeaders(Matchers.header("User-Agent", containsString("Safari")))));
+        }});
+        context.assertIsSatisfied();
     }
 
 }

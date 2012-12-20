@@ -27,39 +27,39 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.collection.IsIterableContainingInOrder;
 
-import java.util.Arrays;
 import java.util.List;
+
+import static bad.robot.http.matchers.Matchers.expectedLineLeadingSpaces;
+import static java.lang.String.format;
+import static java.lang.System.getProperty;
+import static java.util.Arrays.asList;
 
 class HeadersMatcher extends TypeSafeMatcher<Headers> {
 
-    private final List<Header> expected;
+    private final List<Matcher<Header>> matchers;
 
     @Factory
-    public static Matcher<Headers> hasHeaders(Header... headers) {
-        return new HeadersMatcher(headers);
+    public static Matcher<Headers> hasHeaders(Matcher<Header>... headers) {
+        return new HeadersMatcher(asList(headers));
     }
 
-    @Factory
-    public static Matcher<Headers> hasHeader(Header header) {
-        return new HeadersMatcher(new Header[] {header});
-    }
-
-    private HeadersMatcher(Header[] expected) {
-        this.expected = Arrays.asList(expected);
+    private HeadersMatcher(List<Matcher<Header>> matchers) {
+        this.matchers = matchers;
     }
 
     @Override
     public boolean matchesSafely(Headers actual) {
-        int matches = 0;
-        for (Header header : actual)
-            if (expected.contains(header))
-                matches++;
-        return matches == expected.size();
+        return new IsIterableContainingInOrder(matchers).matches(actual);
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("headers to contain ").appendValue(expected);
+        description.appendText("headers to contain (all items in any order)")
+                .appendText(getProperty("line.separator"))
+                .appendText(expectedLineLeadingSpaces())
+                .appendList("", format(" and %s%s", getProperty("line.separator"), expectedLineLeadingSpaces()), "", matchers);
     }
+
 }

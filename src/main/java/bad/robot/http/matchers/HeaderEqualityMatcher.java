@@ -27,31 +27,27 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-class HeaderMatcher extends TypeSafeMatcher<Header> {
+class HeaderEqualityMatcher extends TypeSafeMatcher<Header> {
 
-    private final String name;
-    private final Matcher<String> value;
+    private final Header header;
 
     @Factory
-    public static Matcher<Header> header(String name, Matcher<String> matcher) {
-        return new HeaderMatcher(name, matcher);
+    static Matcher<Header> equalTo(Header expected) {
+        return new HeaderEqualityMatcher(expected);
     }
 
-    private HeaderMatcher(String name, Matcher<String> value) {
-        this.name = name;
-        this.value = value;
+    private HeaderEqualityMatcher(Header header) {
+        this.header = header;
     }
 
     @Override
     public boolean matchesSafely(Header actual) {
-        if (actual.name().equals(name) && value.matches(actual.value()))
-            return true;
-        return false;
+        return header.name().equals(actual.name()) && header.value().equals(actual.value());
     }
 
     @Override
     public void describeTo(Description description) {
-        description.appendText("header ").appendValue(name).appendText(" with value of ");
-        value.describeTo(description);
+        description.appendValue(header);
     }
+
 }

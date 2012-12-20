@@ -30,7 +30,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 class HttpMessageHeaderValueMatcher<T extends HttpMessage> extends TypeSafeMatcher<T> {
 
-    private final Matcher<Header> delegate;
+    private final Matcher<Header> matcher;
 
     @Factory
     public static <T extends HttpMessage> Matcher<T> headerWithValue(String name, Matcher<String> matcher) {
@@ -38,13 +38,13 @@ class HttpMessageHeaderValueMatcher<T extends HttpMessage> extends TypeSafeMatch
     }
 
     public HttpMessageHeaderValueMatcher(String name, Matcher<String> matcher) {
-        this.delegate = HeaderValueMatcher.hasHeaderWithValue(name, matcher);
+        this.matcher = HeaderMatcher.header(name, matcher);
     }
 
     @Override
     public boolean matchesSafely(T actual) {
         for (Header header : actual.getHeaders()) {
-            if (delegate.matches(header))
+            if (matcher.matches(header))
                 return true;
         }
         return false;
@@ -53,6 +53,6 @@ class HttpMessageHeaderValueMatcher<T extends HttpMessage> extends TypeSafeMatch
     @Override
     public void describeTo(Description description) {
         description.appendText("a ").appendText(HttpMessage.class.getSimpleName()).appendText(" with ");
-        delegate.describeTo(description);
+        matcher.describeTo(description);
     }
 }

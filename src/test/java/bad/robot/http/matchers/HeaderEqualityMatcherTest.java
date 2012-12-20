@@ -26,35 +26,52 @@ import org.hamcrest.StringDescription;
 import org.junit.Test;
 
 import static bad.robot.http.HeaderPair.header;
-import static bad.robot.http.matchers.HeaderValueMatcher.hasHeaderWithValue;
-import static org.hamcrest.Matchers.*;
+import static bad.robot.http.matchers.Matchers.equalTo;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class HeaderValueMatcherTest {
+public class HeaderEqualityMatcherTest {
 
     private final Header header = header("Accept", "application/json, q=1; text/plain, q=0.5");
 
     @Test
     public void exampleUsage() {
-        assertThat(header, hasHeaderWithValue("Accept", containsString("json")));
+        assertThat(header, is(equalTo(header("Accept", "application/json, q=1; text/plain, q=0.5"))));
     }
 
     @Test
     public void matches() {
-        assertThat(hasHeaderWithValue("Accept", containsString("json")).matches(header), is(true));
+        assertThat(equalTo(header("Accept", "application/json, q=1; text/plain, q=0.5")).matches(header), is(true));
+    }
+
+    @Test
+    public void matchesAgainstHeaderImplementationWithoutEqualityImplemented() {
+        assertThat(equalTo(header("Accept", "application/json, q=1; text/plain, q=0.5")).matches(new HeaderWithoutEqualityImplemented()), is(true));
     }
 
     @Test
     public void doesNotMatch() {
-        assertThat(hasHeaderWithValue("Accept", containsString("xml")).matches(header), is(false));
-        assertThat(hasHeaderWithValue("accept", containsString("json")).matches(header), is(false));
+        assertThat(equalTo(header("Accept", "application/json, q=1")).matches(header), is(false));
+        assertThat(equalTo(header("accept", "application/json, q=1; text/plain, q=0.5")).matches(header), is(false));
     }
 
     @Test
     public void description() {
         StringDescription description = new StringDescription();
-        hasHeaderWithValue("Accept", equalTo("json")).describeTo(description);
-        assertThat(description.toString(), containsString("header \"Accept\" with value \"json\""));
+        equalTo(header("Accept", "application/json, q=1; text/plain, q=0.5")).describeTo(description);
+        assertThat(description.toString(), containsString("application/json, q=1; text/plain, q=0.5"));
     }
 
+    private static class HeaderWithoutEqualityImplemented implements Header {
+        @Override
+        public String name() {
+            return "Accept";
+        }
+
+        @Override
+        public String value() {
+            return "application/json, q=1; text/plain, q=0.5";
+        }
+    }
 }
