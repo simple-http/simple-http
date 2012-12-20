@@ -25,7 +25,6 @@ import java.net.URL;
 
 public class OAuthCredentials implements AuthorisationCredentials {
 
-
     private final AccessToken token;
     private final URL url;
 
