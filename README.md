@@ -108,3 +108,7 @@ which will use basic auth for requests to `http://robotooling.com` and bearer to
 Available via my [Maven repository](http://robotooling.com/maven/).
 
 For more tools, see [robotooling.com](http://www.robotooling.com) and visit my [blog](http://baddotrobot.com).
+
+# Continuous Integration
+
+[Travis CI](https://travis-ci.org/tobyweston/simple-http)
