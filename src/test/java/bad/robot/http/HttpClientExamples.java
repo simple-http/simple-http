@@ -26,6 +26,7 @@ import bad.robot.http.configuration.Proxy;
 import bad.robot.http.matchers.Matchers;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
@@ -86,6 +87,7 @@ public class HttpClientExamples {
     }
 
     @Test
+    @Ignore ("example using a proxy, you need to have a running proxy for this to actually run")
     public void exampleProxy() throws MalformedURLException {
         anApacheClient().with(Proxy.proxy(new URL("http://localhost:8888"))).get(new URL("http://www.baddotrobot.com"));
     }
@@ -96,6 +98,7 @@ public class HttpClientExamples {
     }
 
     @Test
+    @Ignore ("illistrative only; shows how to use a matcher")
     public void exampleOfHeaderMatcher() {
         final JUnit4Mockery context = new JUnit4Mockery();
         final HttpClient http = context.mock(HttpClient.class);
