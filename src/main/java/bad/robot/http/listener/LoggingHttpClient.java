@@ -109,11 +109,10 @@ public class LoggingHttpClient implements HttpClient {
     }
 
     private String message(URL url, HttpRequest request, HttpResponse response) {
-        return new StringBuilder()
-            .append(request(url, request))
-            .append(lineSeparator)
-            .append(response(response))
-            .toString();
+        StringBuilder builder = new StringBuilder().append(request(url, request)).append(lineSeparator);
+        if (response != null)
+            builder.append(response(response));
+        return builder.toString();
     }
 
     private String request(URL url, final HttpRequest message) {
