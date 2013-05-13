@@ -1,4 +1,5 @@
 # Simple-HTTP
+[![](https://travis-ci.org/tobyweston/simple-http.png?branch=master)](https://travis-ci.org/tobyweston/simple-http)
 ## Quickly get up and running with HTTP
 
 A simple way to build and configure a HTTP client and work with the HTTP verbs;
