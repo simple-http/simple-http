@@ -54,7 +54,7 @@ http.get(new URL("http://baddotrobot.com"),
 You can set things up to go throw a proxy (e.g. `localhost:8888`) like this.
 
 ``` java
-anApacheClient().with(proxy(new URL("http://localhost:8888"))).get(new URL("http://baddotrobot.com"));
+anApacheClient().with(proxy(new URL("http://username:password@localhost:8888"))).get(new URL("http://baddotrobot.com"));
 ```
 
 
