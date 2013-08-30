@@ -29,7 +29,7 @@ public class Proxy extends AbstractValueType<URL> implements Setting<URL> {
         return new Proxy(value);
     }
 
-    private Proxy(URL value) {
+    protected Proxy(URL value) {
         super(value);
     }
 
@@ -37,4 +37,5 @@ public class Proxy extends AbstractValueType<URL> implements Setting<URL> {
     public void applyTo(Configurable<URL> configurable) {
         configurable.setTo(value);
     }
+
 }

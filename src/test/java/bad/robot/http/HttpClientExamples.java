@@ -39,6 +39,7 @@ import static bad.robot.http.configuration.AccessToken.accessToken;
 import static bad.robot.http.configuration.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.configuration.OAuthCredentials.oAuth;
 import static bad.robot.http.configuration.Password.password;
+import static bad.robot.http.configuration.SystemPropertyProxy.systemPropertyProxy;
 import static bad.robot.http.configuration.Username.username;
 import static bad.robot.http.matchers.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,13 +49,13 @@ public class HttpClientExamples {
 
     @Test
     public void exampleGet() throws MalformedURLException {
-        HttpResponse response = anApacheClient().get(new URL("http://www.baddotrobot.com"));
+        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(new URL("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
 
     @Test
     public void exampleGetSettingHeaders() throws MalformedURLException {
-        HttpResponse response = anApacheClient().get(new URL("http://www.baddotrobot.com"),
+        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(new URL("http://www.baddotrobot.com"),
             headers(
                 header("Accept", "application/json")
             ));
@@ -65,6 +66,7 @@ public class HttpClientExamples {
     public void exampleBasicAuth() throws MalformedURLException {
         AuthorisationCredentials credentials = basicAuth(username("username"), password("secret"), new URL("http://www.baddotrobot.com"));
         HttpResponse response = anApacheClient()
+            .with(systemPropertyProxy())
             .with(credentials)
             .get(new URL("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
@@ -73,7 +75,7 @@ public class HttpClientExamples {
     @Test
     public void exampleOAuthToken() throws MalformedURLException {
         AuthorisationCredentials credentials = oAuth(accessToken("XystZ5ee"), new URL("http://www.baddotrobot.com"));
-        HttpResponse response = anApacheClient().with(credentials).get(new URL("http://www.baddotrobot.com"));
+        HttpResponse response = anApacheClient().with(systemPropertyProxy()).with(credentials).get(new URL("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
 
@@ -81,7 +83,7 @@ public class HttpClientExamples {
     public void exampleMixedAuthorisationSchemes() throws MalformedURLException {
         AuthorisationCredentials basicAuthCredentials = basicAuth(username("username"), password("secret"), new URL("http://robotooling.com"));
         AuthorisationCredentials oAuthCredentials = oAuth(accessToken("XystZ5ee"), new URL("http://baddotrobot.com"));
-        HttpClient http = anApacheClient().with(basicAuthCredentials).with(oAuthCredentials);
+        HttpClient http = anApacheClient().with(systemPropertyProxy()).with(basicAuthCredentials).with(oAuthCredentials);
         http.get(new URL("http://baddotrobot.com"));
         http.get(new URL("http://robotooling.com"));
     }
@@ -94,7 +96,7 @@ public class HttpClientExamples {
 
     @Test
     public void exampleOfDisguisingTheUserAgent() throws MalformedURLException {
-        anApacheClient().get(new URL("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
+        anApacheClient().with(systemPropertyProxy()).get(new URL("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
     }
 
     @Test
