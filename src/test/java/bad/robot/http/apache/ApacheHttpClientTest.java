@@ -58,8 +58,7 @@ public class ApacheHttpClientTest {
     private final Builder<HttpClient> httpClientBuilder = context.mock(Builder.class, "http client");
     private final Builder<HttpContext> contextBuilder = context.mock(Builder.class, "local context");
     private final HttpClient client = context.mock(HttpClient.class, "apache http");
-    private final Executor<HttpException> executor = context.mock(Executor.class, "exception wrapper");
-    private final HttpResponse response = new StringHttpResponse(200, "OK", "", emptyHeaders());
+    private final HttpResponse response = new StringHttpResponse(200, "OK", "", emptyHeaders(), "http://example.com");
     private final HttpContext localContext = new StubHttpContext();
 
     @Test (expected = HttpException.class)

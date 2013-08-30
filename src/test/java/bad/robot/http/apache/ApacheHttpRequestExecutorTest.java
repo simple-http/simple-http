@@ -48,7 +48,7 @@ public class ApacheHttpRequestExecutorTest {
     private final HttpClient client = context.mock(HttpClient.class);
 
     private final HttpGet anyRequest = new HttpGet("http://whatever.trevor");
-    private final HttpResponse anyResponse = new StringHttpResponse(200, "OK", "", emptyHeaders());
+    private final HttpResponse anyResponse = new StringHttpResponse(200, "OK", "", emptyHeaders(), "http://example.com");
 
     @Test
     public void delegates() throws Exception {

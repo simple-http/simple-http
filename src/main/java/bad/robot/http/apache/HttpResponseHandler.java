@@ -25,6 +25,7 @@ import bad.robot.http.Headers;
 import bad.robot.http.HttpResponse;
 import bad.robot.http.StringHttpResponse;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.client.ResponseHandler;
 
 import java.io.IOException;
@@ -33,19 +34,17 @@ import static bad.robot.http.apache.Coercions.asHeaders;
 
 class HttpResponseHandler implements ResponseHandler<HttpResponse> {
 
+    private final String originatingUri;
     private final ContentConsumingStrategy consumer;
 
-    HttpResponseHandler(ContentConsumingStrategy consumer) {
+    HttpResponseHandler(HttpRequest originatingRequest, ContentConsumingStrategy consumer) {
+        this.originatingUri = originatingRequest.getRequestLine().getUri();
         this.consumer = consumer;
     }
 
     @Override
     public HttpResponse handleResponse(org.apache.http.HttpResponse response) throws IOException {
-        return new StringHttpResponse(
-                getStatusCodeFrom(response), 
-                getStatusMessageFrom(response), 
-                getContentFrom(response), 
-                getHeadersFrom(response));
+        return new StringHttpResponse(getStatusCodeFrom(response), getStatusMessageFrom(response), getContentFrom(response), getHeadersFrom(response), originatingUri);
     }
 
     private static String getStatusMessageFrom(org.apache.http.HttpResponse response) {

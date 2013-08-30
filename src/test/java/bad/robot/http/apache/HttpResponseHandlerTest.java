@@ -24,7 +24,9 @@ package bad.robot.http.apache;
 import bad.robot.http.HttpResponse;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
 import org.jmock.Expectations;
@@ -38,6 +40,7 @@ import java.io.IOException;
 import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.matchers.Matchers.*;
 import static org.apache.http.HttpVersion.HTTP_1_1;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
@@ -56,7 +59,8 @@ public class HttpResponseHandlerTest {
     }};
 
     private final ContentConsumingStrategy consumer = context.mock(ContentConsumingStrategy.class);
-    private final HttpResponseHandler handler = new HttpResponseHandler(consumer);
+    private final HttpRequest request = new BasicHttpRequest("GET", "http://example.com");
+    private final HttpResponseHandler handler = new HttpResponseHandler(request, consumer);
 
     @Test
     public void shouldConvertStatusCode() throws IOException {
@@ -106,6 +110,12 @@ public class HttpResponseHandlerTest {
             allowing(consumer); will(throwException(new IOException()));
         }});
         handler.handleResponse(anApacheResponseWithBody);
+    }
+
+    @Test
+    public void shouldReturnOriginatingUrl() throws IOException {
+        HttpResponse response = handler.handleResponse(anApacheResponseWithHeaders);
+        assertThat(response.getOriginatingUri(), is("http://example.com"));
     }
 
 }

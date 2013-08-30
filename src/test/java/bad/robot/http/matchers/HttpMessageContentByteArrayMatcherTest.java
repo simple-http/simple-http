@@ -35,7 +35,7 @@ import static org.junit.Assert.assertThat;
 
 public class HttpMessageContentByteArrayMatcherTest {
 
-    private final HttpResponse response = new StringHttpResponse(200, "OK", "expected body", headers(header("Accept", "application/json")));
+    private final HttpResponse response = new StringHttpResponse(200, "OK", "expected body", headers(header("Accept", "application/json")), "http://example.com");
     private final byte[] expected = "expected body".getBytes();
 
     @Test

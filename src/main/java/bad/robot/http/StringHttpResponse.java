@@ -29,12 +29,14 @@ public class StringHttpResponse implements HttpResponse {
     private final String statusMessage;
     private final String content;
     private final Headers headers;
+    private final String originatingUri;
 
-    public StringHttpResponse(int statusCode, String statusMessage, String content, Headers headers) {
+    public StringHttpResponse(int statusCode, String statusMessage, String content, Headers headers, String originatingUri) {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.content = content;
         this.headers = headers;
+        this.originatingUri = originatingUri;
     }
 
     @Override
@@ -58,12 +60,17 @@ public class StringHttpResponse implements HttpResponse {
     }
 
     @Override
+    public String getOriginatingUri() {
+        return originatingUri;
+    }
+
+    @Override
     public boolean ok() {
         return statusCode == 200;
     }
 
     @Override
     public String toString() {
-        return format("%s{statusCode=%d, statusMessage='%s', content='%s', headers='%s'}", this.getClass().getSimpleName(), statusCode, statusMessage, content, headers);
+        return format("%s{statusCode=%d, statusMessage='%s', content='%s', headers='%s', originatingUri='%s'}", this.getClass().getSimpleName(), statusCode, statusMessage, content, headers, originatingUri);
     }
 }

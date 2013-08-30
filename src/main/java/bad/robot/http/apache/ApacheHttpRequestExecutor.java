@@ -41,6 +41,6 @@ class ApacheHttpRequestExecutor implements Callable<HttpResponse> {
 
     @Override
     public HttpResponse call() throws Exception {
-        return client.execute(request, new HttpResponseHandler(new ToStringConsumer()), localContext);
+        return client.execute(request, new HttpResponseHandler(request, new ToStringConsumer()), localContext);
     }
 }

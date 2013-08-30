@@ -79,8 +79,7 @@ public class TimedHttpClientTest {
     @Test
     public void shouldLogDetails() throws MalformedURLException {
         context.checking(new Expectations() {{
-            allowing(delegate).get(with(any(URL.class)));
-            will(returnValue(new StringHttpResponse(200, "OK", "nothing", emptyHeaders())));
+            allowing(delegate).get(with(any(URL.class))); will(returnValue(new StringHttpResponse(200, "OK", "nothing", emptyHeaders(), "http://example.com")));
         }});
         timedHttpClient(delegate, new FixedClock(), logger).get(anyUrl());
         log4J.assertThat(containsString("GET http://not.real.url was 200 (OK), took Duration 0 MILLISECONDS"));

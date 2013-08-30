@@ -24,9 +24,7 @@ package bad.robot.http;
 public interface HttpResponse extends HttpMessage {
 
     int getStatusCode();
-
     String getStatusMessage();
-
+    String getOriginatingUri();
     boolean ok();
-    
 }
