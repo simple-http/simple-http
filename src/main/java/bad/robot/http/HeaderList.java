@@ -63,4 +63,16 @@ public class HeaderList implements Headers {
         return format("%s{headers=%s}", this.getClass().getSimpleName(), headers);
     }
 
+    @Override
+    public boolean has(String key) {
+        return get(key).equals(new NoHeader());
+    }
+
+    @Override
+    public Header get(String key) {
+        for (Header header : headers)
+            if (header.name().equalsIgnoreCase(key))
+                return header;
+        return new NoHeader();
+    }
 }

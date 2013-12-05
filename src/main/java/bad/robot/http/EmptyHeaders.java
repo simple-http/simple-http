@@ -44,4 +44,14 @@ public class EmptyHeaders implements Headers {
         return "";
     }
 
+    @Override
+    public boolean has(String header) {
+        return false;
+    }
+
+    @Override
+    public Header get(String header) {
+        return new NoHeader();
+    }
+
 }

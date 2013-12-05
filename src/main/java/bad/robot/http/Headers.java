@@ -23,4 +23,7 @@ package bad.robot.http;
 
 public interface Headers extends Iterable<Header> {
 
+    boolean has(String header);
+    Header get(String header);
+
 }
