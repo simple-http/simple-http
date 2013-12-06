@@ -13,8 +13,10 @@ public class Link {
 
     private final Map<String, URL> links = new HashMap<>();
 
-    public Link(String link) throws MalformedURLException {
-        StringTokenizer tokenizer = new StringTokenizer(link, ",");
+    public Link(Headers headers) throws MalformedURLException {
+        if (!headers.has("link"))
+            return;
+        StringTokenizer tokenizer = new StringTokenizer(headers.get("link").value(), ",");
         while (tokenizer.hasMoreElements()) {
             String relativeLink = (String) tokenizer.nextElement();
             String href = findHref(relativeLink);
@@ -29,7 +31,7 @@ public class Link {
 
     public URL previous() {
         if (!links.containsKey("prev"))
-        return links.get("previous");
+            return links.get("previous");
         return links.get("prev");
     }
 

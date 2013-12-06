@@ -65,7 +65,7 @@ public class HeaderList implements Headers {
 
     @Override
     public boolean has(String key) {
-        return get(key).equals(new NoHeader());
+        return !get(key).equals(new NoHeader());
     }
 
     @Override

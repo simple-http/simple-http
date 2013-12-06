@@ -27,4 +27,5 @@ public interface HttpResponse extends HttpMessage {
     String getStatusMessage();
     String getOriginatingUri();
     boolean ok();
+
 }
