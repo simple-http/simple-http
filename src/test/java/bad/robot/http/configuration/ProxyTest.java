@@ -26,8 +26,9 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+
+import static bad.robot.http.Url.url;
 
 public class ProxyTest {
 
@@ -35,8 +36,8 @@ public class ProxyTest {
     private final Configurable<URL> configurable = context.mock(Configurable.class);
 
     @Test
-    public void configures() throws MalformedURLException {
-        final URL url = new URL("http://baddotrobot.com");
+    public void configures() {
+        final URL url = url("http://baddotrobot.com");
         Proxy proxy = Proxy.proxy(url);
         context.checking(new Expectations() {{
             oneOf(configurable).setTo(url);

@@ -30,13 +30,14 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static bad.robot.http.FormParameters.params;
+import static bad.robot.http.Url.url;
 import static bad.robot.http.matchers.HttpMessageContentStringMatcher.content;
 import static bad.robot.http.matchers.Matchers.*;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class HttpMessageContentStringMatcherTest {
@@ -53,14 +54,14 @@ public class HttpMessageContentStringMatcherTest {
     }
 
     @Test
-    public void anotherExample() throws MalformedURLException {
+    public void anotherExample() {
         final HttpClient http = context.mock(HttpClient.class);
         context.checking(new Expectations() {{
             oneOf(http).post(with(any(URL.class)), with(post(content("post body"))));
             oneOf(http).put(with(any(URL.class)), with(put(content("put body"))));
         }});
 
-        URL url = new URL("http://www.google.com");
+        URL url = url("http://www.google.com");
         http.post(url, new UnencodedStringMessage("post body"));
         http.put(url, new UnencodedStringMessage("put body"));
 

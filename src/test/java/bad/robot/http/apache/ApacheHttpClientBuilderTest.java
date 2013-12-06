@@ -26,9 +26,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import static bad.robot.http.Url.url;
 import static bad.robot.http.apache.matchers.CredentialsMatcher.credentialsProviderContains;
 import static bad.robot.http.apache.matchers.HttpParameterMatcher.parameter;
 import static bad.robot.http.configuration.HttpTimeout.httpTimeout;
@@ -78,43 +76,43 @@ public class ApacheHttpClientBuilderTest {
     }
 
     @Test
-    public void shouldConfigureProxy() throws MalformedURLException {
-        assertThat(builder.with(proxy(new URL("http://localhost:8989"))).build(), parameter(DEFAULT_PROXY, is(new HttpHost("localhost", 8989, "http"))));
+    public void shouldConfigureProxy() {
+        assertThat(builder.with(proxy(url("http://localhost:8989"))).build(), parameter(DEFAULT_PROXY, is(new HttpHost("localhost", 8989, "http"))));
     }
 
     @Test
-    public void shouldConfigureCredentialsProvider() throws MalformedURLException {
-        HttpClient client = builder.withBasicAuthCredentials("username", "password", new URL("http://localhost:80")).build();
-        assertThat(client, credentialsProviderContains(new URL("http://localhost:80"), "username", "password"));
+    public void shouldConfigureCredentialsProvider() {
+        HttpClient client = builder.withBasicAuthCredentials("username", "password", url("http://localhost:80")).build();
+        assertThat(client, credentialsProviderContains(url("http://localhost:80"), "username", "password"));
     }
 
     @Test
-    public void credentialsProviderCanOnlyHaveOneCredentialPerAuthenticationScope() throws MalformedURLException {
+    public void credentialsProviderCanOnlyHaveOneCredentialPerAuthenticationScope() {
         HttpClient client = builder
-            .withBasicAuthCredentials("username", "password", new URL("http://localhost:80"))
-            .withBasicAuthCredentials("replacedUsername", "replacedPassword", new URL("http://localhost:80"))
+            .withBasicAuthCredentials("username", "password", url("http://localhost:80"))
+            .withBasicAuthCredentials("replacedUsername", "replacedPassword", url("http://localhost:80"))
             .build();
-        assertThat(client, credentialsProviderContains(new URL("http://localhost:80"), "replacedUsername", "replacedPassword"));
+        assertThat(client, credentialsProviderContains(url("http://localhost:80"), "replacedUsername", "replacedPassword"));
     }
 
     @Test
-    public void credentialsProviderWithDifferingAuthenticationScopes() throws MalformedURLException {
+    public void credentialsProviderWithDifferingAuthenticationScopes() {
         HttpClient client = builder
-            .withBasicAuthCredentials("username", "password", new URL("http://localhost:80"))
-            .withBasicAuthCredentials("replacedUsername", "replacedPassword", new URL("http://localhost:8081"))
+            .withBasicAuthCredentials("username", "password", url("http://localhost:80"))
+            .withBasicAuthCredentials("replacedUsername", "replacedPassword", url("http://localhost:8081"))
             .build();
-        assertThat(client, credentialsProviderContains(new URL("http://localhost:80"), "username", "password"));
-        assertThat(client, credentialsProviderContains(new URL("http://localhost:8081"), "replacedUsername", "replacedPassword"));
+        assertThat(client, credentialsProviderContains(url("http://localhost:80"), "username", "password"));
+        assertThat(client, credentialsProviderContains(url("http://localhost:8081"), "replacedUsername", "replacedPassword"));
     }
 
     @Test
-    public void credentialsProviderWithDifferingAuthenticationScopesUsingRealUrls() throws MalformedURLException {
+    public void credentialsProviderWithDifferingAuthenticationScopesUsingRealUrls() {
         HttpClient client = builder
-            .withBasicAuthCredentials("username", "password", new URL("http://baddotrobot.com"))
-            .withBasicAuthCredentials("replacedUsername", "replacedPassword", new URL("http://robotooling.com"))
+            .withBasicAuthCredentials("username", "password", url("http://baddotrobot.com"))
+            .withBasicAuthCredentials("replacedUsername", "replacedPassword", url("http://robotooling.com"))
             .build();
-        assertThat(client, credentialsProviderContains(new URL("http://baddotrobot.com"), "username", "password"));
-        assertThat(client, credentialsProviderContains(new URL("http://robotooling.com"), "replacedUsername", "replacedPassword"));
+        assertThat(client, credentialsProviderContains(url("http://baddotrobot.com"), "username", "password"));
+        assertThat(client, credentialsProviderContains(url("http://robotooling.com"), "replacedUsername", "replacedPassword"));
     }
 
 }

@@ -29,12 +29,10 @@ import org.hamcrest.StringDescription;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import static bad.robot.http.HeaderList.headers;
 import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.HttpClients.anApacheClient;
+import static bad.robot.http.Url.url;
 import static bad.robot.http.matchers.Matchers.has;
 import static bad.robot.http.matchers.Matchers.headerWithValue;
 import static org.hamcrest.Matchers.*;
@@ -48,9 +46,9 @@ public class HttpMessageHeaderValueMatcherTest {
 
     @Test
     @Ignore("an example only")
-    public void exampleUsage() throws MalformedURLException {
+    public void exampleUsage() {
         HttpPost request = new UnencodedStringMessage("body", headers(header));
-        HttpResponse response = anApacheClient().post(new URL("http://www.google.com"), request);
+        HttpResponse response = anApacheClient().post(url("http://www.google.com"), request);
 
         assertThat(request, has(headerWithValue("Accept", containsString("html"))));
         assertThat(response, has(headerWithValue("Content-Type", not(containsString("xml")))));

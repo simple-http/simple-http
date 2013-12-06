@@ -29,7 +29,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static bad.robot.http.HeaderList.headers;
@@ -48,14 +47,14 @@ import static org.hamcrest.Matchers.containsString;
 public class HttpClientExamples {
 
     @Test
-    public void exampleGet() throws MalformedURLException {
-        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(new URL("http://www.baddotrobot.com"));
+    public void exampleGet() {
+        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(Url.url("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
 
     @Test
-    public void exampleGetSettingHeaders() throws MalformedURLException {
-        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(new URL("http://www.baddotrobot.com"),
+    public void exampleGetSettingHeaders() {
+        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(Url.url("http://www.baddotrobot.com"),
             headers(
                 header("Accept", "application/json")
             ));
@@ -63,40 +62,40 @@ public class HttpClientExamples {
     }
 
     @Test
-    public void exampleBasicAuth() throws MalformedURLException {
-        AuthorisationCredentials credentials = basicAuth(username("username"), password("secret"), new URL("http://www.baddotrobot.com"));
+    public void exampleBasicAuth() {
+        AuthorisationCredentials credentials = basicAuth(username("username"), password("secret"), Url.url("http://www.baddotrobot.com"));
         HttpResponse response = anApacheClient()
             .with(systemPropertyProxy())
             .with(credentials)
-            .get(new URL("http://www.baddotrobot.com"));
+            .get(Url.url("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
 
     @Test
-    public void exampleOAuthToken() throws MalformedURLException {
-        AuthorisationCredentials credentials = oAuth(accessToken("XystZ5ee"), new URL("http://www.baddotrobot.com"));
-        HttpResponse response = anApacheClient().with(systemPropertyProxy()).with(credentials).get(new URL("http://www.baddotrobot.com"));
+    public void exampleOAuthToken() {
+        AuthorisationCredentials credentials = oAuth(accessToken("XystZ5ee"), Url.url("http://www.baddotrobot.com"));
+        HttpResponse response = anApacheClient().with(systemPropertyProxy()).with(credentials).get(Url.url("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
 
     @Test
-    public void exampleMixedAuthorisationSchemes() throws MalformedURLException {
-        AuthorisationCredentials basicAuthCredentials = basicAuth(username("username"), password("secret"), new URL("http://robotooling.com"));
-        AuthorisationCredentials oAuthCredentials = oAuth(accessToken("XystZ5ee"), new URL("http://baddotrobot.com"));
+    public void exampleMixedAuthorisationSchemes() {
+        AuthorisationCredentials basicAuthCredentials = basicAuth(username("username"), password("secret"), Url.url("http://robotooling.com"));
+        AuthorisationCredentials oAuthCredentials = oAuth(accessToken("XystZ5ee"), Url.url("http://baddotrobot.com"));
         HttpClient http = anApacheClient().with(systemPropertyProxy()).with(basicAuthCredentials).with(oAuthCredentials);
-        http.get(new URL("http://baddotrobot.com"));
-        http.get(new URL("http://robotooling.com"));
+        http.get(Url.url("http://baddotrobot.com"));
+        http.get(Url.url("http://robotooling.com"));
     }
 
     @Test
     @Ignore ("example using a proxy, you need to have a running proxy for this to actually run")
-    public void exampleProxy() throws MalformedURLException {
-        anApacheClient().with(Proxy.proxy(new URL("http://localhost:8888"))).get(new URL("http://www.baddotrobot.com"));
+    public void exampleProxy() {
+        anApacheClient().with(Proxy.proxy(Url.url("http://localhost:8888"))).get(Url.url("http://www.baddotrobot.com"));
     }
 
     @Test
-    public void exampleOfDisguisingTheUserAgent() throws MalformedURLException {
-        anApacheClient().with(systemPropertyProxy()).get(new URL("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
+    public void exampleOfDisguisingTheUserAgent() {
+        anApacheClient().with(systemPropertyProxy()).get(Url.url("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
     }
 
     @Test

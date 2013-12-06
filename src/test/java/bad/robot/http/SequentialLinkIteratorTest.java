@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static bad.robot.http.EmptyHeaders.emptyHeaders;
@@ -34,8 +33,8 @@ public class SequentialLinkIteratorTest {
 
     @Before
     public void setUp() throws Exception {
-        firstUrl = new URL("http://example.com/first");
-        secondUrl = new URL("http://example.com/second");
+        firstUrl = Url.url("http://example.com/first");
+        secondUrl = Url.url("http://example.com/second");
     }
 
     @Test
@@ -44,7 +43,7 @@ public class SequentialLinkIteratorTest {
     }
 
     @Test
-    public void shouldFollowLinks() throws MalformedURLException {
+    public void shouldFollowLinks() {
         final Sequence order = context.sequence("order");
         context.checking(new Expectations() {{
             oneOf(http).get(with(firstUrl), with(any(Headers.class))); will(returnValue(secondResponse)); inSequence(order);

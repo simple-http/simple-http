@@ -29,7 +29,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static bad.robot.http.HeaderList.headers;
@@ -49,21 +48,21 @@ public class HttpMessageHeaderMatcherTest {
 
     @Test
     @Ignore ("an example only")
-    public void exampleUsage() throws MalformedURLException {
+    public void exampleUsage() {
         HttpPost request = new UnencodedStringMessage("body", headers(header));
-        HttpResponse response = anApacheClient().post(new URL("http://www.google.com"), request);
+        HttpResponse response = anApacheClient().post(Url.url("http://www.google.com"), request);
 
         assertThat(request, has(header("Accept", "text/html")));
         assertThat(response, has(header("Content-Type", "tex/html")));
     }
 
     @Test
-    public void anotherExample() throws MalformedURLException {
+    public void anotherExample() {
         final HttpClient http = context.mock(HttpClient.class);
         context.checking(new Expectations() {{
             oneOf(http).put(with(any(URL.class)), with(put(has(header("Accept", "text/html")))));
         }});
-        http.put(new URL("http://www.google.com"), new UnencodedStringMessage("content", headers(header("Accept", "text/html"))));
+        http.put(Url.url("http://www.google.com"), new UnencodedStringMessage("content", headers(header("Accept", "text/html"))));
         context.assertIsSatisfied();
     }
 

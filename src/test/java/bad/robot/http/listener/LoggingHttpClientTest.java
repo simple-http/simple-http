@@ -34,8 +34,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.net.MalformedURLException;
-
 import static bad.robot.http.Any.anyUrl;
 import static bad.robot.http.FormParameters.params;
 import static bad.robot.http.HeaderList.headers;
@@ -56,14 +54,14 @@ public class LoggingHttpClientTest {
     private final LoggingHttpClient http = new LoggingHttpClient(client, logger);
 
     @Test
-    public void shouldLogGet() throws MalformedURLException {
+    public void shouldLogGet() {
         expectingHttpClientCall();
         http.get(anyUrl());
         log4J.assertThat(containsString("GET http://not.real.url HTTP/1.1"));
     }
 
     @Test
-    public void shouldLogGetWithHeaders() throws MalformedURLException {
+    public void shouldLogGetWithHeaders() {
         expectingHttpClientCall();
         http.get(anyUrl(), headers(header("Accept", "text/plain"), header("Host", "127.0.0.1")));
         log4J.assertThat(containsString("GET http://not.real.url HTTP/1.1" + lineSeparator + "Accept: text/plain" + lineSeparator + "Host: 127.0.0.1"));
@@ -71,7 +69,7 @@ public class LoggingHttpClientTest {
 
     @Test
     // TODO this fails because Apache itself adds the Content-Type mime type, whereas the test is using a mock (which wont)
-    public void shouldLogPostFormUrlEncoded() throws MalformedURLException {
+    public void shouldLogPostFormUrlEncoded() {
         expectingHttpClientCall();
         http.post(anyUrl(), new FormUrlEncodedMessage(
                 params(
@@ -91,7 +89,7 @@ public class LoggingHttpClientTest {
     }
 
     @Test
-    public void shouldLogPostUnencoded() throws MalformedURLException {
+    public void shouldLogPostUnencoded() {
         expectingHttpClientCall();
         http.post(anyUrl(), new UnencodedStringMessage("cheese sandwich", headers(header("Accept", "text/plain"), header("Host", "127.0.0.1"))));
         log4J.assertThat(containsString("POST http://not.real.url HTTP/1.1"));
@@ -102,7 +100,7 @@ public class LoggingHttpClientTest {
 
     @Test
     // TODO doesn't respect the difference between PUT and POST
-    public void shouldLogPut() throws MalformedURLException {
+    public void shouldLogPut() {
         expectingHttpClientCall();
         http.put(anyUrl(), new UnencodedStringMessage("cheese sandwich", headers(header("Accept", "text/plain"), header("Host", "127.0.0.1"))));
         log4J.assertThat(containsString("PUT http://not.real.url HTTP/1.1"));
@@ -112,7 +110,7 @@ public class LoggingHttpClientTest {
     }
 
     @Test
-    public void shouldLogDelete() throws MalformedURLException {
+    public void shouldLogDelete() {
         expectingHttpClientCall();
         http.delete(anyUrl());
         log4J.assertThat(containsString("DELETE http://not.real.url HTTP/1.1"));

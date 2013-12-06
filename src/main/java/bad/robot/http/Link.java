@@ -1,10 +1,11 @@
 package bad.robot.http;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import static bad.robot.http.Url.url;
 
 /**
  * @see <a href="http://www.rfc-editor.org/rfc/rfc5988.txt">http://www.rfc-editor.org/rfc/rfc5988.txt</a>
@@ -13,7 +14,7 @@ public class Link {
 
     private final Map<String, URL> links = new HashMap<>();
 
-    public Link(Headers headers) throws MalformedURLException {
+    public Link(Headers headers) {
         if (!headers.has("link"))
             return;
         StringTokenizer tokenizer = new StringTokenizer(headers.get("link").value(), ",");
@@ -21,7 +22,7 @@ public class Link {
             String relativeLink = (String) tokenizer.nextElement();
             String href = findHref(relativeLink);
             String relation = findRelation(relativeLink);
-            links.put(relation, new URL(href));
+            links.put(relation, url(href));
         }
     }
 

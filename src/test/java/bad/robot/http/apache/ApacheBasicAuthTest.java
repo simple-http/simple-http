@@ -29,11 +29,11 @@ import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.junit.*;
 import sun.misc.BASE64Encoder;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
 import static bad.robot.http.HttpClients.anApacheClient;
+import static bad.robot.http.Url.url;
 import static bad.robot.http.configuration.BasicAuthCredentials.basicAuth;
 import static bad.robot.http.configuration.Password.password;
 import static bad.robot.http.configuration.Proxy.proxy;
@@ -67,40 +67,40 @@ public class ApacheBasicAuthTest {
     }
 
     @Test
-    public void basicAuthorisationHeaderIsSet() throws MalformedURLException {
-        HttpClient http = anApacheClient().with(basicAuth(username("username"), password("password"), new URL("http://localhost:8080")));
-        http.get(new URL("http://localhost:8080/test"));
+    public void basicAuthorisationHeaderIsSet() {
+        HttpClient http = anApacheClient().with(basicAuth(username("username"), password("password"), url("http://localhost:8080")));
+        http.get(url("http://localhost:8080/test"));
         verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", containing("Basic " + encode("username", "password"))));
     }
 
     @Test
-    public void basicAuthorisationHeaderIsNotSetForDifferingUrl() throws MalformedURLException {
-        HttpClient http = anApacheClient().with(basicAuth(username("username"), password("password"), new URL("https://localhost:8080")));
-        http.get(new URL("http://localhost:8080/test"));
+    public void basicAuthorisationHeaderIsNotSetForDifferingUrl() {
+        HttpClient http = anApacheClient().with(basicAuth(username("username"), password("password"), url("https://localhost:8080")));
+        http.get(url("http://localhost:8080/test"));
         verifyNoHeadersFor(urlEqualTo("/test"));
     }
 
     @Test
-    public void basicAuthorisationForMultipleCredentials() throws MalformedURLException {
+    public void basicAuthorisationForMultipleCredentials() {
         HttpClient http = anApacheClient()
-            .with(basicAuth(username("username"), password("password"), new URL("http://localhost:8080")))
-            .with(basicAuth(username("anotherUsername"), password("anotherPassword"), new URL("https://localhost:8080")));
-        http.get(new URL("http://localhost:8080/test"));
+            .with(basicAuth(username("username"), password("password"), url("http://localhost:8080")))
+            .with(basicAuth(username("anotherUsername"), password("anotherPassword"), url("https://localhost:8080")));
+        http.get(url("http://localhost:8080/test"));
         verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", containing("Basic " + encode("anotherUsername", "anotherPassword"))));
     }
 
     @Test
     @Ignore("requires manually setting up a proxy like Charles on port 8888 before running")
-    public void manuallyRunThisTestWithAProxyRunningToVerifyTheHeaders() throws MalformedURLException {
-        URL badrobot    = new URL("http://baddotrobot.com");
-        URL robotooling = new URL("http://robotooling.com");
+    public void manuallyRunThisTestWithAProxyRunningToVerifyTheHeaders() {
+        URL badrobot    = url("http://baddotrobot.com");
+        URL robotooling = url("http://robotooling.com");
 
         HttpClient http = anApacheClient()
-            .with(proxy(new URL("http://localhost:8888")))
+            .with(proxy(url("http://localhost:8888")))
             .with(basicAuth(username("username"), password("password"), badrobot))
             .with(basicAuth(username("anotherUsername"), password("anotherPassword"), robotooling));
-        assertThat(http.get(new URL("http://baddotrobot.com")), has(status(200)));
-        assertThat(http.get(new URL("http://robotooling.com")), has(status(200)));
+        assertThat(http.get(url("http://baddotrobot.com")), has(status(200)));
+        assertThat(http.get(url("http://robotooling.com")), has(status(200)));
     }
 
     private void verifyNoHeadersFor(UrlMatchingStrategy url) {

@@ -4,9 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import static bad.robot.http.Url.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -47,20 +45,20 @@ public class SystemPropertyProxyTest {
     }
 
     @Test
-    public void acceptUrlAndPortSystemProperty() throws MalformedURLException {
+    public void acceptUrlAndPortSystemProperty() {
         System.setProperty(proxyUrl, "example.com");
         System.setProperty(proxyPort, "80");
         Proxy proxy = SystemPropertyProxy.systemPropertyProxy();
-        assertThat(proxy.value, is(new URL("http://example.com:80")));
+        assertThat(proxy.value, is(url("http://example.com:80")));
     }
 
     @Test
-    public void acceptUtlWithUsernameAndPassword() throws MalformedURLException {
+    public void acceptUtlWithUsernameAndPassword() {
         System.setProperty(proxyUrl, "example.com");
         System.setProperty(proxyPort, "80");
         System.setProperty(proxyUser, "username");
         System.setProperty(proxyPassword, "password");
         Proxy proxy = SystemPropertyProxy.systemPropertyProxy();
-        assertThat(proxy.value, is(new URL("http://username:password@example.com:80")));
+        assertThat(proxy.value, is(url("http://username:password@example.com:80")));
     }
 }

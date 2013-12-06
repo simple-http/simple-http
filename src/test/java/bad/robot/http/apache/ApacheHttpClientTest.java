@@ -39,7 +39,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static bad.robot.http.Any.anyUrl;
@@ -62,7 +61,7 @@ public class ApacheHttpClientTest {
     private final HttpContext localContext = new StubHttpContext();
 
     @Test (expected = HttpException.class)
-    public void wrapsExceptionsForGet() throws MalformedURLException {
+    public void wrapsExceptionsForGet() {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(null));

@@ -35,7 +35,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 
@@ -57,7 +56,7 @@ public class TimedHttpClientTest {
     private final Log4J log4J = Log4J.appendTo(Logger.getLogger(logger), INFO);
 
     @Test
-    public void shouldDelegate() throws MalformedURLException {
+    public void shouldDelegate() {
         final URL url = anyUrl();
         context.checking(new Expectations() {{
             oneOf(delegate).get(url);
@@ -77,7 +76,7 @@ public class TimedHttpClientTest {
     }
 
     @Test
-    public void shouldLogDetails() throws MalformedURLException {
+    public void shouldLogDetails() {
         context.checking(new Expectations() {{
             allowing(delegate).get(with(any(URL.class))); will(returnValue(new StringHttpResponse(200, "OK", "nothing", emptyHeaders(), "http://example.com")));
         }});

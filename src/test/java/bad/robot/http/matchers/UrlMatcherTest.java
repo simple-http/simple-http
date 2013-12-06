@@ -22,28 +22,21 @@
 package bad.robot.http.matchers;
 
 import org.hamcrest.StringDescription;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
+import static bad.robot.http.Url.url;
 import static bad.robot.http.matchers.UrlMatcher.containsPath;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class UrlMatcherTest {
 
-
-    private URL url;
-
-    @Before
-    public void createUrl() throws MalformedURLException {
-        url = new URL("http://baddotrobot.com:80/blog/archives/");
-    }
+    private URL url  = url("http://baddotrobot.com:80/blog/archives/");
 
     @Test
-    public void exampleUsage() throws MalformedURLException {
+    public void exampleUsage() {
         assertThat(url, containsPath("blog/archives"));
         assertThat(url, containsPath("baddotrobot"));
         assertThat(url, containsPath("80"));

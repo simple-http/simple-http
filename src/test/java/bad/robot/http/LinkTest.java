@@ -2,9 +2,6 @@ package bad.robot.http;
 
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import static bad.robot.http.HeaderList.headers;
 import static bad.robot.http.HeaderPair.header;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,44 +18,44 @@ public class LinkTest {
 
     private final Link link;
 
-    public LinkTest() throws MalformedURLException {
+    public LinkTest() {
         link = new Link(example);
     }
 
     @Test
-    public void nextUri() throws MalformedURLException {
-        assertThat(link.next(), is(new URL("http://example.com/customers?page=6&per_page=50")));
+    public void nextUri() {
+        assertThat(link.next(), is(Url.url("http://example.com/customers?page=6&per_page=50")));
     }
 
     @Test
-    public void prevUri() throws MalformedURLException {
-        assertThat(link.previous(), is(new URL("http://example.com/customers?page=4&per_page=50")));
+    public void prevUri() {
+        assertThat(link.previous(), is(Url.url("http://example.com/customers?page=4&per_page=50")));
     }
 
     @Test
-    public void previousUri() throws MalformedURLException {
+    public void previousUri() {
         Link link = new Link(headers(header("link", "<http://example.com/customers?page=4&per_page=50>; rel=\"previous\"")));
-        assertThat(link.previous(), is(new URL("http://example.com/customers?page=4&per_page=50")));
+        assertThat(link.previous(), is(Url.url("http://example.com/customers?page=4&per_page=50")));
     }
 
     @Test
-    public void firstUri() throws MalformedURLException {
-        assertThat(link.first(), is(new URL("http://example.com/customers?page=1&per_page=50")));
+    public void firstUri() {
+        assertThat(link.first(), is(Url.url("http://example.com/customers?page=1&per_page=50")));
     }
 
     @Test
-    public void lastUri() throws MalformedURLException {
-        assertThat(link.last(), is(new URL("http://example.com/customers?page=10&per_page=50")));
+    public void lastUri() {
+        assertThat(link.last(), is(Url.url("http://example.com/customers?page=10&per_page=50")));
     }
 
     @Test
-    public void caseInsensitive() throws MalformedURLException {
+    public void caseInsensitive() {
         Link link = new Link(headers(header("link", "<http://example.com/customers>; rel=\"NEXT\"")));
-        assertThat(link.next(), is(new URL("http://example.com/customers")));
+        assertThat(link.next(), is(Url.url("http://example.com/customers")));
     }
 
     @Test
-    public void noLinkHeader() throws MalformedURLException {
+    public void noLinkHeader() {
         Link link = new Link(headers(header("accept", "application/json")));
         assertThat(link.first(), is(nullValue()));
         assertThat(link.previous(), is(nullValue()));
@@ -68,21 +65,21 @@ public class LinkTest {
 
     // TODO
     @Test (expected = StringIndexOutOfBoundsException.class)
-    public void badHeader() throws MalformedURLException {
+    public void badHeader() {
         new Link(headers(header("link", "asdas")));
     }
 
-    @Test (expected = MalformedURLException.class)
-    public void badUrlAsPerJavasImplmentation() throws MalformedURLException {
+    @Test (expected = MalformedUrlRuntimeException.class)
+    public void badUrlAsPerJavasImplmentation() {
         new Link(headers(header("link", "<classpath://example>; rel=\"next\"")));
     }
 
     @Test
-    public void onlySingleRelativeLink() throws MalformedURLException {
+    public void onlySingleRelativeLink() {
         Link link = new Link(headers(header("link", "<file://example>; rel=\"next\"")));
         assertThat(link.first(), is(nullValue()));
         assertThat(link.previous(), is(nullValue()));
-        assertThat(link.next(), is(new URL("file://example")));
+        assertThat(link.next(), is(Url.url("file://example")));
         assertThat(link.last(), is(nullValue()));
     }
 

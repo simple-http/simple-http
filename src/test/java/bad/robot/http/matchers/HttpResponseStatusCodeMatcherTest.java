@@ -26,8 +26,6 @@ import bad.robot.http.StringHttpResponse;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-
 import static bad.robot.http.HeaderList.headers;
 import static bad.robot.http.HeaderPair.header;
 import static bad.robot.http.matchers.HttpResponseStatusCodeMatcher.status;
@@ -40,7 +38,7 @@ public class HttpResponseStatusCodeMatcherTest {
     private final HttpResponse response = new StringHttpResponse(200, "OK", "{ \"message\", \"not found\" }", headers(header("Content-Type", "application/json")), "http://example.com");
 
     @Test
-    public void exampleUsage() throws MalformedURLException {
+    public void exampleUsage() {
         assertThat(response, has(status(200)));
     }
 

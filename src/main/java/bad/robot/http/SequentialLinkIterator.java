@@ -1,6 +1,5 @@
 package bad.robot.http;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -20,12 +19,12 @@ public class SequentialLinkIterator implements Iterator<HttpResponse>, Iterable<
         return new SequentialLinkIterator(response.getHeaders(), http, headers);
     }
 
-    private SequentialLinkIterator(Headers headers, HttpClient http, Headers headersPrototype) {
+    private SequentialLinkIterator(Headers headers, HttpClient http, Headers prototypeHeaders) {
         this.http = http;
-        this.headers = headersPrototype;
+        this.headers = prototypeHeaders;
         try {
             link = new Link(headers);
-        } catch (MalformedURLException e) {
+        } catch (MalformedUrlRuntimeException e) {
             throw new HttpException("Link header was not valid when trying to construct a sequence of relative links");
         }
     }
@@ -46,7 +45,7 @@ public class SequentialLinkIterator implements Iterator<HttpResponse>, Iterable<
         HttpResponse response = http.get(next, headers);
         try {
             link = new Link(response.getHeaders());
-        } catch (MalformedURLException e) {
+        } catch (MalformedUrlRuntimeException e) {
             throw new HttpException(format("Malformed Url in the 'link' header of the response to %s", next));
         }
         return response;

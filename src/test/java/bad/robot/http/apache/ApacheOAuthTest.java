@@ -31,11 +31,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import static bad.robot.http.HttpClients.anApacheClient;
+import static bad.robot.http.Url.url;
 import static bad.robot.http.configuration.AccessToken.accessToken;
 import static bad.robot.http.configuration.OAuthCredentials.oAuth;
 import static bad.robot.http.wiremock.WireMockHeaderMatcher.header;
@@ -65,25 +64,25 @@ public class ApacheOAuthTest {
     }
 
     @Test
-    public void authorisationHeaderIsSet() throws MalformedURLException {
-        HttpClient http = anApacheClient().with(oAuth(accessToken("XystZ5ee"), new URL("http://localhost:8080")));
-        http.get(new URL("http://localhost:8080/test"));
+    public void authorisationHeaderIsSet() {
+        HttpClient http = anApacheClient().with(oAuth(accessToken("XystZ5ee"), url("http://localhost:8080")));
+        http.get(url("http://localhost:8080/test"));
         verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", equalTo("Bearer XystZ5ee")));
     }
 
     @Test
-    public void authorisationHeaderIsNotSetForDifferingUrl() throws MalformedURLException {
-        HttpClient http = anApacheClient().with(oAuth(accessToken("XystZ5ee"), new URL("https://localhost:8080")));
-        http.get(new URL("http://localhost:8080/test"));
+    public void authorisationHeaderIsNotSetForDifferingUrl() {
+        HttpClient http = anApacheClient().with(oAuth(accessToken("XystZ5ee"), url("https://localhost:8080")));
+        http.get(url("http://localhost:8080/test"));
         verifyNoHeadersFor(urlEqualTo("/test"));
     }
 
     @Test
-    public void basicAuthorisationForMultipleCredentials() throws MalformedURLException {
+    public void basicAuthorisationForMultipleCredentials() {
         HttpClient http = anApacheClient()
-            .with(oAuth(accessToken("XystZ5ee"), new URL("http://localhost:8080")))
-            .with(oAuth(accessToken("ZytrE2xR"), new URL("https://localhost:8080")));
-        http.get(new URL("http://localhost:8080/test"));
+            .with(oAuth(accessToken("XystZ5ee"), url("http://localhost:8080")))
+            .with(oAuth(accessToken("ZytrE2xR"), url("https://localhost:8080")));
+        http.get(url("http://localhost:8080/test"));
         verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", equalTo("Bearer ZytrE2xR")));
     }
 

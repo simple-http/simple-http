@@ -27,9 +27,9 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.protocol.HttpContext;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
+import static bad.robot.http.Url.url;
 import static bad.robot.http.apache.ApacheAuthenticationSchemeHttpContextBuilder.anApacheBasicAuthScheme;
 import static bad.robot.http.apache.Coercions.asHttpHost;
 import static org.apache.http.client.protocol.ClientContext.AUTH_CACHE;
@@ -48,9 +48,9 @@ public class ApacheAuthenticationSchemeHttpContextBuilderTest {
     private final String token = "t0KeN";
 
     @Test
-    public void addsAnAuthenticationSchemeForCredentials() throws MalformedURLException {
-        URL google = new URL("http://www.google.com");
-        URL github = new URL("http://www.github.com");
+    public void addsAnAuthenticationSchemeForCredentials() {
+        URL google = url("http://www.google.com");
+        URL github = url("http://www.github.com");
         HttpContext context = anApacheBasicAuthScheme()
             .withBasicAuthCredentials(username, password, google)
             .build();
@@ -59,9 +59,9 @@ public class ApacheAuthenticationSchemeHttpContextBuilderTest {
     }
 
     @Test
-    public void addsAuthenticationSchemesForCredentialsDifferingInPortNumbers() throws MalformedURLException {
-        URL google1 = new URL("http://www.google.com:80");
-        URL google2 = new URL("http://www.google.com:8081");
+    public void addsAuthenticationSchemesForCredentialsDifferingInPortNumbers() {
+        URL google1 = url("http://www.google.com:80");
+        URL google2 = url("http://www.google.com:8081");
         HttpContext context = anApacheBasicAuthScheme()
             .withBasicAuthCredentials(username, password, google1)
             .withBasicAuthCredentials(username, password, google2)
@@ -71,9 +71,9 @@ public class ApacheAuthenticationSchemeHttpContextBuilderTest {
     }
 
     @Test
-    public void addsAuthenticationSchemesForCredentialsDifferingInProtocol() throws MalformedURLException {
-        URL google1 = new URL("http://www.google.com");
-        URL google2 = new URL("https://www.google.com");
+    public void addsAuthenticationSchemesForCredentialsDifferingInProtocol() {
+        URL google1 = url("http://www.google.com");
+        URL google2 = url("https://www.google.com");
         HttpContext context = anApacheBasicAuthScheme()
             .withBasicAuthCredentials(username, password, google1)
             .withBasicAuthCredentials(username, password, google2)
@@ -83,9 +83,9 @@ public class ApacheAuthenticationSchemeHttpContextBuilderTest {
     }
 
     @Test
-    public void addsAuthenticationSchemesForDifferingUnderlyingSchemes() throws MalformedURLException {
-        URL google = new URL("http://www.google.com");
-        URL github = new URL("http://www.github.com");
+    public void addsAuthenticationSchemesForDifferingUnderlyingSchemes() {
+        URL google = url("http://www.google.com");
+        URL github = url("http://www.github.com");
         HttpContext context = anApacheBasicAuthScheme()
             .withBasicAuthCredentials(username, password, google)
             .withOAuthCredentials(token, github)
