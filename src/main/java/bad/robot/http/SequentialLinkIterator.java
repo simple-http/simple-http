@@ -9,18 +9,20 @@ import static java.lang.String.format;
 public class SequentialLinkIterator implements Iterator<HttpResponse>, Iterable<HttpResponse> {
 
     private final HttpClient http;
+    private final Headers headers;
     private Link link;
 
     public static SequentialLinkIterator sequentialLinkIterator(HttpResponse response, HttpClient http) {
-        return new SequentialLinkIterator(response.getHeaders(), http);
+        return new SequentialLinkIterator(response.getHeaders(), http, EmptyHeaders.emptyHeaders());
     }
 
-    public static SequentialLinkIterator sequentialLinkIterator(Header header, HttpClient http) {
-        return new SequentialLinkIterator(HeaderList.headers(header), http);
+    public static SequentialLinkIterator sequentialLinkIterator(HttpResponse response, HttpClient http, Headers headers) {
+        return new SequentialLinkIterator(response.getHeaders(), http, headers);
     }
 
-    private SequentialLinkIterator(Headers headers, HttpClient http) {
+    private SequentialLinkIterator(Headers headers, HttpClient http, Headers headersPrototype) {
         this.http = http;
+        this.headers = headersPrototype;
         try {
             link = new Link(headers);
         } catch (MalformedURLException e) {
@@ -41,7 +43,7 @@ public class SequentialLinkIterator implements Iterator<HttpResponse>, Iterable<
     @Override
     public HttpResponse next() {
         URL next = link.next();
-        HttpResponse response = http.get(next);
+        HttpResponse response = http.get(next, headers);
         try {
             link = new Link(response.getHeaders());
         } catch (MalformedURLException e) {

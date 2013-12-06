@@ -47,13 +47,22 @@ public class SequentialLinkIteratorTest {
     public void shouldFollowLinks() throws MalformedURLException {
         final Sequence order = context.sequence("order");
         context.checking(new Expectations() {{
-            oneOf(http).get(firstUrl); will(returnValue(secondResponse)); inSequence(order);
-            oneOf(http).get(secondUrl); will(returnValue(finalResponse)); inSequence(order);
+            oneOf(http).get(with(firstUrl), with(any(Headers.class))); will(returnValue(secondResponse)); inSequence(order);
+            oneOf(http).get(with(secondUrl), with(any(Headers.class))); will(returnValue(finalResponse)); inSequence(order);
         }});
         String responses = "0";
         for (HttpResponse response : sequentialLinkIterator(initialResponse, http))
             responses += response.getContent().asString();
         assertThat(responses, is("012"));
+    }
+
+    @Test
+    public void shouldCopyOverHeaders() {
+        final Headers headers = headers(header("accept", "application/json"));
+        context.checking(new Expectations() {{
+            oneOf(http).get(firstUrl, headers); will(returnValue(finalResponse));
+        }});
+        for (HttpResponse response : sequentialLinkIterator(initialResponse, http, headers)) {}
     }
 
 }
