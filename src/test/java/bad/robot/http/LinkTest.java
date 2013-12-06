@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import static bad.robot.http.HeaderList.headers;
 import static bad.robot.http.HeaderPair.header;
+import static bad.robot.http.Url.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -37,42 +38,38 @@ public class LinkTest {
             "<http://example.com/customers?page=1&per_page=50>; rel=\"first\"," +
             "<http://example.com/customers?page=10&per_page=50>; rel=\"last\""));
 
-    private final Link link;
-
-    public LinkTest() {
-        link = new Link(example);
-    }
+    private final Link link = new Link(example);
 
     @Test
     public void nextUri() {
-        assertThat(link.next(), is(Url.url("http://example.com/customers?page=6&per_page=50")));
+        assertThat(link.next(), is(url("http://example.com/customers?page=6&per_page=50")));
     }
 
     @Test
     public void prevUri() {
-        assertThat(link.previous(), is(Url.url("http://example.com/customers?page=4&per_page=50")));
+        assertThat(link.previous(), is(url("http://example.com/customers?page=4&per_page=50")));
     }
 
     @Test
     public void previousUri() {
         Link link = new Link(headers(header("link", "<http://example.com/customers?page=4&per_page=50>; rel=\"previous\"")));
-        assertThat(link.previous(), is(Url.url("http://example.com/customers?page=4&per_page=50")));
+        assertThat(link.previous(), is(url("http://example.com/customers?page=4&per_page=50")));
     }
 
     @Test
     public void firstUri() {
-        assertThat(link.first(), is(Url.url("http://example.com/customers?page=1&per_page=50")));
+        assertThat(link.first(), is(url("http://example.com/customers?page=1&per_page=50")));
     }
 
     @Test
     public void lastUri() {
-        assertThat(link.last(), is(Url.url("http://example.com/customers?page=10&per_page=50")));
+        assertThat(link.last(), is(url("http://example.com/customers?page=10&per_page=50")));
     }
 
     @Test
     public void caseInsensitive() {
         Link link = new Link(headers(header("link", "<http://example.com/customers>; rel=\"NEXT\"")));
-        assertThat(link.next(), is(Url.url("http://example.com/customers")));
+        assertThat(link.next(), is(url("http://example.com/customers")));
     }
 
     @Test
@@ -100,8 +97,20 @@ public class LinkTest {
         Link link = new Link(headers(header("link", "<file://example>; rel=\"next\"")));
         assertThat(link.first(), is(nullValue()));
         assertThat(link.previous(), is(nullValue()));
-        assertThat(link.next(), is(Url.url("file://example")));
+        assertThat(link.next(), is(url("file://example")));
         assertThat(link.last(), is(nullValue()));
+    }
+
+    @Test
+    public void singleQuotes() {
+        Link link = new Link(headers(header("link",
+                "<http://example.com?page=2&per_page=25&bank_account=14127&from_date=2013-11-01&to_date=2013-11-30>; rel='next', " +
+                "<http://example.com?page=2&per_page=25&bank_account=14127&from_date=2013-11-01&to_date=2013-11-30>; rel='last'\n")));
+        assertThat(link.first(), is(nullValue()));
+        assertThat(link.previous(), is(nullValue()));
+        assertThat(link.next(), is(url("http://example.com?page=2&per_page=25&bank_account=14127&from_date=2013-11-01&to_date=2013-11-30")));
+        assertThat(link.last(), is(url("http://example.com?page=2&per_page=25&bank_account=14127&from_date=2013-11-01&to_date=2013-11-30")));
+
     }
 
 }

@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import static bad.robot.http.Url.url;
+import static java.lang.String.format;
 
 /**
  * @see <a href="http://www.rfc-editor.org/rfc/rfc5988.txt">http://www.rfc-editor.org/rfc/rfc5988.txt</a>
@@ -66,14 +67,28 @@ public class Link {
     }
 
     private String findRelation(String link) {
-        String token = "rel=\"";
-        int start = link.indexOf(token);
-        int end = link.indexOf("\"", start + token.length());
-        return link.substring(start + token.length(), end).toLowerCase();
+        try {
+            return findRelationInLinkBetween(link, "rel=\"", "\"");
+        } catch (Exception e) {
+            return findRelationInLinkBetween(link, "rel='", "'");
+        }
+    }
+
+    private String findRelationInLinkBetween(String link, String startDelimiter, String endDelimiter) {
+        int start = link.indexOf(startDelimiter);
+        int end = link.indexOf(endDelimiter, start + startDelimiter.length());
+        if (start == -1 || end == -1)
+            throw new LinkException(link);
+        return link.substring(start + startDelimiter.length(), end).toLowerCase();
     }
 
     private String findHref(String link) {
         return link.substring(link.indexOf("<") + 1, link.indexOf(">;"));
     }
 
+    private static class LinkException extends HttpException {
+        public LinkException(String link) {
+            super(format("failed to find a 'rel' within %s", link));
+        }
+    }
 }
