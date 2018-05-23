@@ -32,6 +32,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.protocol.HttpContext;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -76,7 +77,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpGet.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpGet>instanceOf(HttpGet.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         assertThat(http.get(anyUrl()), is(response));
@@ -103,7 +104,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations(){{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute(with(any(HttpUriRequest.class)), (ResponseHandler) with(instanceOf(HttpResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute(with(any(HttpUriRequest.class)), (ResponseHandler) with(Matchers.<HttpResponseHandler>instanceOf(HttpResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         http.get(url);
@@ -114,7 +115,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(instanceOf(org.apache.http.client.methods.HttpPost.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpPost>instanceOf(org.apache.http.client.methods.HttpPost.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -149,7 +150,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpPut.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpPut>instanceOf(HttpPut.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -177,7 +178,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpDelete.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpDelete>instanceOf(HttpDelete.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -189,7 +190,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(instanceOf(HttpOptions.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpOptions>instanceOf(HttpOptions.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
