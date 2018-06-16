@@ -46,15 +46,18 @@ import static org.hamcrest.Matchers.containsString;
 
 public class HttpClientExamples {
 
+    private CommonHttpClient client = systemPropertyProxy().map(proxy -> anApacheClient().with(proxy))
+            .orElse(anApacheClient());
+
     @Test
     public void exampleGet() {
-        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(Url.url("http://www.baddotrobot.com"));
+        HttpResponse response = client.get(Url.url("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
 
     @Test
     public void exampleGetSettingHeaders() {
-        HttpResponse response = anApacheClient().with(systemPropertyProxy()).get(Url.url("http://www.baddotrobot.com"),
+        HttpResponse response = client.get(Url.url("http://www.baddotrobot.com"),
             headers(
                 header("Accept", "application/json")
             ));
@@ -64,8 +67,7 @@ public class HttpClientExamples {
     @Test
     public void exampleBasicAuth() {
         AuthorisationCredentials credentials = basicAuth(username("username"), password("secret"), Url.url("http://www.baddotrobot.com"));
-        HttpResponse response = anApacheClient()
-            .with(systemPropertyProxy())
+        HttpResponse response = client
             .with(credentials)
             .get(Url.url("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
@@ -74,7 +76,7 @@ public class HttpClientExamples {
     @Test
     public void exampleOAuthToken() {
         AuthorisationCredentials credentials = oAuth(accessToken("XystZ5ee"), Url.url("http://www.baddotrobot.com"));
-        HttpResponse response = anApacheClient().with(systemPropertyProxy()).with(credentials).get(Url.url("http://www.baddotrobot.com"));
+        HttpResponse response = client.with(credentials).get(Url.url("http://www.baddotrobot.com"));
         assertThat(response, has(status(200)));
     }
 
@@ -82,7 +84,7 @@ public class HttpClientExamples {
     public void exampleMixedAuthorisationSchemes() {
         AuthorisationCredentials basicAuthCredentials = basicAuth(username("username"), password("secret"), Url.url("http://robotooling.com"));
         AuthorisationCredentials oAuthCredentials = oAuth(accessToken("XystZ5ee"), Url.url("http://baddotrobot.com"));
-        HttpClient http = anApacheClient().with(systemPropertyProxy()).with(basicAuthCredentials).with(oAuthCredentials);
+        HttpClient http = client.with(basicAuthCredentials).with(oAuthCredentials);
         http.get(Url.url("http://baddotrobot.com"));
         http.get(Url.url("http://robotooling.com"));
     }
@@ -95,7 +97,7 @@ public class HttpClientExamples {
 
     @Test
     public void exampleOfDisguisingTheUserAgent() {
-        anApacheClient().with(systemPropertyProxy()).get(Url.url("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
+        client.get(Url.url("http://baddotrobot.com"), headers(UserAgent.SafariOnMac));
     }
 
     @Test

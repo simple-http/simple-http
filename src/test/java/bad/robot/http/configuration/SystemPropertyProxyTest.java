@@ -25,6 +25,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static bad.robot.http.Url.url;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -54,23 +56,24 @@ public class SystemPropertyProxyTest {
         System.setProperty(proxyPort, cachedProxyPort);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test
     public void minimumRequirements() {
-        SystemPropertyProxy.systemPropertyProxy();
+        assertThat(SystemPropertyProxy.systemPropertyProxy(), is(Optional.empty()));
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test
     public void noNeedForAProtocol() {
         System.setProperty(proxyUrl, "http://example.com");
-        SystemPropertyProxy.systemPropertyProxy();
+        assertThat(SystemPropertyProxy.systemPropertyProxy(), is(Optional.empty()));
     }
 
     @Test
     public void acceptUrlAndPortSystemProperty() {
         System.setProperty(proxyUrl, "example.com");
         System.setProperty(proxyPort, "80");
-        Proxy proxy = SystemPropertyProxy.systemPropertyProxy();
-        assertThat(proxy.value, is(url("http://example.com:80")));
+        Optional<Proxy> maybeProxy = SystemPropertyProxy.systemPropertyProxy();
+        String expectedUrl = "http://example.com:80";
+        assertThat(maybeProxy.map(proxy -> proxy.value), is(Optional.of(url(expectedUrl))));
     }
 
     @Test
@@ -79,7 +82,8 @@ public class SystemPropertyProxyTest {
         System.setProperty(proxyPort, "80");
         System.setProperty(proxyUser, "username");
         System.setProperty(proxyPassword, "password");
-        Proxy proxy = SystemPropertyProxy.systemPropertyProxy();
-        assertThat(proxy.value, is(url("http://username:password@example.com:80")));
+        Optional<Proxy> maybeProxy = SystemPropertyProxy.systemPropertyProxy();
+        String expectedUrl = "http://username:password@example.com:80";
+        assertThat(maybeProxy.map(proxy -> proxy.value), is(Optional.of(url(expectedUrl))));
     }
 }
