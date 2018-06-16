@@ -29,6 +29,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Map;
 
 class HttpRequestToEntity implements HttpRequestVisitor {
@@ -70,7 +71,7 @@ class HttpRequestToEntity implements HttpRequestVisitor {
         try {
             StringMessageContent content = unencodedStringMessage.getContent();
             entity = new StringEntity(content.asString(), unencodedStringMessage.characterSet());
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedCharsetException e) {
             throw new HttpException(e);
         }        
     }
