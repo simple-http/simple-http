@@ -22,6 +22,7 @@
 package bad.robot.http.configuration;
 
 import java.net.URL;
+import java.util.Optional;
 
 import static bad.robot.http.Url.url;
 import static java.lang.String.format;
@@ -34,15 +35,19 @@ public class SystemPropertyProxy extends Proxy {
     private static final String user = "http.proxyUser";
     private static final String password = "http.proxyPassword";
 
-    public static Proxy systemPropertyProxy() {
-        return new SystemPropertyProxy(getUrlFromSystemProperties());
+    public static Optional<Proxy> systemPropertyProxy() {
+        try {
+            return Optional.of(new SystemPropertyProxy(getUrlFromSystemProperties()));
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
     }
 
     private SystemPropertyProxy(URL value) {
         super(value);
     }
 
-    private static URL getUrlFromSystemProperties() {
+    public static URL getUrlFromSystemProperties() {
         String url = (String) System.getProperties().get(SystemPropertyProxy.proxyUrl);
         String port = (String) System.getProperties().get(SystemPropertyProxy.port);
         if (isEmpty(url) || isEmpty(port))
