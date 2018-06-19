@@ -19,7 +19,7 @@
  * under the License.
  */
 
-package bad.robot;
+package bad.robot.http;
 
 import java.io.Serializable;
 import java.util.Iterator;

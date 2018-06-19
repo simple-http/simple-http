@@ -21,8 +21,6 @@
 
 package bad.robot.http;
 
-import bad.robot.EmptyIterator;
-
 import java.util.Iterator;
 
 public class EmptyHeaders implements Headers {
