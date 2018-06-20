@@ -38,12 +38,12 @@
         </layout>
     </appender>
 
-    <category name="bad.robot.http" additivity="false">
+    <category name="simplehttp" additivity="false">
         <priority value="debug"/>
         <appender-ref ref="console"/>
     </category>
 
-    <category name="bad.robot.http.HttpClient" additivity="false">
+    <category name="simplehttp.HttpClient" additivity="false">
         <priority value="debug"/>
         <appender-ref ref="http-log"/>
     </category>

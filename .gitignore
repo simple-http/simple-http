@@ -1,5 +1,4 @@
 target/
-src/test/java/bad/robot/http/ProxyTest.java
 .idea/
 *.iml
 *.iws
