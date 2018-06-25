@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2013, bad robot (london) ltd
+ * Copyright (c) 2011-2018, simple-http committers
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
