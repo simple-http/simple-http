@@ -8,6 +8,12 @@
     <artifactId>simple-http</artifactId>
     <version>1.2-SNAPSHOT</version>
 
+    <scm>
+        <url>https://github.com/simple-http/simple-http</url>
+        <connection>scm:git:https://github.com/simple-http/simple-http.git</connection>
+        <developerConnection>scm:git:git@https://github.com/simple-http/simple-http.git</developerConnection>
+    </scm>
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -117,6 +123,17 @@
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
                 </configuration>
             </plugin>
         </plugins>
