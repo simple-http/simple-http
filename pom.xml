@@ -10,8 +10,8 @@
 
     <scm>
         <url>https://github.com/simple-http/simple-http</url>
-        <connection>scm:git:https://github.com/simple-http/simple-http.git</connection>
-        <developerConnection>scm:git:https://github.com/simple-http/simple-http.git</developerConnection>
+        <connection>scm:git:ssh://git@github.com/simple-http/simple-http.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/simple-http/simple-http.git</developerConnection>
     </scm>
 
     <distributionManagement>
