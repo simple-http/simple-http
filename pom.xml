@@ -11,7 +11,7 @@
     <scm>
         <url>https://github.com/simple-http/simple-http</url>
         <connection>scm:git:https://github.com/simple-http/simple-http.git</connection>
-        <developerConnection>scm:git:git@https://github.com/simple-http/simple-http.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/simple-http/simple-http.git</developerConnection>
     </scm>
 
     <distributionManagement>
