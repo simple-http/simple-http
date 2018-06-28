@@ -2,3 +2,4 @@ language: java
 jdk:
   - oraclejdk8
   - openjdk8
+script: "mvn clean install -Dgpg.skip=true"
