@@ -106,10 +106,10 @@ which will use basic auth for requests to `http://robotooling.com` and bearer to
 
 # Download
 
-Available via my [Maven repository](http://robotooling.com/maven/).
+Available via the [Maven repository](https://repo.maven.apache.org/maven2/com/simple-http/simple-http/).
 
 For more tools, see [robotooling.com](http://www.robotooling.com) and visit my [blog](http://baddotrobot.com).
 
 # Continuous Integration
 
-[Travis CI](https://travis-ci.org/tobyweston/simple-http)
+[Travis CI](https://travis-ci.org/simple-http/simple-http)
