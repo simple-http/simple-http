@@ -122,11 +122,22 @@ public class LoggingHttpClient implements HttpClient {
     }
     
     private String response(HttpResponse response) {
+        return new StringBuilder()
+            .append("HTTP/1.1 ")
+            .append(response.getStatusCode())
+            .append(" ")
+            .append(response.getStatusMessage())
+            .append(lineSeparator)
+            .append(headers(response.getHeaders()))
+            .append(lineSeparator)
+            .append(response.getContent().asString())
+            .toString();
+    }
+    
+    private static String headers(Headers headers) {
         StringBuilder builder = new StringBuilder();
-        builder.append("HTTP/1.1 ").append(response.getStatusCode()).append(" ").append(response.getStatusMessage()).append(lineSeparator);
-        for (Header header : response.getHeaders())
+        for (Header header : headers)
             builder.append(header.name()).append(": ").append(header.value()).append(lineSeparator);
-        builder.append(lineSeparator).append(response.getContent().asString());
         return builder.toString();
     }
 
@@ -161,10 +172,15 @@ public class LoggingHttpClient implements HttpClient {
         }
 
         private void asHttpString(HttpMessage message, String method) {
-            builder.append(method).append(" ").append(url.toExternalForm()).append(" HTTP/1.1").append(lineSeparator);
-            for (Header header : message.getHeaders())
-                builder.append(header.name()).append(": ").append(header.value()).append(lineSeparator);
-            builder.append(lineSeparator).append(message.getContent().asString());
+            builder
+                .append(method)
+                .append(" ")
+                .append(url.toExternalForm())
+                .append(" HTTP/1.1")
+                .append(lineSeparator)
+                .append(headers(message.getHeaders()))
+                .append(lineSeparator)
+                .append(message.getContent().asString());
         }
 
         public String asString() {
