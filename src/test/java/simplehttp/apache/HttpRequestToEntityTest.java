@@ -36,6 +36,7 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static simplehttp.CharacterSet.UTF_8;
@@ -94,12 +95,12 @@ public class HttpRequestToEntityTest {
         HttpEntity entity = converter.asHttpEntity();
 
         assertThat(entity.getContentType(), is(apacheHeader("Content-Type", containsString("multipart/form-data;"))));
-        String content = IOUtils.toString(entity.getContent());
-        assertThat(content, allOf(
+        assertThat(IOUtils.toString(entity.getContent()), allOf(
             containsString("Content-Disposition: form-data; name=\"upload\"; filename=\"example-image.png\""),
             containsString("Content-Type: application/octet-stream"),
             containsString("PNG")
         ));
+        assertThat(entity.getContentLength(), is(greaterThan(100L)));
     }
     
     @Test
