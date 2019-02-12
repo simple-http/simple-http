@@ -25,10 +25,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.junit.Test;
 import simplehttp.FormUrlEncodedMessage;
+import simplehttp.Multipart;
 import simplehttp.UnencodedStringMessage;
 
+import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static simplehttp.CharacterSet.UTF_8;
@@ -78,4 +81,12 @@ public class HttpRequestToEntityTest {
         assertThat(entity.getContentLength(), is((long) "nom nom nom".getBytes().length));
     }
 
+    @Test
+    public void shouldEncodeMultipartBodyForFile() {
+        File file = new File("example-image.jpg");
+        HttpRequestToEntity converter = new HttpRequestToEntity(new Multipart("upload", file));
+        HttpEntity entity = converter.asHttpEntity();
+
+        assertThat(entity.getContentType(), is(apacheHeader("Content-Type", containsString("multipart/form-data;"))));
+    }
 }

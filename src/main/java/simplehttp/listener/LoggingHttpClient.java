@@ -171,6 +171,11 @@ public class LoggingHttpClient implements HttpClient {
             asHttpString(message, "POST");
         }
 
+        @Override
+        public void visit(Multipart multipart) {
+            asHttpString(multipart, "POST");
+        }
+
         private void asHttpString(HttpMessage message, String method) {
             builder
                 .append(method)

@@ -25,12 +25,16 @@ import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import simplehttp.*;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Map;
+
+import static org.apache.http.entity.ContentType.DEFAULT_BINARY;
+import static org.apache.http.entity.mime.HttpMultipartMode.BROWSER_COMPATIBLE;
 
 class HttpRequestToEntity implements HttpRequestVisitor {
 
@@ -74,6 +78,15 @@ class HttpRequestToEntity implements HttpRequestVisitor {
         } catch (UnsupportedCharsetException e) {
             throw new HttpException(e);
         }        
+    }
+
+    @Override
+    public void visit(Multipart multipart) {
+		entity = MultipartEntityBuilder
+			.create()
+			.setMode(BROWSER_COMPATIBLE)
+			.addBinaryBody(multipart.getName(), multipart.getFile(), DEFAULT_BINARY, multipart.getFile().getName())
+			.build();
     }
 
     private Transform<Map.Entry<String, String>, NameValuePair> asApacheNameValuePair() {

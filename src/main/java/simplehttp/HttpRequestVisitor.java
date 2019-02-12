@@ -30,5 +30,7 @@ public interface HttpRequestVisitor {
     void visit(FormUrlEncodedMessage formUrlEncodedMessage);
 
     void visit(UnencodedStringMessage unencodedStringMessage);
+    
+    void visit(Multipart multipart);
 
 }
