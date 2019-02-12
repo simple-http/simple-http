@@ -49,6 +49,6 @@ public class ApacheHeaderMatcher extends TypeSafeMatcher<Header> {
 
     @Override
     public void describeTo(Description description) {
-        description.appendValue(name).appendValue(value);
+        description.appendText("header ").appendValue(name).appendText(" with value of ").appendValue(value);
     }
 }
