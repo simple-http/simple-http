@@ -1,5 +1,7 @@
 # Simple-HTTP
-[![](https://travis-ci.org/simple-http/simple-http.png?branch=master)](https://travis-ci.org/simple-http/simple-http)
+[![](https://travis-ci.org/simple-http/simple-http.png?branch=master)](https://travis-ci.org/simple-http/simple-http) [![](https://codecov.io/gh/simple-http/simple-http/coverage.svg?branch=master)](https://codecov.io/gh/simple-http/simple-http?branch=master)
+
+https://codecov.io/gh/simple-http/simple-http/coverage.svg?branch=master
 ## Quickly get up and running with HTTP
 
 A simple way to build and configure a HTTP client and work with the HTTP verbs;
