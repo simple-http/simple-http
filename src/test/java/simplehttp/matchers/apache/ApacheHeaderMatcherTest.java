@@ -26,7 +26,7 @@ public class ApacheHeaderMatcherTest {
 	@Test
 	public void doesNotMatch() {
 		assertThat(Matchers.apacheHeader("Accept", "xml").matches(header), is(false));
-		assertThat(Matchers.apacheHeader("accept", "json").matches(header), is(false));
+		assertThat(Matchers.apacheHeader("accept", "application/json, q=1; text/plain, q=0.5").matches(header), is(false));
 	}
 
 	@Test
