@@ -23,14 +23,18 @@ package simplehttp.apache;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import simplehttp.FormUrlEncodedMessage;
 import simplehttp.Multipart;
 import simplehttp.UnencodedStringMessage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -40,6 +44,8 @@ import static simplehttp.matchers.Matchers.apacheHeader;
 
 public class HttpRequestToEntityTest {
 
+    @Rule public final ExpectedException exception = ExpectedException.none();
+    
     private static final String encodedContent = "name=I%27m+a+cheese+sandwich";
 
     @Test
@@ -54,7 +60,7 @@ public class HttpRequestToEntityTest {
     }
 
     @Test
-    public void shouldAllowAlternateEncoding() throws IOException {
+    public void shouldAllowAlternateEncoding() {
         HttpRequestToEntity converter = new HttpRequestToEntity(new FormUrlEncodedMessage(params("name", "bob"), UTF_8));
         HttpEntity entity = converter.asHttpEntity();
 
@@ -82,11 +88,28 @@ public class HttpRequestToEntityTest {
     }
 
     @Test
-    public void shouldEncodeMultipartBodyForFile() {
-        File file = new File("example-image.jpg");
+    public void shouldEncodeMultipartBodyForFile() throws IOException {
+        File file = new File("src/test/resource/example-image.png");
         HttpRequestToEntity converter = new HttpRequestToEntity(new Multipart("upload", file));
         HttpEntity entity = converter.asHttpEntity();
 
         assertThat(entity.getContentType(), is(apacheHeader("Content-Type", containsString("multipart/form-data;"))));
+        String content = IOUtils.toString(entity.getContent());
+        assertThat(content, allOf(
+            containsString("Content-Disposition: form-data; name=\"upload\"; filename=\"example-image.png\""),
+            containsString("Content-Type: application/octet-stream"),
+            containsString("PNG")
+        ));
+    }
+    
+    @Test
+    public void multipartWhenFileDoesntExist() throws IOException {
+        File file = new File("no-file.exe");
+        HttpRequestToEntity converter = new HttpRequestToEntity(new Multipart("upload", file));
+        HttpEntity entity = converter.asHttpEntity();
+
+        exception.expect(FileNotFoundException.class);
+        exception.expectMessage("no-file.exe (No such file or directory)");
+        entity.getContent();
     }
 }
