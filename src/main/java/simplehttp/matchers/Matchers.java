@@ -24,10 +24,7 @@ package simplehttp.matchers;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.hamcrest.Matcher;
 import simplehttp.*;
-import simplehttp.matchers.apache.ApacheHeaderMatcher;
-import simplehttp.matchers.apache.ApacheHttpUriRequestContentMatcher;
-import simplehttp.matchers.apache.ApacheHttpUriRequestHeaderMatcher;
-import simplehttp.matchers.apache.ApacheHttpUriRequestUrlMatcher;
+import simplehttp.matchers.apache.*;
 
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -125,8 +122,13 @@ public class Matchers {
 
     // TODO add matcher for Apache headers (plural)
 
+    @Deprecated
     public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
         return ApacheHeaderMatcher.apacheHeader(name, value);
+    }
+
+    public static Matcher<org.apache.http.Header> apacheHeader(String name, Matcher<String> matcher) {
+        return ApacheHeaderValueMatcher.apacheHeader(name, matcher);
     }
 
     public static Matcher<HttpUriRequest> requestContaining(Headers headers) {
