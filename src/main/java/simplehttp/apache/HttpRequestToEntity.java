@@ -77,11 +77,6 @@ class HttpRequestToEntity implements HttpRequestVisitor {
     }
 
     private Transform<Map.Entry<String, String>, NameValuePair> asApacheNameValuePair() {
-        return new Transform<Map.Entry<String, String>, NameValuePair>() {
-            @Override
-            public NameValuePair call(Map.Entry<String, String> tuple) {
-                return new BasicNameValuePair(tuple.getKey(), tuple.getValue());
-            }
-        };
+        return tuple -> new BasicNameValuePair(tuple.getKey(), tuple.getValue());
     }
 }
