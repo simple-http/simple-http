@@ -1,6 +1,17 @@
 language: java
+
 jdk:
-  - oraclejdk8
-  - openjdk8
+- oraclejdk8
+- openjdk8
+
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
+
+addons:
+  sonarcloud:
+    organization: simple-http_simple-http
+#    token:
+#      secure: TBKSvC6wE9nydF6XeoKaHnOnWhXyDyziOrtYhZ4iQW781eTdHTRBpsp4J7uP28RjCzLVzkEKek6QevMf441z0xsaqO8+22LvF/WntAhHAMOz4RImY/rvhCT8wB84jEqdcxfe23YPgXbcaSm7135fGIYAw009n+fUDFyd+qMvVVg=
+
+script:
+- sonar-scanner
