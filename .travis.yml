@@ -9,7 +9,7 @@ after_success:
 
 addons:
   sonarcloud:
-    organization: simple-http_simple-http
+    organization: simple-http
 #    token:
 #      secure: TBKSvC6wE9nydF6XeoKaHnOnWhXyDyziOrtYhZ4iQW781eTdHTRBpsp4J7uP28RjCzLVzkEKek6QevMf441z0xsaqO8+22LvF/WntAhHAMOz4RImY/rvhCT8wB84jEqdcxfe23YPgXbcaSm7135fGIYAw009n+fUDFyd+qMvVVg=
 

@@ -114,3 +114,10 @@ For more tools, see [robotooling.com](http://www.robotooling.com) and visit my [
 # Continuous Integration
 
 [Travis CI](https://travis-ci.org/simple-http/simple-http)
+[Code Coverage (CodeCov)]()
+[Static Code Analysis (SonarQube)]()
+
+$ travis encrypt 62217d802786b15cb51c0e06b272120c0fbd8577 --org --repo simple-http/simple-http
+
+  secure: "BC2OA4svV1WVFgsJ5XpMU/m2ZubIOfxsM3UOIDafM5obhBDcaSXieAYKr7rPqKq5DuBkbGs1kit52mOyUjWsyoQZmIs5DgqATyV40dVMCDIodK9DyYJRhs4Xp/ueN4VMaCDraJxzp6wCIXAK9hBa6Dcbtpo+t7RyX+fGrFwvae4="
+
