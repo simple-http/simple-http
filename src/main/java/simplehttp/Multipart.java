@@ -2,6 +2,8 @@ package simplehttp;
 
 import java.io.File;
 
+import static java.lang.String.format;
+
 public class Multipart implements HttpPost {
 	
 	private final String name;
@@ -26,12 +28,18 @@ public class Multipart implements HttpPost {
 	}
 
 	@Override
-	public MessageContent getContent() {
-		return null;
+	public MultipartContent getContent() {
+		return new MultipartContent(name, file);
 	}
 
 	@Override
 	public Headers getHeaders() {
-		return null;
+//		return headers(header("Content-Type", "multipart/form-data;boundary=\"boundary\""));
+		return EmptyHeaders.emptyHeaders();
+	}
+
+	@Override
+	public String toString() {
+		return format("Multipart{content='name=%s, filename=%s', headers='%s'}", name, file, getHeaders());
 	}
 }

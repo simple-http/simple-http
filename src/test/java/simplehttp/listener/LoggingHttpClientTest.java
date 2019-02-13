@@ -29,10 +29,9 @@ import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import simplehttp.FormUrlEncodedMessage;
-import simplehttp.HttpClient;
-import simplehttp.Log4J;
-import simplehttp.UnencodedStringMessage;
+import simplehttp.*;
+
+import java.io.File;
 
 import static org.apache.log4j.Level.INFO;
 import static org.hamcrest.Matchers.containsString;
@@ -46,6 +45,7 @@ import static simplehttp.HeaderPair.header;
 public class LoggingHttpClientTest {
 
     public static final String lineSeparator = System.getProperty("line.separator");
+
     private final Mockery context = new Mockery();
     private final Logger logger = Logger.getLogger(this.getClass());
     private final Log4J log4J = Log4J.appendTo(logger, INFO);
@@ -98,6 +98,17 @@ public class LoggingHttpClientTest {
         log4J.assertThat(containsString("cheese sandwich"));
     }
 
+    @Test
+    public void shouldLogMultipartPost() {
+        expectingHttpClientCall();
+        http.post(anyUrl(), new Multipart("example", new File("src/test/resource/example-image.png")));
+        log4J.assertThat(containsString("POST http://not.real.url HTTP/1.1"));
+//        log4J.assertThat(containsString("Content-Type: multipart/form-data;boundary=\"boundary\""));
+        log4J.assertThat(containsString("--boundary"));
+        log4J.assertThat(containsString("Content-Disposition: form-data; name=\"example\"; filename=\"example-image.png\""));
+        log4J.assertThat(containsString("--boundary--"));
+    }
+ 
     @Test
     // TODO doesn't respect the difference between PUT and POST
     public void shouldLogPut() {
