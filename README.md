@@ -109,10 +109,9 @@ which will use basic auth for requests to `http://robotooling.com` and bearer to
 
 Available via the [Maven repository](https://repo.maven.apache.org/maven2/com/simple-http/simple-http/).
 
-For more tools, see [robotooling.com](http://www.robotooling.com) and visit my [blog](http://baddotrobot.com).
 
 # Continuous Integration
 
-[Travis CI](https://travis-ci.org/simple-http/simple-http)
-[Code Coverage (CodeCov)]()
-[Static Code Analysis (SonarQube)]()
+[Travis CI](https://travis-ci.org/simple-http/simple-http)  
+[Code Coverage](https://codecov.io/gh/simple-http/simple-http?branch=master)  
+[Static Code Analysis (SonarQube)](https://sonarcloud.io/dashboard?id=simple-http_simple-http)    
