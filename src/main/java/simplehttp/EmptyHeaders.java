@@ -34,7 +34,7 @@ public class EmptyHeaders implements Headers {
 
     @Override
     public Iterator<Header> iterator() {
-        return new EmptyIterator<Header>();
+        return new EmptyIterator<>();
     }
 
     @Override
@@ -52,4 +52,14 @@ public class EmptyHeaders implements Headers {
         return new NoHeader();
     }
 
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        return other != null && getClass() == other.getClass();
+    }
 }
