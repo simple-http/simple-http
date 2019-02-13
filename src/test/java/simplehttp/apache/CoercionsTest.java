@@ -24,11 +24,15 @@ package simplehttp.apache;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Test;
+import simplehttp.EmptyHeaders;
+import simplehttp.HeaderList;
 import simplehttp.Headers;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.hasItems;
 import static simplehttp.HeaderList.headers;
 import static simplehttp.HeaderPair.header;
@@ -52,4 +56,17 @@ public class CoercionsTest {
         // is equivalent to
         assertThat(Coercions.asHeaders(apacheHeaders), has(header("Accept", "text/html"), header("Location", "http://baddotrobot.com")));
     }
+
+	@Test
+	public void concertZeroApacheHeaders() {
+		Header[] noHeader = { };
+		assertThat(Coercions.asHeaders(noHeader), is(EmptyHeaders.emptyHeaders()));
+	}
+
+	@Test
+    public void convertFromSingleApacheHeader() {
+        Header[] header = {new BasicHeader("Accept", "text/html")};
+        assertThat(Coercions.asHeaders(header), is(HeaderList.headers(header("Accept", "text/html"))));
+    }
+
 }

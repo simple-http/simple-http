@@ -23,11 +23,13 @@ package simplehttp.apache;
 
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
+import simplehttp.EmptyHeaders;
 import simplehttp.Header;
 import simplehttp.Headers;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static simplehttp.HeaderList.headers;
@@ -36,17 +38,26 @@ import static simplehttp.HeaderPair.header;
 public class Coercions {
 
     public static org.apache.http.Header[] asApacheBasicHeader(Headers headers) {
-        List<org.apache.http.Header> list = new ArrayList<org.apache.http.Header>();
+        List<org.apache.http.Header> list = new ArrayList<>();
         for (Header header : headers)
             list.add(new BasicHeader(header.name(), header.value()));
         return list.toArray(new org.apache.http.Header[list.size()]);
     }
 
     public static Headers asHeaders(org.apache.http.Header[] headers) {
-        List<Header> list = new ArrayList<Header>();
+        if (headers.length == 0)
+            return EmptyHeaders.emptyHeaders();
+        
+        List<Header> list = new ArrayList<>();
         for (org.apache.http.Header header : headers)
             list.add(header(header.getName(), header.getValue()));
-        return headers(list.toArray(new Header[list.size()]));
+
+        Header[] array = list.toArray(new Header[list.size()]);
+        return headers(array[0], tail(array));
+    }
+
+    private static Header[] tail(Header[] array) {
+        return Arrays.copyOfRange(array, 1, array.length);
     }
 
     public static HttpHost asHttpHost(URL url) {

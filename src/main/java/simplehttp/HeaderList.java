@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
@@ -36,11 +38,11 @@ public class HeaderList implements Headers {
     private final List<Header> headers;
 
     private HeaderList(List<Header> headers) {
-        this.headers = new ArrayList<Header>(headers);
+        this.headers = new ArrayList<>(headers);
     }
 
-    public static Headers headers(Header... headers) {
-        return new HeaderList(Arrays.asList(headers));
+    public static Headers headers(Header header, Header... headers) { ;
+        return new HeaderList(Stream.concat(Stream.of(header), Arrays.stream(headers)).collect(Collectors.toList()));
     }
 
     @Override

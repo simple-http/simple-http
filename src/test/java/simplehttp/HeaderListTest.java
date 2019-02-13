@@ -23,12 +23,29 @@ package simplehttp;
 
 import org.junit.Test;
 
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.*;
+import static java.util.stream.StreamSupport.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static simplehttp.HeaderList.headers;
 import static simplehttp.HeaderPair.header;
 
 public class HeaderListTest {
+
+    @Test
+    public void shouldConstructAListInOrder() {
+        Headers headers = headers(header("a", "1"), header("b", "2"), header("c", "3"));
+        
+        Function<Header, String> toString = header -> header.name() + ":" + header.value();
+        String actual = stream(headers.spliterator(), false).map(toString).collect(joining(" "));
+        
+        assertThat(actual, is("a:1 b:2 c:3"));
+    }
 
     @Test
     public void has() {
