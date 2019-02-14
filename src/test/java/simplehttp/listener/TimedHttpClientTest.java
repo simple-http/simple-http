@@ -65,7 +65,7 @@ public class TimedHttpClientTest {
     }
 
     @Test
-    public void shouldTimeRequest() throws IOException {
+    public void shouldTimeRequest() {
         context.checking(new Expectations() {{
             allowing(delegate).get(with(any(URL.class)));
             oneOf(clock).create(); will(returnValue(new Date(0)));
@@ -85,7 +85,7 @@ public class TimedHttpClientTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void shouldNotAllowVagueLoggerClass() throws IOException {
+    public void shouldNotAllowVagueLoggerClass() {
         timedHttpClient(delegate, clock, Object.class).get(anyUrl());
     }
 

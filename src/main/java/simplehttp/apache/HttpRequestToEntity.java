@@ -61,20 +61,20 @@ class HttpRequestToEntity implements HttpRequestVisitor {
     }
 
     @Override
-    public void visit(FormUrlEncodedMessage formUrlEncodedMessage) {
+    public void visit(FormUrlEncodedMessage message) {
         try {
-            FormParameters content = formUrlEncodedMessage.getContent();
-            entity = new UrlEncodedFormEntity(content.transform(asApacheNameValuePair()), formUrlEncodedMessage.characterSet());
+            FormParameters content = message.getContent();
+            entity = new UrlEncodedFormEntity(content.transform(asApacheNameValuePair()), message.characterSet());
         } catch (UnsupportedEncodingException e) {
             throw new HttpException(e);
         }
     }
 
     @Override
-    public void visit(UnencodedStringMessage unencodedStringMessage) {
+    public void visit(UnencodedStringMessage message) {
         try {
-            StringMessageContent content = unencodedStringMessage.getContent();
-            entity = new StringEntity(content.asString(), unencodedStringMessage.characterSet());
+            StringMessageContent content = message.getContent();
+            entity = new StringEntity(content.asString(), message.characterSet());
         } catch (UnsupportedCharsetException e) {
             throw new HttpException(e);
         }        
