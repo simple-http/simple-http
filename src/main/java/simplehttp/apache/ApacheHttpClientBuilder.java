@@ -41,9 +41,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.code.tempusfugit.temporal.Duration.minutes;
-import static com.google.code.tempusfugit.temporal.Duration.seconds;
 import static java.lang.String.format;
+import static java.time.Duration.of;
+import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.time.temporal.ChronoUnit.SECONDS;
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.http.auth.AuthScope.ANY_REALM;
@@ -55,11 +56,11 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     private Ssl ssl = Ssl.enabled;
     private List<AuthenticatedHost> authentications = new ArrayList<>();
     private Setting<URL> proxy = new NoProxy();
-    private Setting<Integer> timeout = httpTimeout(minutes(10));
+    private Setting<Integer> timeout = httpTimeout(of(10, MINUTES));
     private Setting<Boolean> handleRedirects = AutomaticRedirectHandling.on();
 
     public static ApacheHttpClientBuilder anApacheClientWithShortTimeout() {
-        return new ApacheHttpClientBuilder().with(httpTimeout(seconds(5)));
+        return new ApacheHttpClientBuilder().with(httpTimeout(of(5, SECONDS)));
     }
 
     @Override

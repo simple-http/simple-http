@@ -27,8 +27,10 @@ import org.apache.http.client.config.RequestConfig;
 import org.junit.Test;
 import simplehttp.configuration.AutomaticRedirectHandling;
 
-import static com.google.code.tempusfugit.temporal.Duration.millis;
-import static com.google.code.tempusfugit.temporal.Duration.minutes;
+import java.time.Duration;
+
+import static java.time.temporal.ChronoUnit.MILLIS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static simplehttp.Url.url;
 import static simplehttp.apache.matchers.InternalHttpClientConfigMatcher.hasConfiguration;
@@ -39,7 +41,7 @@ import static simplehttp.configuration.Proxy.proxy;
 public class ApacheHttpClientBuilderTest {
 
     private final ApacheHttpClientBuilder builder = new ApacheHttpClientBuilder();
-    private final int TEN_MINUTES = (int) minutes(10).inMillis();
+    private final int TEN_MINUTES = (int) Duration.of(10, MINUTES).toMillis();
     
     private final RequestConfig.Builder defaultExpectedConfiguration = RequestConfig.custom()
         .setCircularRedirectsAllowed(true)
@@ -75,7 +77,7 @@ public class ApacheHttpClientBuilderTest {
 
     @Test
     public void shouldConfigureTimeouts() {
-        HttpClient client = builder.with(httpTimeout(millis(256))).build();
+        HttpClient client = builder.with(httpTimeout(Duration.of(256, MILLIS))).build();
         assertThat(client, hasConfiguration(defaultExpectedConfiguration
             .setConnectTimeout(256)
             .setSocketTimeout(256)

@@ -30,8 +30,6 @@ import org.hamcrest.TypeSafeMatcher;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
-import static com.google.code.tempusfugit.ExceptionWrapper.wrapAsRuntimeException;
-
 public class ApacheHttpUriRequestUrlMatcher extends TypeSafeMatcher<HttpUriRequest> {
 
     private final URL url;
@@ -47,20 +45,19 @@ public class ApacheHttpUriRequestUrlMatcher extends TypeSafeMatcher<HttpUriReque
 
     @Override
     public boolean matchesSafely(HttpUriRequest request) {
-        return wrapAsRuntimeException(matchUrlTo(request));
-    }
-
-    private Callable<Boolean> matchUrlTo(final HttpUriRequest request) {
-        return new Callable<Boolean>(){
-            @Override
-            public Boolean call() throws Exception {
-                return url.toExternalForm().equals(request.getURI().toURL().toExternalForm());
-            }
-        };
+        return wrapAsRuntimeException(() -> url.toExternalForm().equals(request.getURI().toURL().toExternalForm()));
     }
 
     @Override
     public void describeTo(Description description) {
         description.appendText("Url contains ").appendValue(url);
+    }
+
+    private static <V> V wrapAsRuntimeException(Callable<V> callable) throws RuntimeException {
+        try {
+            return callable.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

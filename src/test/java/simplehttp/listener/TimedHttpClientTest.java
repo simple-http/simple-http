@@ -21,8 +21,6 @@
 
 package simplehttp.listener;
 
-import com.google.code.tempusfugit.FactoryException;
-import com.google.code.tempusfugit.temporal.Clock;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -33,9 +31,12 @@ import simplehttp.Log4J;
 import simplehttp.StringHttpResponse;
 
 import java.net.URL;
-import java.util.Date;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 
-import static com.google.code.tempusfugit.temporal.Duration.millis;
+import static java.time.Instant.ofEpochMilli;
+import static java.time.ZoneId.of;
 import static org.apache.log4j.Level.INFO;
 import static org.hamcrest.Matchers.containsString;
 import static simplehttp.Any.anyUrl;
@@ -47,9 +48,9 @@ public class TimedHttpClientTest {
     private final JUnitRuleMockery context = new JUnitRuleMockery();
     private final Class<? extends TimedHttpClientTest> logger = this.getClass();
 
-    private final Clock clock = context.mock(Clock.class);
     private final HttpClient delegate = context.mock(HttpClient.class);
     private final Log4J log4J = Log4J.appendTo(Logger.getLogger(logger), INFO);
+    private final Clock fixedClock = Clock.fixed(ofEpochMilli(0), of("GMT"));
 
     @Test
     public void shouldDelegate() {
@@ -57,18 +58,17 @@ public class TimedHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(delegate).get(url);
         }});
-        timedHttpClient(delegate, new FixedClock(), logger).get(url);
+        timedHttpClient(delegate, fixedClock, logger).get(url);
     }
 
     @Test
     public void shouldTimeRequest() {
+        Clock clock = new FixedIncrementClock(100);
         context.checking(new Expectations() {{
-            allowing(delegate).get(with(any(URL.class)));
-            oneOf(clock).create(); will(returnValue(new Date(0)));
-            oneOf(clock).create(); will(returnValue(new Date(millis(100).inMillis())));
+            allowing(delegate).get(with(any(URL.class))); will(returnValue(new StringHttpResponse(200, "OK", "nothing", emptyHeaders(), "http://example.com")));
         }});
         timedHttpClient(delegate, clock, logger).get(anyUrl());
-        log4J.assertThat(containsString("100 MILLISECONDS"));
+        log4J.assertThat(containsString("took 100ms"));
     }
 
     @Test
@@ -76,13 +76,13 @@ public class TimedHttpClientTest {
         context.checking(new Expectations() {{
             allowing(delegate).get(with(any(URL.class))); will(returnValue(new StringHttpResponse(200, "OK", "nothing", emptyHeaders(), "http://example.com")));
         }});
-        timedHttpClient(delegate, new FixedClock(), logger).get(anyUrl());
-        log4J.assertThat(containsString("GET http://not.real.url was 200 (OK), took Duration 0 MILLISECONDS"));
+        timedHttpClient(delegate, fixedClock, logger).get(anyUrl());
+        log4J.assertThat(containsString("GET http://not.real.url was 200 (OK), took 0ms"));
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void shouldNotAllowVagueLoggerClass() {
-        timedHttpClient(delegate, clock, Object.class).get(anyUrl());
+        timedHttpClient(delegate, fixedClock, Object.class).get(anyUrl());
     }
 
     @After
@@ -90,11 +90,28 @@ public class TimedHttpClientTest {
         log4J.clean();
     }
 
-    private static class FixedClock implements Clock {
+    private static class FixedIncrementClock extends Clock {
+        private long now = 0;
+        private long increment;
+
+        private FixedIncrementClock(long increment) {
+            this.increment = increment;
+        }
+
         @Override
-        public Date create() throws FactoryException {
-            return new Date(0);
+        public ZoneId getZone() {
+            return null;
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return null;
+        }
+
+        @Override
+        public Instant instant() {
+            now = now + increment;
+            return Instant.ofEpochMilli(now);
         }
     }
-
 }

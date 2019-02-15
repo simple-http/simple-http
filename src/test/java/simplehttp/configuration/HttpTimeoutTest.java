@@ -26,7 +26,9 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 
-import static com.google.code.tempusfugit.temporal.Duration.millis;
+import java.time.Duration;
+
+import static java.time.temporal.ChronoUnit.MILLIS;
 import static simplehttp.configuration.HttpTimeout.httpTimeout;
 
 public class HttpTimeoutTest {
@@ -36,7 +38,7 @@ public class HttpTimeoutTest {
 
     @Test
     public void configures() {
-        HttpTimeout timeout = httpTimeout(millis(400));
+        HttpTimeout timeout = httpTimeout(Duration.of(400, MILLIS));
         context.checking(new Expectations() {{
             oneOf(configurable).setTo(400);
         }});

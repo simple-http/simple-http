@@ -21,7 +21,7 @@
 
 package simplehttp.configuration;
 
-import com.google.code.tempusfugit.temporal.Duration;
+import java.time.Duration;
 
 public class HttpTimeout extends AbstractValueType<Duration> implements Setting<Integer> {
 
@@ -35,6 +35,6 @@ public class HttpTimeout extends AbstractValueType<Duration> implements Setting<
 
     @Override
     public void applyTo(Configurable<Integer> configurable) {
-        configurable.setTo((int) value.inMillis());
+        configurable.setTo((int) value.toMillis());
     }
 }

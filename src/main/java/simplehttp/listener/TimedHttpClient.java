@@ -21,8 +21,6 @@
 
 package simplehttp.listener;
 
-import com.google.code.tempusfugit.temporal.Clock;
-import com.google.code.tempusfugit.temporal.StopWatch;
 import org.apache.log4j.Logger;
 import simplehttp.HttpClient;
 import simplehttp.HttpResponse;
@@ -30,6 +28,10 @@ import simplehttp.HttpResponse;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.time.Clock;
+import java.time.Duration;
+
+import static java.time.temporal.ChronoUnit.MILLIS;
 
 public class TimedHttpClient implements InvocationHandler {
 
@@ -56,18 +58,18 @@ public class TimedHttpClient implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        StopWatch stopWatch = StopWatch.start(clock);
+        Timer timer = new Timer(clock).start();
         Object result = null;
         try {
             result = method.invoke(delegate, args);
             return result;
         } finally {
             if (log.isInfoEnabled())
-                log.info(message(method, args, stopWatch, result));
+                log.info(message(method, args, timer, result));
         }
     }
 
-    private String message(Method method, Object[] args, StopWatch stopWatch, Object result) {
+    private String message(Method method, Object[] args, Timer timer, Object result) {
         return new StringBuilder()
             .append(method.getName().toUpperCase())
             .append(" ")
@@ -75,7 +77,8 @@ public class TimedHttpClient implements InvocationHandler {
             .append(" was ")
             .append(response(result))
             .append(", took ")
-            .append(stopWatch.markAndGetTotalElapsedTime())
+            .append(timer.getElapsedTime().toMillis())
+            .append("ms")
             .toString();
     }
 
@@ -86,5 +89,26 @@ public class TimedHttpClient implements InvocationHandler {
             return builder.append(response.getStatusCode()).append(" (").append(response.getStatusMessage()).append(")");
         }
         return builder;
+    }
+    
+    static class Timer {
+        private final Clock clock;
+        private long start = 0;
+
+        Timer(Clock clock) {
+            this.clock = clock;
+        }
+
+        Timer start() {
+            start = clock.millis();    
+            return this;
+        }
+        
+        Duration getElapsedTime() {
+            long now = clock.millis();
+            if (now < start)
+                throw new RuntimeException("please start the stop watch before stopping it");
+            return Duration.of(now - start, MILLIS);
+        }
     }
 }
