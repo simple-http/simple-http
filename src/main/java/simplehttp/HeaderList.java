@@ -41,7 +41,7 @@ public class HeaderList implements Headers {
         this.headers = new ArrayList<>(headers);
     }
 
-    public static Headers headers(Header header, Header... headers) { ;
+    public static Headers headers(Header header, Header... headers) {
         return new HeaderList(Stream.concat(Stream.of(header), Arrays.stream(headers)).collect(Collectors.toList()));
     }
 
