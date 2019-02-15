@@ -40,8 +40,7 @@ public class AbstractValueType<T> implements ValueType<T> {
         if (!(o instanceof AbstractValueType))
             return false;
         AbstractValueType that = (AbstractValueType) o;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
-        return true;
+        return value != null ? value.equals(that.value) : that.value == null;
     }
 
     @Override

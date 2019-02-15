@@ -44,9 +44,7 @@ class HeaderMatcher extends TypeSafeMatcher<Header> {
 
     @Override
     public boolean matchesSafely(Header actual) {
-        if (actual.name().equals(name) && value.matches(actual.value()))
-            return true;
-        return false;
+        return actual.name().equals(name) && value.matches(actual.value());
     }
 
     @Override
