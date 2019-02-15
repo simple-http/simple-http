@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2018, simple-http committers
+ * Copyright (c) 2011-2019, simple-http committers
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,7 +24,6 @@ package simplehttp.apache;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import simplehttp.EmptyHeaders;
 import simplehttp.HeaderList;
@@ -32,8 +31,8 @@ import simplehttp.Headers;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
 import static simplehttp.HeaderList.headers;
 import static simplehttp.HeaderPair.header;
 import static simplehttp.matchers.Matchers.apacheHeader;

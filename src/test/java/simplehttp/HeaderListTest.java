@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2018, simple-http committers
+ * Copyright (c) 2011-2019, simple-http committers
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,12 +24,9 @@ package simplehttp;
 import org.junit.Test;
 
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
-import static java.util.stream.Collectors.*;
-import static java.util.stream.StreamSupport.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.StreamSupport.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static simplehttp.HeaderList.headers;

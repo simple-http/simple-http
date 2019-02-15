@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2018, simple-http committers
+ * Copyright (c) 2011-2019, simple-http committers
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,13 +23,11 @@ package simplehttp.apache.matchers;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
-import org.hamcrest.*;
-
-import java.util.Optional;
-import java.util.function.Function;
+import org.hamcrest.Description;
+import org.hamcrest.Factory;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
 import static org.apache.http.impl.client.ReflectiveInternalHttpClientAdapter.getConfig;
-import static org.hamcrest.Matchers.is;
 
 public class InternalHttpClientConfigMatcher extends TypeSafeDiagnosingMatcher<HttpClient> {
 
