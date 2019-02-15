@@ -27,12 +27,7 @@ public class HttpDeleteMessage implements HttpDelete {
 
     @Override
     public MessageContent getContent() {
-        return new MessageContent() {
-            @Override
-            public String asString() {
-                return "";
-            }
-        };
+        return () -> "";
     }
 
     @Override
