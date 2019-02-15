@@ -43,7 +43,7 @@ public class ApacheExceptionWrappingExecutor implements Executor<HttpException> 
             throw new HttpConnectionRefusedException(e);
         } catch (UnknownHostException e) {
             throw new HttpUnknownHostException(e.getMessage(), e);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             throw new HttpException(e);
         }
     }

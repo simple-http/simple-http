@@ -36,6 +36,8 @@ import static java.lang.String.format;
  */
 public class Matchers {
 
+    private Matchers() { }
+    
     public static <T> Matcher<T> has(Matcher<T> matcher) {
         return matcher;
     }
@@ -123,6 +125,7 @@ public class Matchers {
     // TODO add matcher for Apache headers (plural)
 
     @Deprecated
+    /** @deprecated use {@link #apacheHeader(String, Matcher)} instead */
     public static Matcher<org.apache.http.Header> apacheHeader(String name, String value) {
         return ApacheHeaderMatcher.apacheHeader(name, value);
     }

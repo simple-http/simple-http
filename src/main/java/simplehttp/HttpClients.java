@@ -37,6 +37,8 @@ import static simplehttp.apache.ApacheHttpClientBuilder.anApacheClientWithShortT
 
 public class HttpClients {
 
+    private HttpClients() { }
+
     public static CommonHttpClient anApacheClient() {
         return new ApacheCommonHttpClient();
     }

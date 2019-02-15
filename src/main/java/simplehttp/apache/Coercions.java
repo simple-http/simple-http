@@ -37,6 +37,8 @@ import static simplehttp.HeaderPair.header;
 
 public class Coercions {
 
+    private Coercions() { }
+    
     public static org.apache.http.Header[] asApacheBasicHeader(Headers headers) {
         List<org.apache.http.Header> list = new ArrayList<>();
         for (Header header : headers)
