@@ -21,6 +21,6 @@
 
 package simplehttp;
 
-public interface Transform<FROM, TO> {
-    TO call(FROM value);
+public interface Transform<F, T> {
+    T call(F value);
 }

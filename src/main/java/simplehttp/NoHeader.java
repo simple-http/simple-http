@@ -34,6 +34,8 @@ public class NoHeader implements Header {
 
     @Override
     public boolean equals(Object that) {
+        if (that == null) 
+            return false;
         return that.getClass().equals(this.getClass());
     }
 

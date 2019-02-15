@@ -42,12 +42,7 @@ public class HttpGetMessage implements HttpGet {
 
     @Override
     public MessageContent getContent() {
-        return new MessageContent() {
-            @Override
-            public String asString() {
-                return "";
-            }
-        };
+        return () -> "";
     }
 
     @Override

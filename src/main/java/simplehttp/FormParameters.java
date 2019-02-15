@@ -30,7 +30,7 @@ import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCod
 
 public class FormParameters implements MessageContent {
 
-    private final Map<String, String> parameters = new HashMap<String, String>();
+    private final Map<String, String> parameters = new HashMap<>();
 
     public static FormParameters params(String... values) {
         return new FormParameters(values);
@@ -48,7 +48,7 @@ public class FormParameters implements MessageContent {
     }
 
     public <T> List<T> transform(Transform<Map.Entry<String, String>, T> transform) {
-        List<T> pairs = new ArrayList<T>();
+        List<T> pairs = new ArrayList<>();
         for (Map.Entry<String, String> parameter : parameters.entrySet())
             pairs.add(transform.call(parameter));
         return pairs;

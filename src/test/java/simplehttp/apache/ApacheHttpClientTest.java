@@ -212,12 +212,9 @@ public class ApacheHttpClientTest {
 
     private void expectingHttpClientExecuteWith(final Matcher<? extends HttpUriRequest> request, final Matcher<ResponseHandler> responseHandler) throws IOException {
         context.checking(new Expectations() {{
-            oneOf(httpClientBuilder).build();
-            will(returnValue(client));
-            oneOf(contextBuilder).build();
-            will(returnValue(localContext));
-            oneOf(client).execute(with(request), with(responseHandler), with(any(HttpContext.class)));
-            will(returnValue(response));
+            oneOf(httpClientBuilder).build(); will(returnValue(client));
+            oneOf(contextBuilder).build(); will(returnValue(localContext));
+            oneOf(client).execute(with(request), with(responseHandler), with(any(HttpContext.class))); will(returnValue(response));
         }});
     }
 
@@ -229,7 +226,6 @@ public class ApacheHttpClientTest {
 
         @Override
         public void setAttribute(String id, Object obj) {
-
         }
 
         @Override

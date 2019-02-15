@@ -83,7 +83,7 @@ public class Link {
     }
 
     private String findHref(String link) {
-        return link.substring(link.indexOf("<") + 1, link.indexOf(">;"));
+        return link.substring(link.indexOf('<') + 1, link.indexOf(">;"));
     }
 
     private static class LinkException extends HttpException {
