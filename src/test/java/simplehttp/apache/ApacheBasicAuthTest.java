@@ -22,8 +22,8 @@
 package simplehttp.apache;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.UrlMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.matching.UrlPattern;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.junit.*;
 import simplehttp.HttpClient;
@@ -103,7 +103,7 @@ public class ApacheBasicAuthTest {
         assertThat(http.get(url("http://robotooling.com")), has(status(200)));
     }
 
-    private void verifyNoHeadersFor(UrlMatchingStrategy url) {
+    private void verifyNoHeadersFor(UrlPattern url) {
         List<LoggedRequest> requests = WireMock.findAll(getRequestedFor(url));
         assertThat(requests, not(contains(header("Authorization"))));
     }

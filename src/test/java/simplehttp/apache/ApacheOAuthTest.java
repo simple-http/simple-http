@@ -22,8 +22,8 @@
 package simplehttp.apache;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.UrlMatchingStrategy;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.matching.UrlPattern;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -86,7 +86,7 @@ public class ApacheOAuthTest {
         verify(getRequestedFor(urlEqualTo("/test")).withHeader("Authorization", equalTo("Bearer ZytrE2xR")));
     }
 
-    private void verifyNoHeadersFor(UrlMatchingStrategy url) {
+    private void verifyNoHeadersFor(UrlPattern url) {
         List<LoggedRequest> requests = WireMock.findAll(getRequestedFor(url));
         assertThat(requests, not(contains(header("Authorization"))));
     }
