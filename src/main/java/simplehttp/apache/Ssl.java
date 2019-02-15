@@ -21,37 +21,37 @@
 
 package simplehttp.apache;
 
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.SchemeSocketFactory;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import simplehttp.java.PlatformSslProtocolConfiguration;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import simplehttp.java.AlwaysTrustingDefaultSslSocketFactory;
+import simplehttp.java.AlwaysTrustingHostNameVerifier;
 
 public enum Ssl {
     enabled {
         @Override
-        public SchemeSocketFactory getSocketFactory() {
-            return SSLSocketFactory.getSocketFactory();
+        public ConnectionSocketFactory getSocketFactory() {
+            return SSLConnectionSocketFactory.getSocketFactory();
         }
     },
     naive {
         @Override
-        public SchemeSocketFactory getSocketFactory() {
+        public ConnectionSocketFactory getSocketFactory() {
             setPlatformSslToAlwaysTrustCertificatesAndHosts();
-            return SSLSocketFactory.getSocketFactory();
+            return SSLConnectionSocketFactory.getSocketFactory();
         }
 
         private void setPlatformSslToAlwaysTrustCertificatesAndHosts() {
-            PlatformSslProtocolConfiguration platform = new PlatformSslProtocolConfiguration();
-            platform.configureDefaultHostnameVerifier();
-            platform.configureDefaultSslSocketFactory();
+            new AlwaysTrustingDefaultSslSocketFactory().configureDefaultSslSocketFactory();
+            new AlwaysTrustingHostNameVerifier().configureHttpsUrlConnection();
         }
     },
     disabled {
         @Override
-        public SchemeSocketFactory getSocketFactory() {
-            return PlainSocketFactory.getSocketFactory();
+        public ConnectionSocketFactory getSocketFactory() {
+            return PlainConnectionSocketFactory.getSocketFactory();
         }
     };
 
-    public abstract SchemeSocketFactory getSocketFactory();
+    public abstract ConnectionSocketFactory getSocketFactory();
 }

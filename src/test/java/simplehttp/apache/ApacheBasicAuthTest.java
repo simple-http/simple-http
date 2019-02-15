@@ -27,9 +27,9 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.junit.*;
 import simplehttp.HttpClient;
-import sun.misc.BASE64Encoder;
 
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -109,7 +109,7 @@ public class ApacheBasicAuthTest {
     }
 
     private String encode(String username, String password) {
-        return new BASE64Encoder().encode((username + ":" + password).getBytes());
+        return Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
     }
 
 }

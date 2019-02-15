@@ -27,6 +27,8 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
+/** @deprecated (since 4.3 of Apache) see {@link org.apache.http.impl.client.HttpClientBuilder} for a description and 
+ * use the {@link InternalHttpClientConfigMatcher} where possible */
 public class HttpParameterMatcher extends TypeSafeDiagnosingMatcher<HttpClient> {
 
     private final String parameter;

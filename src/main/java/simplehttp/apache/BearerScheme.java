@@ -23,7 +23,6 @@ package simplehttp.apache;
 
 import org.apache.http.Header;
 import org.apache.http.HttpRequest;
-import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.Credentials;
 import org.apache.http.impl.auth.RFC2617Scheme;
 import org.apache.http.message.BasicHeader;
@@ -46,7 +45,7 @@ public class BearerScheme extends RFC2617Scheme {
     }
 
     @Override
-    public Header authenticate(Credentials credentials, HttpRequest request) throws AuthenticationException {
+    public Header authenticate(Credentials credentials, HttpRequest request) {
         return new BasicHeader("Authorization", "Bearer " + credentials.getUserPrincipal().getName());
     }
 }

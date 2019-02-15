@@ -29,9 +29,8 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
-public class AlwaysTrustingDefaultSslSocketFactory implements ConfigurePlatformDefaultSslSocketFactory {
+public class AlwaysTrustingDefaultSslSocketFactory {
 
-    @Override
     public void configureDefaultSslSocketFactory() {
         try {
             SSLContext context = SSLContext.getInstance("SSL");
@@ -56,4 +55,5 @@ public class AlwaysTrustingDefaultSslSocketFactory implements ConfigurePlatformD
             return (AcceptedIssuers);
         }
     }
+
 }

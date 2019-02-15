@@ -21,16 +21,19 @@
 
 package simplehttp.apache;
 
+import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.HttpParams;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import simplehttp.Builder;
 import simplehttp.configuration.*;
 
@@ -45,16 +48,12 @@ import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.http.auth.AuthScope.ANY_REALM;
 import static org.apache.http.auth.AuthScope.ANY_SCHEME;
-import static org.apache.http.client.params.ClientPNames.*;
-import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
-import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
-import static org.apache.http.params.CoreProtocolPNames.USE_EXPECT_CONTINUE;
 import static simplehttp.configuration.HttpTimeout.httpTimeout;
 
 public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.HttpClient>, ConfigurableHttpClient {
 
     private Ssl ssl = Ssl.enabled;
-    private List<AuthenticatedHost> authentications = new ArrayList<AuthenticatedHost>();
+    private List<AuthenticatedHost> authentications = new ArrayList<>();
     private Setting<URL> proxy = new NoProxy();
     private Setting<Integer> timeout = httpTimeout(minutes(10));
     private Setting<Boolean> handleRedirects = AutomaticRedirectHandling.on();
@@ -96,48 +95,41 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
     }
 
     public org.apache.http.client.HttpClient build() {
-        HttpParams httpParameters = createAndConfigureHttpParameters();
-        ThreadSafeClientConnManager connectionManager = new ThreadSafeClientConnManager(httpParameters, createSchemeRegistry());
-        DefaultHttpClient client = new DefaultHttpClient(connectionManager, httpParameters);
-        setupAuthentication(client);
-        return client;
+        return HttpClientBuilder
+            .create()
+            .setConnectionManager(new PoolingHttpClientConnectionManager(createSchemeRegistry()))
+            .setDefaultRequestConfig(configureApache().requestConfig())
+            .setDefaultCredentialsProvider(setupAuthentication())
+            .build();
     }
 
-    private SchemeRegistry createSchemeRegistry() {
-        SchemeRegistry registry = new SchemeRegistry();
-        registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
-        registry.register(new Scheme("https", 443, ssl.getSocketFactory()));
-        return registry;
+    private Registry<ConnectionSocketFactory> createSchemeRegistry() {
+        return RegistryBuilder.<ConnectionSocketFactory>create()
+            .register("http", PlainConnectionSocketFactory.getSocketFactory())
+            .register("https", ssl.getSocketFactory())
+            .build();
     }
 
-    private HttpParams createAndConfigureHttpParameters() {
-        HttpParams parameters = createHttpParametersViaNastyHackButBetterThanCopyAndPastingTheApacheSource();
-        parameters.setParameter(ALLOW_CIRCULAR_REDIRECTS, true);
-        parameters.setParameter(HANDLE_AUTHENTICATION, true);
-        parameters.setParameter(USE_EXPECT_CONTINUE, true);
+    private ApacheConfig configureApache() {
+        RequestConfig.Builder config = RequestConfig.custom()
+            .setCircularRedirectsAllowed(true)
+            .setAuthenticationEnabled(true)
+            .setExpectContinueEnabled(true);
 
-        ApacheHttpParameters apache = new ApacheHttpParameters(parameters);
-        handleRedirects.applyTo(apache.configuration(HANDLE_REDIRECTS));
-        timeout.applyTo(apache.configuration(CONNECTION_TIMEOUT));
-        timeout.applyTo(apache.configuration(SO_TIMEOUT));
-        proxy.applyTo(apache.defaultProxy());
+        handleRedirects.applyTo(config::setRedirectsEnabled);
+        timeout.applyTo(config::setConnectTimeout);
+        timeout.applyTo(config::setConnectionRequestTimeout);
+        timeout.applyTo(config::setSocketTimeout);
+        proxy.applyTo(url -> config.setProxy(new HttpHost(url.getHost(), url.getPort(), url.getProtocol())));
 
-        return parameters;
+        return new ApacheConfig(config.build());
     }
-
-    private HttpParams createHttpParametersViaNastyHackButBetterThanCopyAndPastingTheApacheSource() {
-        return new DefaultHttpClient() {
-            @Override
-            protected HttpParams createHttpParams() {
-                return super.createHttpParams();
-            }
-        }.createHttpParams();
-    }
-
-    private void setupAuthentication(DefaultHttpClient client) {
-        CredentialsProvider credentialsProvider = client.getCredentialsProvider();
+    
+    private CredentialsProvider setupAuthentication() {
+        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         for (AuthenticatedHost authentication : authentications)
             credentialsProvider.setCredentials(authentication.scope, authentication.credentials);
+        return credentialsProvider;
     }
 
     public class AuthenticatedHost {

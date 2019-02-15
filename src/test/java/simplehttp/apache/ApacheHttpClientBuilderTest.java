@@ -23,21 +23,16 @@ package simplehttp.apache;
 
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.junit.Test;
 import simplehttp.configuration.AutomaticRedirectHandling;
 
 import static com.google.code.tempusfugit.temporal.Duration.millis;
 import static com.google.code.tempusfugit.temporal.Duration.minutes;
-import static org.apache.http.client.params.ClientPNames.HANDLE_REDIRECTS;
-import static org.apache.http.conn.params.ConnRoutePNames.DEFAULT_PROXY;
-import static org.apache.http.params.CoreConnectionPNames.CONNECTION_TIMEOUT;
-import static org.apache.http.params.CoreConnectionPNames.SO_TIMEOUT;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static simplehttp.Url.url;
-import static simplehttp.apache.matchers.CredentialsMatcher.credentialsProviderContains;
-import static simplehttp.apache.matchers.HttpParameterMatcher.parameter;
+import static simplehttp.apache.matchers.InternalHttpClientConfigMatcher.hasConfiguration;
+import static simplehttp.apache.matchers.InternalHttpClientCredentialsMatcher.credentialsProviderContains;
 import static simplehttp.configuration.HttpTimeout.httpTimeout;
 import static simplehttp.configuration.Proxy.proxy;
 
@@ -45,39 +40,53 @@ public class ApacheHttpClientBuilderTest {
 
     private final ApacheHttpClientBuilder builder = new ApacheHttpClientBuilder();
     private final int TEN_MINUTES = (int) minutes(10).inMillis();
+    
+    private final RequestConfig.Builder defaultExpectedConfiguration = RequestConfig.custom()
+        .setCircularRedirectsAllowed(true)
+        .setAuthenticationEnabled(true)
+        .setExpectContinueEnabled(true)
+        .setRedirectsEnabled(true)
+        .setConnectTimeout(TEN_MINUTES)
+        .setSocketTimeout(TEN_MINUTES)
+        .setConnectionRequestTimeout(TEN_MINUTES)
+        .setProxy(null);
 
     @Test
     public void shouldDefaultConfigurationValues() {
         HttpClient client = builder.build();
-        assertThat(client, parameter(HANDLE_REDIRECTS, is(true)));
-        assertThat(client, parameter(CONNECTION_TIMEOUT, is(TEN_MINUTES)));
-        assertThat(client, parameter(SO_TIMEOUT, is(TEN_MINUTES)));
-        assertThat(client, parameter(DEFAULT_PROXY, is(nullValue())));
+        assertThat(client, hasConfiguration(defaultExpectedConfiguration.build()));
     }
 
     @Test
     public void shouldDefaultConfigurationValueForPredefinedBuilder() {
         HttpClient client = ApacheHttpClientBuilder.anApacheClientWithShortTimeout().build();
-        assertThat(client, parameter(CONNECTION_TIMEOUT, is(5000)));
-        assertThat(client, parameter(SO_TIMEOUT, is(5000)));
+        assertThat(client, hasConfiguration(defaultExpectedConfiguration
+            .setConnectTimeout(5000)
+            .setSocketTimeout(5000)
+            .setConnectionRequestTimeout(5000)
+            .build()));
     }
 
     @Test
     public void shouldConfigureAutomaticRedirectHandling() {
-        assertThat(builder.with(AutomaticRedirectHandling.off()).build(), parameter(HANDLE_REDIRECTS, is(false)));
-        assertThat(builder.with(AutomaticRedirectHandling.on()).build(), parameter(HANDLE_REDIRECTS, is(true)));
+        assertThat(builder.with(AutomaticRedirectHandling.off()).build(), hasConfiguration(defaultExpectedConfiguration.setRedirectsEnabled(false).build()));
+        assertThat(builder.with(AutomaticRedirectHandling.on()).build(), hasConfiguration(defaultExpectedConfiguration.setRedirectsEnabled(true).build()));
     }
 
     @Test
     public void shouldConfigureTimeouts() {
         HttpClient client = builder.with(httpTimeout(millis(256))).build();
-        assertThat(client, parameter(CONNECTION_TIMEOUT, is(256)));
-        assertThat(client, parameter(SO_TIMEOUT, is(256)));
+        assertThat(client, hasConfiguration(defaultExpectedConfiguration
+            .setConnectTimeout(256)
+            .setSocketTimeout(256)
+            .setConnectionRequestTimeout(256)
+            .build()));
     }
 
     @Test
     public void shouldConfigureProxy() {
-        assertThat(builder.with(proxy(url("http://localhost:8989"))).build(), parameter(DEFAULT_PROXY, is(new HttpHost("localhost", 8989, "http"))));
+        RequestConfig expected = defaultExpectedConfiguration.setProxy(new HttpHost("localhost", 8989, "http")).build();
+        assertThat(builder.with(proxy(url("http://localhost:8989"))).build(), hasConfiguration(expected));
     }
 
     @Test

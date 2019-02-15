@@ -34,6 +34,9 @@ import java.net.URL;
 import static org.apache.http.auth.AuthScope.ANY_REALM;
 import static org.apache.http.auth.AuthScope.ANY_SCHEME;
 
+/** @deprecated (since 4.3 of Apache) see {@link org.apache.http.impl.client.HttpClientBuilder} for a description and 
+ * use the {@link InternalHttpClientCredentialsMatcher} where possible */
+@Deprecated
 public class CredentialsMatcher extends TypeSafeDiagnosingMatcher<HttpClient> {
 
     private final String username;
