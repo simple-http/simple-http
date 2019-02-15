@@ -33,7 +33,7 @@ public class AlwaysTrustingDefaultSslSocketFactory {
 
     public void configureDefaultSslSocketFactory() {
         try {
-            SSLContext context = SSLContext.getInstance("SSL");
+            SSLContext context = SSLContext.getInstance("TLSv1.2");
             context.init(null, new TrustManager[]{new AlwaysTrustingX509TrustManager()}, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
         } catch (GeneralSecurityException e) {
@@ -45,11 +45,9 @@ public class AlwaysTrustingDefaultSslSocketFactory {
 
         private static final X509Certificate[] AcceptedIssuers = new X509Certificate[]{};
 
-        public void checkClientTrusted(X509Certificate[] chain, String authType) {
-        }
+        public void checkClientTrusted(X509Certificate[] chain, String authType) { /* always proceed / trust */ }
 
-        public void checkServerTrusted(X509Certificate[] chain, String authType) {
-        }
+        public void checkServerTrusted(X509Certificate[] chain, String authType) { /* always proceed / trust */ }
 
         public X509Certificate[] getAcceptedIssuers() {
             return (AcceptedIssuers);
