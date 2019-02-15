@@ -23,12 +23,10 @@ package simplehttp.listener;
 
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import simplehttp.*;
 
 import java.io.File;
@@ -40,13 +38,12 @@ import static simplehttp.FormParameters.params;
 import static simplehttp.HeaderList.headers;
 import static simplehttp.HeaderPair.header;
 
-@RunWith(JMock.class)
 @Ignore("need to sort out a POST and PUT sharing the same parent / generally rethinkg this")
 public class LoggingHttpClientTest {
 
     public static final String lineSeparator = System.getProperty("line.separator");
 
-    private final Mockery context = new Mockery();
+    private final JUnitRuleMockery context = new JUnitRuleMockery();
     private final Logger logger = Logger.getLogger(this.getClass());
     private final Log4J log4J = Log4J.appendTo(logger, INFO);
     private final HttpClient client = context.mock(HttpClient.class);

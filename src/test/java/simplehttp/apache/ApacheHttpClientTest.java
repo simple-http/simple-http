@@ -32,10 +32,8 @@ import org.apache.http.protocol.HttpContext;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import simplehttp.*;
 
 import java.io.IOException;
@@ -51,10 +49,9 @@ import static simplehttp.HeaderList.headers;
 import static simplehttp.HeaderPair.header;
 import static simplehttp.matchers.Matchers.*;
 
-@RunWith(JMock.class)
 public class ApacheHttpClientTest {
 
-    private final Mockery context = new Mockery();
+    private final JUnitRuleMockery context = new JUnitRuleMockery();
     private final Builder<HttpClient> httpClientBuilder = context.mock(Builder.class, "http client");
     private final Builder<HttpContext> contextBuilder = context.mock(Builder.class, "local context");
     private final HttpClient client = context.mock(HttpClient.class, "apache http");
@@ -77,7 +74,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpGet>instanceOf(HttpGet.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute(with(Matchers.<HttpGet>instanceOf(HttpGet.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
         assertThat(http.get(anyUrl()), is(response));
@@ -150,7 +147,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpPut>instanceOf(HttpPut.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute(with(Matchers.<HttpPut>instanceOf(HttpPut.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -178,7 +175,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpDelete>instanceOf(HttpDelete.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute(with(Matchers.<HttpDelete>instanceOf(HttpDelete.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -190,7 +187,7 @@ public class ApacheHttpClientTest {
         context.checking(new Expectations() {{
             oneOf(httpClientBuilder).build(); will(returnValue(client));
             oneOf(contextBuilder).build(); will(returnValue(localContext));
-            oneOf(client).execute((HttpUriRequest) with(Matchers.<HttpOptions>instanceOf(HttpOptions.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
+            oneOf(client).execute(with(Matchers.<HttpOptions>instanceOf(HttpOptions.class)), with(any(ResponseHandler.class)), with(any(HttpContext.class))); will(returnValue(response));
         }});
 
         ApacheHttpClient http = new ApacheHttpClient(httpClientBuilder, contextBuilder);
@@ -198,7 +195,7 @@ public class ApacheHttpClientTest {
     }
 
     @Test
-    public void shouldCloseConnectionManager() throws IOException {
+    public void shouldCloseConnectionManager() {
         final ClientConnectionManager connectionManager = context.mock(ClientConnectionManager.class);
         context.checking(new Expectations(){{
             allowing(httpClientBuilder).build(); will(returnValue(client));

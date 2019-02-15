@@ -22,13 +22,10 @@
 package simplehttp;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.jmock.Sequence;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.net.URL;
 
@@ -39,10 +36,10 @@ import static simplehttp.HeaderList.headers;
 import static simplehttp.HeaderPair.header;
 import static simplehttp.SequentialLinkIterator.sequentialLinkIterator;
 
-@RunWith(JMock.class)
+
 public class SequentialLinkIteratorTest {
 
-    private final Mockery context = new JUnit4Mockery();
+    private final JUnitRuleMockery context = new JUnitRuleMockery();
     private final HttpClient http = context.mock(HttpClient.class);
 
     private final HttpResponse initialResponse = new StringHttpResponse(200, "OK", "0", headers(header("Link", "<http://example.com/first>; rel=\"next\"")), "");

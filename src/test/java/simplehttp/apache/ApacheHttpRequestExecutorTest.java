@@ -28,11 +28,8 @@ import org.apache.http.protocol.HttpContext;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import simplehttp.HttpResponse;
 import simplehttp.StringHttpResponse;
 
@@ -40,25 +37,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static simplehttp.EmptyHeaders.emptyHeaders;
 
-@RunWith(JMock.class)
 public class ApacheHttpRequestExecutorTest {
 
-    private final Mockery context = new JUnit4Mockery();
-    private final HttpContext localContext = context.mock(HttpContext.class);
-    private final HttpClient client = context.mock(HttpClient.class);
+	private final JUnitRuleMockery context = new JUnitRuleMockery();
+	
+	private final HttpContext localContext = context.mock(HttpContext.class);
+	private final HttpClient client = context.mock(HttpClient.class);
 
-    private final HttpGet anyRequest = new HttpGet("http://whatever.trevor");
-    private final HttpResponse anyResponse = new StringHttpResponse(200, "OK", "", emptyHeaders(), "http://example.com");
+	private final HttpGet anyRequest = new HttpGet("http://whatever.trevor");
+	private final HttpResponse anyResponse = new StringHttpResponse(200, "OK", "", emptyHeaders(), "http://example.com");
 
-    @Test
-    public void delegates() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(client).execute(with(anyRequest), with(instanceOf(HttpResponseHandler.class)), with(localContext)); will(returnValue(anyResponse));
-        }});
-        assertThat(new ApacheHttpRequestExecutor(client, localContext, anyRequest).call(), is(anyResponse));
-    }
+	@Test
+	public void delegates() throws Exception {
+		context.checking(new Expectations() {{
+			oneOf(client).execute(with(anyRequest), with(instanceOf(HttpResponseHandler.class)), with(localContext));
+			will(returnValue(anyResponse));
+		}});
+		assertThat(new ApacheHttpRequestExecutor(client, localContext, anyRequest).call(), is(anyResponse));
+	}
 
-    private static Matcher<ResponseHandler> instanceOf(Class<HttpResponseHandler> type) {
-        return Matchers.instanceOf(type);
-    }
+	private static Matcher<ResponseHandler> instanceOf(Class<HttpResponseHandler> type) {
+		return Matchers.instanceOf(type);
+	}
 }

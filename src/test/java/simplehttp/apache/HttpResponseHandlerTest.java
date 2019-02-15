@@ -29,10 +29,8 @@ import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicStatusLine;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import simplehttp.HttpResponse;
 
 import java.io.IOException;
@@ -43,10 +41,9 @@ import static org.junit.Assert.assertThat;
 import static simplehttp.HeaderPair.header;
 import static simplehttp.matchers.Matchers.*;
 
-@RunWith(JMock.class)
 public class HttpResponseHandlerTest {
 
-    private final Mockery context = new Mockery();
+    private final JUnitRuleMockery context = new JUnitRuleMockery();
 
     private final HttpEntity body = context.mock(HttpEntity.class);
 

@@ -25,16 +25,13 @@ import com.google.code.tempusfugit.FactoryException;
 import com.google.code.tempusfugit.temporal.Clock;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import simplehttp.HttpClient;
 import simplehttp.Log4J;
 import simplehttp.StringHttpResponse;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
@@ -45,10 +42,9 @@ import static simplehttp.Any.anyUrl;
 import static simplehttp.EmptyHeaders.emptyHeaders;
 import static simplehttp.listener.TimedHttpClient.timedHttpClient;
 
-@RunWith(JMock.class)
 public class TimedHttpClientTest {
 
-    private final Mockery context = new Mockery();
+    private final JUnitRuleMockery context = new JUnitRuleMockery();
     private final Class<? extends TimedHttpClientTest> logger = this.getClass();
 
     private final Clock clock = context.mock(Clock.class);
