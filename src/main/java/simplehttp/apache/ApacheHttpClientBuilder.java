@@ -40,13 +40,12 @@ import simplehttp.configuration.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.lang.String.format;
 import static java.time.Duration.of;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.time.temporal.ChronoUnit.SECONDS;
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.http.auth.AuthScope.ANY_REALM;
 import static org.apache.http.auth.AuthScope.ANY_SCHEME;
 import static simplehttp.configuration.HttpTimeout.httpTimeout;
@@ -144,13 +143,17 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         }
 
         @Override
-        public boolean equals(Object that) {
-            return reflectionEquals(this, that);
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            AuthenticatedHost that = (AuthenticatedHost) o;
+            return Objects.equals(credentials, that.credentials) &&
+                Objects.equals(scope, that.scope);
         }
 
         @Override
         public int hashCode() {
-            return reflectionHashCode(this);
+            return Objects.hash(credentials, scope);
         }
 
         @Override

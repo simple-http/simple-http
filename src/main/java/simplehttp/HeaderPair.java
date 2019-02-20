@@ -21,9 +21,9 @@
 
 package simplehttp;
 
+import java.util.Objects;
+
 import static java.lang.String.format;
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
 public class HeaderPair implements Header {
 
@@ -50,13 +50,17 @@ public class HeaderPair implements Header {
     }
 
     @Override
-    public int hashCode() {
-        return reflectionHashCode(this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HeaderPair that = (HeaderPair) o;
+        return Objects.equals(name, that.name) &&
+            Objects.equals(value, that.value);
     }
 
     @Override
-    public boolean equals(Object that) {
-        return reflectionEquals(this, that);
+    public int hashCode() {
+        return Objects.hash(name, value);
     }
 
     @Override

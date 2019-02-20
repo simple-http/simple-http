@@ -21,9 +21,9 @@
 
 package simplehttp;
 
+import java.util.Objects;
+
 import static java.lang.String.format;
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static simplehttp.CharacterSet.defaultCharacterSet;
 import static simplehttp.EmptyHeaders.emptyHeaders;
 
@@ -72,13 +72,18 @@ public class FormUrlEncodedMessage implements HttpPost {
     }
 
     @Override
-    public int hashCode() {
-        return reflectionHashCode(this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FormUrlEncodedMessage that = (FormUrlEncodedMessage) o;
+        return Objects.equals(headers, that.headers) &&
+            Objects.equals(content, that.content) &&
+            characterSet == that.characterSet;
     }
 
     @Override
-    public boolean equals(Object that) {
-        return reflectionEquals(this, that);
+    public int hashCode() {
+        return Objects.hash(headers, content, characterSet);
     }
 
     @Override

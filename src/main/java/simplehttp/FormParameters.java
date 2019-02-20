@@ -25,8 +25,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
 
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
 public class FormParameters implements MessageContent {
 
@@ -76,13 +74,16 @@ public class FormParameters implements MessageContent {
     }
 
     @Override
-    public int hashCode() {
-        return reflectionHashCode(this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FormParameters that = (FormParameters) o;
+        return Objects.equals(parameters, that.parameters);
     }
 
     @Override
-    public boolean equals(Object that) {
-        return reflectionEquals(this, that);
+    public int hashCode() {
+        return Objects.hash(parameters);
     }
 
     @Override

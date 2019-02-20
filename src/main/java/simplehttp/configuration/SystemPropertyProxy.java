@@ -25,7 +25,7 @@ import java.net.URL;
 import java.util.Optional;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.http.util.TextUtils.isEmpty;
 import static simplehttp.Url.url;
 
 public class SystemPropertyProxy extends Proxy {

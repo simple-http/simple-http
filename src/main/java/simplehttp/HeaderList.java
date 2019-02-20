@@ -22,16 +22,11 @@
 package simplehttp;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 
 public class HeaderList implements Headers {
 
@@ -51,13 +46,16 @@ public class HeaderList implements Headers {
     }
 
     @Override
-    public int hashCode() {
-        return reflectionHashCode(this);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HeaderList headers1 = (HeaderList) o;
+        return Objects.equals(headers, headers1.headers);
     }
 
     @Override
-    public boolean equals(Object that) {
-        return reflectionEquals(this, that);
+    public int hashCode() {
+        return Objects.hash(headers);
     }
 
     @Override
