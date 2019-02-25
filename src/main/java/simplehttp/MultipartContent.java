@@ -31,7 +31,7 @@ import java.util.Objects;
  * actual entity and create a dynamic boundary, differing each time).
  * 
  */
-class MultipartContent implements MessageContent {
+public class MultipartContent implements MessageContent {
 	
 	private final String name;
 	private final File file;
