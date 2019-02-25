@@ -21,6 +21,7 @@
 
 package simplehttp;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -34,5 +35,9 @@ public class EmptyHeadersTest {
 		assertThat(emptyHeaders(), is(emptyHeaders()));
 	}
 
+	@Test
+	public void hashCodeAndEquals() {
+		EqualsVerifier.forClass(EmptyHeaders.class).verify();
+	}
 
 }

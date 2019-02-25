@@ -27,7 +27,7 @@ import static java.lang.String.format;
 import static simplehttp.CharacterSet.defaultCharacterSet;
 import static simplehttp.EmptyHeaders.emptyHeaders;
 
-public class FormUrlEncodedMessage implements HttpPost {
+public final class FormUrlEncodedMessage implements HttpPost {
 
     private final Headers headers;
     private final FormParameters content;

@@ -21,6 +21,7 @@
 
 package simplehttp.apache;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.apache.http.HttpHost;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -126,4 +127,8 @@ public class ApacheHttpClientBuilderTest {
         assertThat(client, credentialsProviderContains(url("http://robotooling.com"), "replacedUsername", "replacedPassword"));
     }
 
+    @Test
+    public void hashCodeAndEquals() {
+        EqualsVerifier.forClass(ApacheHttpClientBuilder.AuthenticatedHost.class).verify();
+    }
 }

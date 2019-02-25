@@ -21,6 +21,7 @@
 
 package simplehttp;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
 import java.util.function.Function;
@@ -63,4 +64,8 @@ public class HeaderListTest {
         assertThat(headers.get("cheese"), is(header("cheese", "ham")));
     }
 
+    @Test
+    public void hashCodeAndEquals() {
+        EqualsVerifier.forClass(HeaderList.class).verify();
+    }
 }

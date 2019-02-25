@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 import static java.lang.String.format;
 
-public class HeaderList implements Headers {
+public final class HeaderList implements Headers {
 
     private final List<Header> headers;
 

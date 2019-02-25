@@ -132,7 +132,7 @@ public class ApacheHttpClientBuilder implements Builder<org.apache.http.client.H
         return credentialsProvider;
     }
 
-    public class AuthenticatedHost {
+    public final class AuthenticatedHost {
 
         private final Credentials credentials;
         private final AuthScope scope;

@@ -23,7 +23,7 @@ package simplehttp;
 
 import java.util.Iterator;
 
-public class EmptyHeaders implements Headers {
+public final class EmptyHeaders implements Headers {
 
     public static EmptyHeaders emptyHeaders() {
         return new EmptyHeaders();

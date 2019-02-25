@@ -21,6 +21,7 @@
 
 package simplehttp;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -55,4 +56,8 @@ public class FormUrlEncodedMessageTest {
 		assertThat(new FormUrlEncodedMessage(params("name", "bob"), headers(header("a", "b")), CharacterSet.UTF_8).toString(), is("FormUrlEncodedMessage{content='name=bob', headers='HeaderList{headers=[HeaderPair{name='a', value='b'}]}'characterSet='UTF-8'}"));
 	}
 
+	@Test
+	public void hashCodeAndEquals() {
+		EqualsVerifier.forClass(FormUrlEncodedMessage.class).verify();
+	}
 }

@@ -21,7 +21,7 @@
 
 package simplehttp;
 
-public class NoHeader implements Header {
+public final class NoHeader implements Header {
     @Override
     public String name() {
         throw new UnsupportedOperationException();

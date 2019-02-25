@@ -21,6 +21,7 @@
 
 package simplehttp;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.is;
@@ -54,5 +55,8 @@ public class UnencodedStringMessageTest {
 		assertThat(new UnencodedStringMessage("content", headers(header("a", "b")), CharacterSet.UTF_8).toString(), is("UnencodedStringMessage{content='content', headers='HeaderList{headers=[HeaderPair{name='a', value='b'}]}'}"));
 	}
 
-
+	@Test
+	public void hashCodeAndEquals() {
+		EqualsVerifier.forClass(UnencodedStringMessage.class).verify();
+	}
 }

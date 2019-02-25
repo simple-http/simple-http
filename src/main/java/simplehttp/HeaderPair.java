@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
-public class HeaderPair implements Header {
+public final class HeaderPair implements Header {
 
     private final String name;
     private final String value;

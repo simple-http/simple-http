@@ -26,7 +26,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 
-public class FormParameters implements MessageContent {
+public final class FormParameters implements MessageContent {
 
     private final Map<String, String> parameters = new HashMap<>();
 

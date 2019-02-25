@@ -34,7 +34,7 @@ public class AbstractValueType<T> implements ValueType<T> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof AbstractValueType))
@@ -44,7 +44,7 @@ public class AbstractValueType<T> implements ValueType<T> {
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return value != null ? value.hashCode() : 0;
     }
 

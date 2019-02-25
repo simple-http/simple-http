@@ -27,7 +27,7 @@ import static java.lang.String.format;
 import static simplehttp.CharacterSet.defaultCharacterSet;
 import static simplehttp.EmptyHeaders.emptyHeaders;
 
-public class UnencodedStringMessage implements HttpPut, HttpPost {
+public final class UnencodedStringMessage implements HttpPut, HttpPost {
 
     private final String content;
     private final Headers headers;

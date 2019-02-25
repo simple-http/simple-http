@@ -21,6 +21,7 @@
 
 package simplehttp;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
 import java.util.List;
@@ -50,13 +51,14 @@ public class FormParametersTest {
         assertThat(values.get(1), is("cheese=ham"));
     }
 
+    @Test
+    public void hashCodeAndEquals() {
+        EqualsVerifier.forClass(FormParameters.class).verify();
+    }
+
+
     private static Transform<Map.Entry<String, String>, String> asSimpleString() {
-        return new Transform<Map.Entry<String, String>, String>() {
-            @Override
-            public String call(Map.Entry<String, String> tuple) {
-                return tuple.getKey() + "=" + tuple.getValue();
-            }
-        };
+        return tuple -> tuple.getKey() + "=" + tuple.getValue();
     }
 
 }

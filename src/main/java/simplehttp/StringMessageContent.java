@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import static java.lang.String.format;
 
-public class StringMessageContent implements MessageContent {
+public final class StringMessageContent implements MessageContent {
 
     private final String content;
 
