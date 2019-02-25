@@ -25,8 +25,8 @@ import static simplehttp.HeaderPair.header;
 
 public interface UserAgent {
 
-    Header Apache = header("User-Agent", "Apache-HttpClient/4.1.3 (java 1.5)");
-    Header SafariOnMac = header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17");
-    Header ChromeOnMac = header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+    Header Apache = header("User-Agent", "Apache-HttpClient/4.4.11 (java 1.8)");
+    Header SafariOnMac = header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.1 Safari/605.1.15");
+    Header ChromeOnMac = header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36");
 
 }
