@@ -4,7 +4,7 @@
 
     <groupId>com.simple-http</groupId>
     <artifactId>simple-http</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -42,7 +42,7 @@
         <url>https://github.com/simple-http/simple-http</url>
         <connection>scm:git:ssh://git@github.com/simple-http/simple-http.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/simple-http/simple-http.git</developerConnection>
-      <tag>simple-http-1.4</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
